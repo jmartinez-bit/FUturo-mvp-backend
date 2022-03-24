@@ -1,4 +1,4 @@
-const {models}=require('./../libs/sequelize')
+//const {models}=require('./../libs/sequelize')
 const sequelize=require('./../libs/sequelize')
 
 class ResourcesService{
@@ -8,7 +8,7 @@ class ResourcesService{
   }
 
   async findByClientAndPeriod(cliente,periodo){
-      const query='SELECT * FROM mapa_recursos WHERE cliente='+cliente+' AND periodo='+periodo+' ;';
+      const query="SELECT * FROM maparecursos WHERE cliente='"+cliente+"' AND periodo="+periodo+" ;";
       const [data] = await sequelize.query(query);
       return data;
   }
