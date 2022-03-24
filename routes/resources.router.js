@@ -4,6 +4,16 @@ const ResourcesService =require("./../services/resources.service");
 const router=express.Router();
 const service=new ResourcesService();
 
+router.get("/",async (req, res,next) =>{
+  try{
+    const resources=await service.findAll();
+    res.json(resources);
+  }catch (e){
+    next(e);
+  }
+
+});
+
 router.get("/:cliente/:periodo",async (req, res,next) =>{
   try{
     const {cliente,periodo}=req.params;

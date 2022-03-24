@@ -13,6 +13,12 @@ class ResourcesService{
       return data;
   }
 
+  async findAll(){
+    const query="SELECT * FROM maparecursos";
+    const [data] = await sequelize.query(query);
+    return data;
+}
+
 
 }
 module.exports = ResourcesService;
