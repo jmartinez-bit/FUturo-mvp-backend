@@ -7,7 +7,8 @@ const AreaSchema = {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    field:'cod_area'
   },
   area: {
     allowNull: false,

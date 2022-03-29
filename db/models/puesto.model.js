@@ -7,7 +7,8 @@ const PuestoSchema = {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    field:'cod_puesto'
   },
   puesto: {
     allowNull: false,

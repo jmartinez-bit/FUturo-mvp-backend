@@ -11,11 +11,13 @@ const PeriodoSchema = {
   },
   fechaReg: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field:'fecha_reg'
   },
   usuarioReg: {
     allowNull: false,
-    type: DataTypes.STRING(20)
+    type: DataTypes.STRING(20),
+    field:'usuario_reg'
   },
   estado: {
     allowNull: false,

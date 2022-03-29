@@ -1,11 +1,11 @@
 'use strict';
 
 const { AREA_TABLE, AreaSchema } = require('../models/area.model');
-const { ASIGNACION_RECURSO_TABLE, AsignacionRecursoSchema } = require('../models/asignacion-recurso.model');
+const { ASIGNACION_RECURSO_TABLE, AsignacionRecursoSchema } = require('../models/asignacion_recurso.model');
 const { COLABORADOR_TABLE, ColaboradorSchema } = require('../models/colaborador.model');
 const { CONTRATO_TABLE, ContratoSchema } = require('../models/contratos.model');
-const { LINEA_SERVICIO_TABLE, LineaServicioSchema } = require('../models/linea-servicio.model');
-const { MAPA_RECURSOS_TABLE, MapaRecursosSchema } = require('../models/mapa-recursos.model');
+const { LINEA_SERVICIO_TABLE, LineaServicioSchema } = require('../models/linea_servicio.model');
+const { MAPA_RECURSOS_TABLE, MapaRecursosSchema } = require('../models/mapa_recursos.model');
 const { PERIODO_TABLE, PeriodoSchema } = require('../models/periodo.model');
 const { PUESTO_TABLE, PuestoSchema } = require('../models/puesto.model');
 const { SERVICIO_TABLE, ServicioSchema } = require('../models/servicio.model');
