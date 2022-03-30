@@ -1,5 +1,5 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
-const { COLABORADOR_TABLE } = require('./colaborador.model');
+const { Model, DataTypes,Sequelize} = require('sequelize');
+//const { COLABORADOR_TABLE } = require('./colaborador.model');
 
 const CONTRATO_TABLE = 'contrato';
 
@@ -15,12 +15,12 @@ const ContratoSchema = {
     allowNull: false,
     type: DataTypes.INTEGER,
     unique: true,
-    references: {
+    /*references: {
       model: COLABORADOR_TABLE,
       key: 'cod_colaborador'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
+    onDelete: 'SET NULL',*/
     field:'cod_colaborador'
   },
   tipo: {

@@ -1,5 +1,5 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
-const { PERFIL_TABLE } = require('./perfil.model');
+const { Model, DataTypes,Sequelize } = require('sequelize');
+//const { PERFIL_TABLE } = require('./perfil.model');
 
 const USUARIO_TABLE = 'usuario';
 
@@ -24,12 +24,12 @@ const UsuarioSchema = {
   codPerfil: {
     allowNull: false,
     type: DataTypes.INTEGER,
-    references: {
+    /*references: {
       model: PERFIL_TABLE,
       key: 'cod_perfil'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
+    onDelete: 'SET NULL',*/
     field:'cod_perfil'
   },
   nombresApellidos: {

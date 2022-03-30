@@ -1,6 +1,6 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
-const { COLABORADOR_TABLE } = require('./colaborador.model');
-const { SERVICIO_TABLE } = require('./servicio.model');
+const { Model, DataTypes,Sequelize} = require('sequelize');
+//const { COLABORADOR_TABLE } = require('./colaborador.model');
+//const { SERVICIO_TABLE } = require('./servicio.model');
 
 const ASIGNACION_RECURSO_TABLE = 'asignacion_recurso';
 
@@ -15,23 +15,23 @@ const AsignacionRecursoSchema = {
   codServicio: {
     allowNull: false,
     type: DataTypes.INTEGER,
-    references: {
+    /*references: {
       model: SERVICIO_TABLE,
       key: 'cod_servicio'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
+    onDelete: 'SET NULL',*/
     field:'cod_servicio'
   },
   codColaborador: {
     allowNull: false,
     type: DataTypes.INTEGER,
-    references: {
+    /*references: {
       model: COLABORADOR_TABLE,
       key: 'cod_colaborador'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
+    onDelete: 'SET NULL',*/
     field:'cod_colaborador'
   },
   porAsignacion: {

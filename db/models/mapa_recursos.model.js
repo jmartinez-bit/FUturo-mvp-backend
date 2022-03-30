@@ -1,6 +1,6 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
-const { COLABORADOR_TABLE } = require('./colaborador.model');
-const { PERIODO_TABLE } = require('./periodo.model');
+const { Model, DataTypes,Sequelize } = require('sequelize');
+//const { COLABORADOR_TABLE } = require('./colaborador.model');
+//const { PERIODO_TABLE } = require('./periodo.model');
 
 const MAPA_RECURSOS_TABLE = 'mapa_recursos';
 
@@ -15,12 +15,12 @@ const MapaRecursosSchema = {
   periodo: {
     allowNull: false,
     type: DataTypes.STRING,
-    references: {
+    /*references: {
       model: PERIODO_TABLE,
       key: 'periodo'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL'*/
   },
   codCliente: {
     allowNull: false,
@@ -39,12 +39,12 @@ const MapaRecursosSchema = {
   codColaborador: {
     allowNull: false,
     type: DataTypes.INTEGER,
-    references: {
+    /*references: {
       model: COLABORADOR_TABLE,
       key: 'cod_colaborador'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
+    onDelete: 'SET NULL',*/
     field:'cod_colaborador'
   },
   box: {

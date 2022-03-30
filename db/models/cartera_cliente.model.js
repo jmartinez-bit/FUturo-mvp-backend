@@ -1,6 +1,6 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
-const { USUARIO_TABLE } = require('./usuario.model');
-const { CLIENTE_TABLE } = require('./cliente.model');
+const { Model, DataTypes,Sequelize} = require('sequelize');
+//const { USUARIO_TABLE } = require('./usuario.model');
+//const { CLIENTE_TABLE } = require('./cliente.model');
 
 const CARTERA_CLIENTE_TABLE = 'cartera_cliente';
 
@@ -8,23 +8,23 @@ const CarteraClienteSchema = {
   codUsuario: {
     allowNull: false,
     type: DataTypes.INTEGER,
-    references: {
+    /*references: {
       model: USUARIO_TABLE,
       key: 'cod_usuario'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
+    onDelete: 'SET NULL',*/
     field:'cod_usuario'
   },
   codCliente: {
     allowNull: false,
     type: DataTypes.INTEGER,
-    references: {
+    /*references: {
       model: CLIENTE_TABLE,
       key: 'cod_cliente'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
+    onDelete: 'SET NULL',*/
     field:'cod_cliente'
   },
   fechaAsignacion: {

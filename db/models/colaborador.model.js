@@ -1,6 +1,6 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
-const { AREA_TABLE } = require('./area.model');
-const { PUESTO_TABLE } = require('./puesto.model');
+const { Model, DataTypes,Sequelize} = require('sequelize');
+//const { AREA_TABLE } = require('./area.model');
+//const { PUESTO_TABLE } = require('./puesto.model');
 const COLABORADOR_TABLE = 'colaborador';
 
 const ColaboradorSchema = {
@@ -25,12 +25,12 @@ const ColaboradorSchema = {
     allowNull: false,
     type: DataTypes.INTEGER,
     unique: true,
-    references: {
+    /*references: {
       model: PUESTO_TABLE,
       key: 'cod_puesto'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
+    onDelete: 'SET NULL',*/
     field:'cod_puesto'
   },
   nivel: {
@@ -41,12 +41,12 @@ const ColaboradorSchema = {
     allowNull: false,
     type: DataTypes.INTEGER,
     unique: true,
-    references: {
+    /*references: {
       model: AREA_TABLE,
       key: 'cod_area'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
+    onDelete: 'SET NULL',*/
     field:'cod_area'
   },
   nombres: {

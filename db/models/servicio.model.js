@@ -1,5 +1,5 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
-const { LINEA_SERVICIO_TABLE } = require('./linea_servicio.model');
+const { Model, DataTypes,Sequelize } = require('sequelize');
+//const { LINEA_SERVICIO_TABLE } = require('./linea_servicio.model');
 
 const SERVICIO_TABLE = 'servicio';
 
@@ -19,12 +19,12 @@ const ServicioSchema = {
   codLineaServicio: {
     allowNull: false,
     type: DataTypes.INTEGER,
-    references: {
+    /*references: {
       model: LINEA_SERVICIO_TABLE,
       key: 'cod_linea_servicio'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
+    onDelete: 'SET NULL',*/
     field:'cod_linea_servicio'
   },
   tipoServicio: {
