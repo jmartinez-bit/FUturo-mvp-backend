@@ -8,12 +8,24 @@ const service=new ResourcesService();
 router.post("/:idDM/maparecursos",async (req, res,next) =>{
   try{
     const {idDM}=req.params;
-    const cliente=req.body.cliente;
+    const cod_cliente=req.body.cod_cliente;
     const periodo=req.body.periodo;
-    //const perfil=req.body.perfil||null;
-    //const nombresyapell=req.body.nombresyapell||null;
-    const resources=await service.findByClientAndPeriod(cliente,periodo);
-    res.json(resources);
+    const cod_perfil=req.body.cod_perfil||null;
+    const cod_colab=req.body.cod_colaborador||null;
+    if(cod_perfil===null && cod_colab===null){
+      const resources=await service.findByClientAndPeriod(cod_cliente,periodo);
+      res.json(resources);
+    }else if(cod_perfil===null && cod_colab!=null){
+      const resources=await service.findByClientPeriodAndNames(cod_cliente,periodo,cod_colab);
+      res.json(resources);
+    }else if(cod_perfil!=null && cod_colab===null){
+      const resources=await service.findByClientPeriodAndProfile(cod_cliente,periodo,cod_perfil);
+      res.json(resources);
+    }else if(cod_perfil!=null && cod_colab!=null){
+      const resources=await service.findByClientPeriodProfileAndNames(cod_cliente,periodo,cod_perfil,cod_colab);
+      res.json(resources);
+    }
+
   }catch (e){
     next(e);
   }
@@ -41,12 +53,24 @@ router.get("/:idDM/clientes",async (req, res,next) =>{
     next(e);
   }
 
+
 });
 
 //Retorna todos los perfiles
 router.get("/perfiles",async (req, res,next) =>{
   try{
     const profiles=await service.findProfiles();
+    res.json(profiles);
+  }catch (e){
+    next(e);
+  }
+
+});
+
+//Retorna todos los nombres de los colaboradores
+router.get("/colaboradores",async (req, res,next) =>{
+  try{
+    const profiles=await service.findCollaboratorNames();
     res.json(profiles);
   }catch (e){
     next(e);

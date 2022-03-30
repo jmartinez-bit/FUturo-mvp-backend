@@ -8,23 +8,26 @@ class ResourcesService{
     this.products=[]
   }
 
-  async findByClientAndPeriod(cliente,periodo){
-      const query1="SELECT cod_cliente FROM cliente WHERE nombre_corto='"+cliente+"' ;";
-      const [data1] = await sequelize.query(query1);
-      const cod_cliente=Object.values(data1[0]);
-      const query2="SELECT * FROM mapa_recursos WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"' ;";
-      const [data2] = await sequelize.query(query2);
-      return data2 ;
+  async findByClientAndPeriod(cod_cliente,periodo){
+      const query="SELECT * FROM mapa_recursos WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"' ;";
+      const [data] = await sequelize.query(query);
+      return data ;
   }
 
-  async findByProfile(cliente,periodo){
-    const query="SELECT * FROM maparecursos WHERE cliente='"+cliente+"' AND periodo="+periodo+" ;";
+  async findByClientPeriodAndProfile(cod_cliente,periodo,cod_perfil){
+    const query="SELECT * FROM mapa_recursos WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"' AND perfil="+cod_perfil+" ;";
     const [data] = await sequelize.query(query);
     return data;
   }
 
-  async findByNames(cliente,periodo){
-    const query="SELECT * FROM maparecursos WHERE cliente='"+cliente+"' AND periodo="+periodo+" ;";
+  async findByClientPeriodAndNames(cod_cliente,periodo,cod_colab){
+    const query="SELECT * FROM mapa_recursos WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"' AND cod_colaborador="+cod_colab+" ;";
+    const [data] = await sequelize.query(query);
+    return data;
+  }
+
+  async findByClientPeriodProfileAndNames(cod_cliente,periodo,cod_perfil,cod_colab){
+    const query="SELECT * FROM mapa_recursos WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"' AND perfil="+cod_perfil+" AND cod_colaborador="+cod_colab+" ;";
     const [data] = await sequelize.query(query);
     return data;
   }
@@ -36,10 +39,21 @@ class ResourcesService{
   }
 
   async findCustomers(idDM){
-    const query="SELECT nombre_corto FROM cliente INNER JOIN cartera_cliente ON cliente.cod_cliente=cartera_cliente.cod_cliente WHERE cod_usuario="+idDM+";";
+    const query="SELECT cartera_cliente.cod_cliente,nombre_corto FROM cliente INNER JOIN cartera_cliente ON cliente.cod_cliente=cartera_cliente.cod_cliente WHERE cod_usuario="+idDM+";";
     const [data] = await sequelize.query(query);
     return data;
   }
 
+  async findProfiles(){
+    const query="SELECT cod_perfil,nombre_perfil FROM perfil;";
+    const [data] = await sequelize.query(query);
+    return data;
+  }
+
+  async findCollaboratorNames(){
+    const query="SELECT cod_colaborador,nombres,apellido_pat,apellido_mat FROM colaborador;";
+    const [data] = await sequelize.query(query);
+    return data;
+  }
 }
 module.exports = ResourcesService;
