@@ -8,14 +8,11 @@ const service=new ResourcesService();
 router.post("/:idDM/maparecursos",async (req, res,next) =>{
   try{
     const {idDM}=req.params;
-    const {limit,offset}=req.query;
-    const theLimit=limit || 10;//valor por defecto
-    const theOffset=offset || 0;
     const cliente=req.body.cliente;
     const periodo=req.body.periodo;
-    const perfil=req.body.perfil||null;
-    const nombresyapell=req.body.nombresyapell||null;
-    const resources=await service.findByClientAndPeriod(idDM,cliente,periodo,perfil,nombresyapell,theLimit,theOffset);
+    //const perfil=req.body.perfil||null;
+    //const nombresyapell=req.body.nombresyapell||null;
+    const resources=await service.findByClientAndPeriod(cliente,periodo);
     res.json(resources);
   }catch (e){
     next(e);
