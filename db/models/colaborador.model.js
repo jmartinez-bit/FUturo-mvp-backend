@@ -1,6 +1,6 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
-const { AREA_TABLE } = require('./area.model');
-const { PUESTO_TABLE } = require('./puesto.model');
+const { Model, DataTypes,Sequelize} = require('sequelize');
+//const { AREA_TABLE } = require('./area.model');
+//const { PUESTO_TABLE } = require('./puesto.model');
 const COLABORADOR_TABLE = 'colaborador';
 
 const ColaboradorSchema = {
@@ -8,26 +8,30 @@ const ColaboradorSchema = {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    field:'cod_colaborador'
   },
   tipoDoc: {
     allowNull: false,
     type: DataTypes.STRING(10),
+    field:'tipo_doc'
   },
   nroDocumento: {
     allowNull: false,
-    type: DataTypes.STRING(15)
+    type: DataTypes.STRING(15),
+    field:'nro_documento'
   },
   codPuesto: {
     allowNull: false,
     type: DataTypes.INTEGER,
     unique: true,
-    references: {
+    /*references: {
       model: PUESTO_TABLE,
-      key: 'codPuesto'
+      key: 'cod_puesto'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',*/
+    field:'cod_puesto'
   },
   nivel: {
     allowNull: false,
@@ -37,12 +41,13 @@ const ColaboradorSchema = {
     allowNull: false,
     type: DataTypes.INTEGER,
     unique: true,
-    references: {
+    /*references: {
       model: AREA_TABLE,
-      key: 'codArea'
+      key: 'cod_area'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',*/
+    field:'cod_area'
   },
   nombres: {
     allowNull: false,
@@ -50,43 +55,53 @@ const ColaboradorSchema = {
   },
   apellidoMat: {
     allowNull: false,
-    type: DataTypes.STRING(100)
+    type: DataTypes.STRING(100),
+    field:'apellido_mat'
   },
   apellidoPat: {
     allowNull: false,
-    type: DataTypes.STRING(100)
+    type: DataTypes.STRING(100),
+    field:'apellido_pat'
   },
   fechaNacimiento: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field:'fecha_nacimiento'
   },
   correoPersonal: {
     allowNull: false,
-    type: DataTypes.STRING(100)
+    type: DataTypes.STRING(100),
+    field:'correo_personal'
   },
   correoTrabajo: {
     allowNull: false,
-    type: DataTypes.STRING(100)
+    type: DataTypes.STRING(100),
+    field:'correo_trabajo'
   },
   celularPersonal: {
     allowNull: false,
-    type: DataTypes.STRING(100)
+    type: DataTypes.STRING(100),
+    field:'celular_personal'
   },
   celularTrabajo: {
     allowNull: false,
-    type: DataTypes.STRING(100)
+    type: DataTypes.STRING(100),
+    field:'celular_trabajo'
   },
   fechaReg: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field:'fecha_reg'
   },
   fechaAct: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field:'fecha_act'
   },
   fechaCese: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field:'fecha_cese'
   },
   sexo: {
     allowNull: false,
@@ -94,11 +109,13 @@ const ColaboradorSchema = {
   },
   usuarioReg: {
     allowNull: false,
-    type: DataTypes.STRING(20)
+    type: DataTypes.STRING(20),
+    field:'usuario_reg'
   },
   usuarioAct: {
     allowNull: false,
-    type: DataTypes.STRING(20)
+    type: DataTypes.STRING(20),
+    field:'usuario_act'
   },
   estado: {
     allowNull: false,

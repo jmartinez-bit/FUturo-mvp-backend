@@ -1,26 +1,27 @@
 const { Model, DataTypes,Sequelize } = require('sequelize');
 
-const PUESTO_TABLE = 'puesto';
+const PERFIL_TABLE = 'perfil';
 
-const PuestoSchema = {
-  codPuesto: {
+const PerfilSchema = {
+  codPerfil: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER,
-    field:'cod_puesto'
+    field:'cod_perfil'
   },
-  puesto: {
+  nombrePerfil: {
     allowNull: false,
-    type: DataTypes.STRING(100),
+    type: DataTypes.STRING(20),
+    field:'nombre_perfil'
   },
   estado: {
     allowNull: false,
-    type: DataTypes.STRING(1)
-  }
+    type: DataTypes.CHAR(1)
+  },
 }
 
-class Puesto extends Model {
+class Perfil extends Model {
 
   static associate(models) {
 
@@ -29,11 +30,11 @@ class Puesto extends Model {
   static config(sequelize) {
     return {
       sequelize,
-      tableName: PUESTO_TABLE,
-      modelName: 'Puesto',
+      tableName: PERFIL_TABLE,
+      modelName: 'Perfil',
       timestamps: false
     }
   }
 }
 
-module.exports = { Puesto, PuestoSchema, PUESTO_TABLE }
+module.exports = { Perfil, PerfilSchema, PERFIL_TABLE }
