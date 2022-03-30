@@ -29,12 +29,17 @@ class ResourcesService{
     return data;
   }
 
-  async findAll(){
-    const query="SELECT * FROM maparecursos";
+  async findPeriods(){
+    const query="SELECT periodo FROM periodo";
     const [data] = await sequelize.query(query);
     return data;
   }
 
+  async findCustomers(idDM){
+    const query="SELECT nombre_corto FROM cliente INNER JOIN cartera_cliente ON cliente.cod_cliente=cartera_cliente.cod_cliente WHERE cod_usuario="+idDM+";";
+    const [data] = await sequelize.query(query);
+    return data;
+  }
 
 }
 module.exports = ResourcesService;
