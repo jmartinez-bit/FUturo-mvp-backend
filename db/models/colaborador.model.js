@@ -110,7 +110,24 @@ const ColaboradorSchema = {
 class Colaborador extends Model {
 
   static associate(models) {
-
+    this.hasMany(models.MapaRecurso, {
+      as: 'mapaRecursos',
+      foreignKey: 'codColaborador'
+    });
+    this.belongsToMany(models.Servicio, {
+      as: 'servicios',
+      through: models.AsignacionRecurso,
+      foreignKey: 'codColaborador',
+      otherKey: 'codServicio'
+    });
+    this.hasMany(models.AsignacionRecurso, {
+      as: 'asignaciones',
+      foreignKey: 'codColaborador'
+    });
+    this.hasMany(models.Contrato, {
+      as: 'contratos',
+      foreignKey: 'codColaborador'
+    });
   }
 
   static config(sequelize) {

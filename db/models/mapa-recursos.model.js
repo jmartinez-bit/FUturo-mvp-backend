@@ -152,7 +152,7 @@ const MapaRecursosSchema = {
 class MapaRecurso extends Model {
 
   static associate(models) {
-
+    this.belongsTo(models.Colaborador, {as: 'colaborador', foreignKey: 'codColaborador'});
   }
 
   static config(sequelize) {
