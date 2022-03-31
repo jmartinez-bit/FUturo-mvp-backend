@@ -14,7 +14,18 @@ router.get("/",async (req, res,next) =>{
 
 });
 
+router.get("/resources",async (req, res,next) =>{
+  try{
+    const resources=await service.findAll();
+    res.json(resources);
+  }catch (e){
+    next(e);
+  }
+
+});
+
 router.get("/:cliente/:periodo",async (req, res,next) =>{
+  console.log("hola goku")
   try{
     const {cliente,periodo}=req.params;
     const resources=await service.findByClientAndPeriod(cliente,periodo);
