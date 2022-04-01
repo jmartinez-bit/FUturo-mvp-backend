@@ -16,7 +16,7 @@ const ServicioSchema = {
   },
   codLineaServicio: {
     allowNull: false,
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING(10),
     references: {
       model: LINEA_SERVICIO_TABLE,
       key: 'codLineaServicio'

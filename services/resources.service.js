@@ -24,7 +24,7 @@ class ResourcesService{
     try {
       const mapaRecurso = await models.MapaRecurso.findByPk(id,
         {
-          attributes: ['horasServicio', 'licencias', 'faltas', 'vacaciones', 'horasExtras', 'totalHorasAsignaciones', 'totalHorasFacturables', 'eficiencia', 'rendimiento', 'capacity', 'clm', 'fechaFinContrato'],
+          attributes: ['horasServicio', 'licencias', 'faltas', 'vacaciones', 'horasExtras', 'totalHorasAsignaciones', 'totalHorasFacturables', 'eficiencia', 'rendimiento', 'capacity', 'clm', 'fechaFinContrato', 'fechaInicio', 'fechaFin'],
           include: [
             {
               model: models.Colaborador,
@@ -38,7 +38,21 @@ class ResourcesService{
                   as: 'servicios',
                   required: true,
                   through: {
-                    attributes: ['porAsignacion', 'fechaInicio', 'fechaFin']
+                    attributes: ['porAsignacion', 'fechaInicio', 'fechaFin'],
+                    where: {
+                      [Op.and]: [
+                        {
+                          fechaInicio: {
+                            [Op.gte]: Sequelize.literal(`(SELECT "fechaInicio" FROM "mapa-recurso" WHERE "mapa-recurso"."codMapaRecurso" = ${id})`)
+                          }
+                        },
+                        {
+                          fechaFin: {
+                            [Op.lte]: Sequelize.literal(`(SELECT "fechaFin" FROM "mapa-recurso" WHERE "mapa-recurso"."codMapaRecurso" = ${id})`)
+                          }
+                        },
+                      ]
+                    }
                   }
                 },
                 {
@@ -46,17 +60,10 @@ class ResourcesService{
                   attributes: ['codContrato', 'modalidad', 'fechaFin', 'sueldoPlanilla', 'bono', 'eps', 'clm'],
                   as: 'contratos',
                   required: true,
-                  where: {
-                    fechaFin: { [Op.eq]: Sequelize.col('MapaRecurso.fechaFinContrato')}
-                  }
+                  order: [['codContrato', 'DESC']],
+                  limit: 1
                 }
               ]
-              // association: 'colaborador',
-              // attributes: ['codColaborador'],
-              // through: {
-              //   attributes: ['porAsignacion', 'fechaInicio', 'fechaFin']
-              // },
-              // include: ['servicios']
             }
           ]
         }

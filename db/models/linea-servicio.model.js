@@ -5,9 +5,8 @@ const LINEA_SERVICIO_TABLE = 'linea-servicio';
 const LineaServicioSchema = {
   codLineaServicio: {
     allowNull: false,
-    autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.STRING(10)
   },
   lineaServicio: {
     allowNull: false,

@@ -13,7 +13,6 @@ const ContratoSchema = {
   codColaborador: {
     allowNull: false,
     type: DataTypes.INTEGER,
-    unique: true,
     references: {
       model: COLABORADOR_TABLE,
       key: 'codColaborador'
@@ -82,13 +81,12 @@ const ContratoSchema = {
     type: DataTypes.DATE
   },
   fechaCese: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.DATE
   },
   nroContratoAnt: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.INTEGER,
-    unique: true,
     references: {
       model: CONTRATO_TABLE,
       key: 'codContrato'
