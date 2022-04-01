@@ -15,20 +15,20 @@ class ResourcesService{
       return data;
   }
 
-  async findBySumClientAndPeriod(cliente,periodo){
+  async findByMontoServicio(cod_cliente,periodo,perfil,cod_colaborador){
     const client = await getConnection();
-    const rta = await client.query("SELECT sum(clm_efectivo) as clm_efectivo, sum(produccion) as produccion, sum(produccion)/sum(clm_efectivo) as productividad FROM public.maparecursos WHERE cod_cliente="+cliente+" AND periodo='"+periodo+"'");
-    // this.resources.push({
-    //   name: "carlos"
-    // })
-    // return this.resources;
+    let query = "SELECT sum(clm_efectivo) as clm_efectivo, sum(produccion) as produccion, sum(produccion)/sum(clm_efectivo) as productividad FROM public.maparecursos WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"'"
+    if(perfil != null){
+      query = query + " AND perfil = '" + perfil + "'"
+    }
+    if(cod_colaborador != null){
+      query = query + " AND cod_colaborador = " + cod_colaborador 
+    }
+    const rta = await client.query(query);
     return (await rta).rows;
-    // const query="SELECT * FROM maparecursos";
-    // const [data] = await sequelize.query(query);
-    // return data;
   }
 
-  async findAll(cliente,periodo){
+  async findAll(cod_cliente,periodo){
     const client = await getConnection();
     const rta = await client.query("SELECT * FROM public.maparecursos");
     // this.resources.push({
