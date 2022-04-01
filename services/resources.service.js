@@ -15,9 +15,22 @@ class ResourcesService{
       return data;
   }
 
-  async findAll(){
+  async findBySumClientAndPeriod(cliente,periodo){
     const client = await getConnection();
-    const rta = await client.query('SELECT * FROM public.maparecursos');
+    const rta = await client.query("SELECT sum(clm_efectivo) as clm_efectivo, sum(produccion) as produccion, sum(produccion)/sum(clm_efectivo) as productividad FROM public.maparecursos WHERE cod_cliente="+cliente+" AND periodo='"+periodo+"'");
+    // this.resources.push({
+    //   name: "carlos"
+    // })
+    // return this.resources;
+    return (await rta).rows;
+    // const query="SELECT * FROM maparecursos";
+    // const [data] = await sequelize.query(query);
+    // return data;
+  }
+
+  async findAll(cliente,periodo){
+    const client = await getConnection();
+    const rta = await client.query("SELECT * FROM public.maparecursos");
     // this.resources.push({
     //   name: "carlos"
     // })

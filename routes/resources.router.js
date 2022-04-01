@@ -14,9 +14,10 @@ router.get("/",async (req, res,next) =>{
 
 });
 
-router.get("/resources",async (req, res,next) =>{
+router.get("/resources/:cliente/:periodo",async (req, res,next) =>{
   try{
-    const resources=await service.findAll();
+    const {cliente,periodo}=req.params;
+    const resources=await service.findBySumClientAndPeriod(cliente,periodo);
     res.json(resources);
   }catch (e){
     next(e);
