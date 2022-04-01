@@ -1,16 +1,18 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
+const { Model, DataTypes ,Sequelize} = require('sequelize');
 
-const LINEA_SERVICIO_TABLE = 'linea-servicio';
+const LINEA_SERVICIO_TABLE = 'linea_servicio';
 
 const LineaServicioSchema = {
   codLineaServicio: {
     allowNull: false,
     primaryKey: true,
-    type: DataTypes.STRING(10)
+    type: DataTypes.STRING(10),
+    field:'cod_linea_servicio'
   },
   lineaServicio: {
     allowNull: false,
     type: DataTypes.STRING(100),
+    field:'linea_servicio'
   },
   estado: {
     allowNull: false,
