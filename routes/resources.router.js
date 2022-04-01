@@ -5,9 +5,8 @@ const router=express.Router();
 const service=new ResourcesService();
 
 //Buscar recursos de un Delivery Manager
-router.post("/:idDM/maparecursos",async (req, res,next) =>{
+router.post("/maparecursos",async (req, res,next) =>{
   try{
-    const {idDM}=req.params;
     const cod_cliente=req.body.cod_cliente;
     const periodo=req.body.periodo;
     const cod_perfil=req.body.cod_perfil||null;
@@ -68,9 +67,10 @@ router.get("/perfiles",async (req, res,next) =>{
 });
 
 //Retorna todos los nombres de los colaboradores
-router.get("/colaboradores",async (req, res,next) =>{
+router.get("/:id_cliente/colaboradores",async (req, res,next) =>{
   try{
-    const profiles=await service.findCollaboratorNames();
+    const {id_cliente}=req.params;
+    const profiles=await service.findCollaboratorNames(id_cliente);
     res.json(profiles);
   }catch (e){
     next(e);

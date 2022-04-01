@@ -162,7 +162,7 @@ const MapaRecursosSchema = {
   },
   estado: {
     allowNull: false,
-    type: DataTypes.CHAR(1)
+    type: DataTypes.CHAR(8)
   },
 }
 
