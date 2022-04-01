@@ -113,11 +113,19 @@ const MapaRecursosSchema = {
   },
   eficiencia: {
     allowNull: false,
-    type: DataTypes.DECIMAL(5, 2)
+    type: DataTypes.DECIMAL(5, 2),
+    get() {
+      const value = this.getDataValue('eficiencia');
+      return value === null ? null : parseFloat(value);
+    }
   },
   rendimiento: {
     allowNull: false,
-    type: DataTypes.DECIMAL(5, 2)
+    type: DataTypes.DECIMAL(5, 2),
+    get() {
+      const value = this.getDataValue('rendimiento');
+      return value === null ? null : parseFloat(value);
+    }
   },
   capacity: {
     allowNull: false,

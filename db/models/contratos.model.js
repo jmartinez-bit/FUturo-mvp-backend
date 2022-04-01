@@ -42,7 +42,11 @@ const ContratoSchema = {
   },
   sueldoPlanilla: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
+    type: DataTypes.DECIMAL(10, 2),
+    get() {
+      const value = this.getDataValue('sueldoPlanilla');
+      return value === null ? null : parseFloat(value);
+    }
   },
   asignacionFamiliar: {
     allowNull: false,
@@ -54,11 +58,19 @@ const ContratoSchema = {
   },
   bono: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
+    type: DataTypes.DECIMAL(10, 2),
+    get() {
+      const value = this.getDataValue('bono');
+      return value === null ? null : parseFloat(value);
+    }
   },
   eps: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
+    type: DataTypes.DECIMAL(10, 2),
+    get() {
+      const value = this.getDataValue('eps');
+      return value === null ? null : parseFloat(value);
+    }
   },
   sctr: {
     allowNull: false,
@@ -66,7 +78,11 @@ const ContratoSchema = {
   },
   clm: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
+    type: DataTypes.DECIMAL(10, 2),
+    get() {
+      const value = this.getDataValue('clm');
+      return value === null ? null : parseFloat(value);
+    }
   },
   indIndefinido: {
     allowNull: false,

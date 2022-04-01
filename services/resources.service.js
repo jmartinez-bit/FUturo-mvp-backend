@@ -24,12 +24,12 @@ class ResourcesService{
     try {
       const mapaRecurso = await models.MapaRecurso.findByPk(id,
         {
-          attributes: ['horasServicio', 'licencias', 'faltas', 'vacaciones', 'horasExtras', 'totalHorasAsignaciones', 'totalHorasFacturables', 'eficiencia', 'rendimiento', 'capacity', 'clm', 'fechaFinContrato', 'fechaInicio', 'fechaFin'],
+          attributes: ['horasServicio', 'licencias', 'faltas', 'vacaciones', 'horasExtras', 'totalHorasAsignaciones', 'totalHorasFacturables', 'eficiencia', 'rendimiento', 'capacity'],
           include: [
             {
               model: models.Colaborador,
               as: 'colaborador',
-              attributes: ['codColaborador', 'nombres', 'apellidoPat', 'apellidoMat'],
+              attributes: ['codColaborador', 'nroDocumento', 'nombres', 'apellidoPat', 'apellidoMat'],
               required: true,
               include: [
                 {
