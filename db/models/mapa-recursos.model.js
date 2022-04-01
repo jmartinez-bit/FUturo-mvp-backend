@@ -88,11 +88,11 @@ const MapaRecursosSchema = {
     type: DataTypes.DATE
   },
   finVacaciones: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.DATE
   },
   vacaciones: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.INTEGER
   },
   horasExtras: {

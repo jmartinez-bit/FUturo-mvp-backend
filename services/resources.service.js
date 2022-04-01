@@ -24,12 +24,15 @@ class ResourcesService{
     try {
       const mapaRecurso = await models.MapaRecurso.findByPk(id,
         {
-          attributes: ['horasServicio', 'licencias', 'faltas', 'vacaciones', 'horasExtras', 'totalHorasAsignaciones', 'totalHorasFacturables', 'eficiencia', 'rendimiento', 'capacity'],
+          attributes: ['horasServicio', 'licencias', 'faltas',
+                       'vacaciones', 'horasExtras', 'totalHorasAsignaciones',
+                       'totalHorasFacturables', 'eficiencia', 'rendimiento', 'capacity'],
           include: [
             {
               model: models.Colaborador,
               as: 'colaborador',
-              attributes: ['codColaborador', 'nroDocumento', 'nombres', 'apellidoPat', 'apellidoMat'],
+              attributes: ['codColaborador', 'nroDocumento', 'nombres',
+                           'apellidoPat', 'apellidoMat'],
               required: true,
               include: [
                 {
@@ -43,12 +46,16 @@ class ResourcesService{
                       [Op.and]: [
                         {
                           fechaInicio: {
-                            [Op.gte]: Sequelize.literal(`(SELECT "fechaInicio" FROM "mapa-recurso" WHERE "mapa-recurso"."codMapaRecurso" = ${id})`)
+                            [Op.gte]: Sequelize.literal(`(SELECT "fechaInicio"
+                                                        FROM "mapa-recurso"
+                                                        WHERE "mapa-recurso"."codMapaRecurso" = ${id})`)
                           }
                         },
                         {
                           fechaFin: {
-                            [Op.lte]: Sequelize.literal(`(SELECT "fechaFin" FROM "mapa-recurso" WHERE "mapa-recurso"."codMapaRecurso" = ${id})`)
+                            [Op.lte]: Sequelize.literal(`(SELECT "fechaFin"
+                                                        FROM "mapa-recurso"
+                                                        WHERE "mapa-recurso"."codMapaRecurso" = ${id})`)
                           }
                         },
                       ]
@@ -57,7 +64,8 @@ class ResourcesService{
                 },
                 {
                   model: models.Contrato,
-                  attributes: ['codContrato', 'modalidad', 'fechaFin', 'sueldoPlanilla', 'bono', 'eps', 'clm'],
+                  attributes: ['codContrato', 'modalidad', 'fechaFin',
+                               'sueldoPlanilla', 'bono', 'eps', 'clm'],
                   as: 'contratos',
                   required: true,
                   order: [['codContrato', 'DESC']],
