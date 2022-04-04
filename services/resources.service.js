@@ -30,8 +30,11 @@ class ResourcesService{
   }
 
   async findPeriods(){
+    // Aqui se pone en numero de anio y meses ultimos que se quieren visualizar
+    // Para este caso son 6 meses
     const ultimosAniosAVisualizar=0;
     const ultimosMesesAVisualizar=6;
+    // Se encuentra el periodo activo
     var query="SELECT periodo FROM periodo "+
               "WHERE estado='A' ;";
     var [data] = await sequelize.query(query);
@@ -39,6 +42,8 @@ class ResourcesService{
     const split=periodo.split("-");
     var month=parseInt(split[0],10);
     var year=parseInt(split[1],10);
+    // Se calcula el periodo desde el que se quiere listar
+    // Para esto se resta al periodo actual los anios y meses a visualizar
     if(month>ultimosMesesAVisualizar){
       month-=ultimosMesesAVisualizar;
       year-=ultimosAniosAVisualizar;
@@ -46,11 +51,12 @@ class ResourcesService{
       month+=(12-ultimosMesesAVisualizar);
       year-=(ultimosAniosAVisualizar+1);
     }
-        query="SELECT periodo,estado FROM periodo "+
+    //Se realiza el query
+    query="SELECT periodo,estado FROM periodo "+
               "WHERE CAST(SUBSTRING(periodo,4,4) AS int)> "+year+
               " OR ( CAST(SUBSTRING(periodo,4,4) AS int)= "+year+" AND CAST(SUBSTRING(periodo,1,2) AS int)>"+month+" ) "+
-              "ORDER BY CONCAT(SUBSTRING(periodo,4,4),SUBSTRING(periodo,1,2)) DESC;";
-        [data] = await sequelize.query(query);
+              "ORDER BY CONCAT(SUBSTRING(periodo,4,4),SUBSTRING(periodo,1,2)) DESC;";//se ordena por periodo descendente
+    [data] = await sequelize.query(query);
     return data;
   }
 
@@ -62,7 +68,7 @@ class ResourcesService{
       month=1;
       year+=1;
     }
-    const date="01/"+month+"/"+year;
+    const date="01/"+month+"/"+year;//Se usa el dia primero del mes siguiente al periodo para hacer la comparacion con la fecha de asignacion del cliente
     const query="SELECT cartera_cliente.cod_cliente,nombre_corto FROM cliente INNER JOIN cartera_cliente ON cliente.cod_cliente=cartera_cliente.cod_cliente "+
                 "WHERE cartera_cliente.estado='A' AND fecha_asignacion< CAST('"+date+"' AS date) AND cod_usuario="+idDM+";";
     const [data] = await sequelize.query(query);
