@@ -64,7 +64,7 @@ class ResourcesService{
     }
     const date="01/"+month+"/"+year;
     const query="SELECT cartera_cliente.cod_cliente,nombre_corto FROM cliente INNER JOIN cartera_cliente ON cliente.cod_cliente=cartera_cliente.cod_cliente "+
-                "WHERE cartera_cliente.estado='A' AND fecha_asignacion<= CAST('"+date+"' AS date) AND cod_usuario="+idDM+";";
+                "WHERE cartera_cliente.estado='A' AND fecha_asignacion< CAST('"+date+"' AS date) AND cod_usuario="+idDM+";";
     const [data] = await sequelize.query(query);
     return data;
   }
