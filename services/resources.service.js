@@ -30,9 +30,27 @@ class ResourcesService{
   }
 
   async findPeriods(){
-    const query="SELECT periodo,estado FROM periodo "+
-                "WHERE CAST(SUBSTRING(periodo,4,4) AS int)>= 2021 ;";
-    const [data] = await sequelize.query(query);
+    const ultimosAniosAVisualizar=0;
+    const ultimosMesesAVisualizar=6;
+    var query="SELECT periodo FROM periodo "+
+              "WHERE estado='A' ;";
+    var [data] = await sequelize.query(query);
+    const periodo=Object.values(data[0])[0];
+    const split=periodo.split("-");
+    var month=parseInt(split[0],10);
+    var year=parseInt(split[1],10);
+    if(month>ultimosMesesAVisualizar){
+      month-=ultimosMesesAVisualizar;
+      year-=ultimosAniosAVisualizar;
+    }else{
+      month+=(12-ultimosMesesAVisualizar);
+      year-=(ultimosAniosAVisualizar+1);
+    }
+        query="SELECT periodo,estado FROM periodo "+
+              "WHERE CAST(SUBSTRING(periodo,4,4) AS int)> "+year+
+              " OR ( CAST(SUBSTRING(periodo,4,4) AS int)= "+year+" AND CAST(SUBSTRING(periodo,1,2) AS int)>"+month+" ) "+
+              "ORDER BY CONCAT(SUBSTRING(periodo,4,4),SUBSTRING(periodo,1,2)) DESC;";
+        [data] = await sequelize.query(query);
     return data;
   }
 
