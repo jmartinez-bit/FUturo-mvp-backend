@@ -9,7 +9,7 @@ class ResourcesService{
     this.products=[]
   }
 
-  async findByClientPeriodProfileAndNames(cod_cliente,periodo,cod_perfil,cod_colab){
+  async findByClientPeriodProfileAndNames(cod_cliente,periodo,cod_perfil,nombres){
     const select="SELECT mapa_recursos.cod_colaborador,linea_negocio,mapa_recursos.estado,perfil.nombre_perfil,mapa_recursos.nivel,"+
               "fecha_inicio,fecha_fin,asignacion,clm_efectivo,produccion,productividad,CONCAT(nombres,' ',apellido_pat,' ',apellido_mat) AS nombre_colaborador "+
              "FROM mapa_recursos "+
@@ -20,8 +20,9 @@ class ResourcesService{
     if(cod_perfil!=null){
       query+=" AND mapa_recursos.perfil="+cod_perfil;
     }
-    if(cod_colab!=null){
-      query+=" AND mapa_recursos.cod_colaborador="+cod_colab;
+    if(nombres!=null){
+      nombres=nombres.toLowerCase();
+      query+=" AND lower(CONCAT(nombres,' ',apellido_pat,' ',apellido_mat)) like '%"+nombres+"%'";
     }
     query+=" ;";
     const [data] = await sequelize.query(query);
@@ -30,15 +31,15 @@ class ResourcesService{
 
   async findPeriods(){
     const query="SELECT periodo,estado FROM periodo "+
-                "WHERE CAST(SUBSTRING(periodo,1,4) AS int)>= 2021 ;";
+                "WHERE CAST(SUBSTRING(periodo,4,4) AS int)>= 2021 ;";
     const [data] = await sequelize.query(query);
     return data;
   }
 
-  async findCustomers(idDM,periodo){
+  async findClients(idDM,periodo){
     const split=periodo.split("-");
-    var year=parseInt(split[0],10);
-    var month=(parseInt(split[1],10)+1);
+    var year=parseInt(split[1],10);
+    var month=(parseInt(split[0],10)+1);
     if(month===13){
       month=1;
       year+=1;
