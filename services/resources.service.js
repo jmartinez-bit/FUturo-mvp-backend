@@ -107,6 +107,20 @@ class ResourcesService{
     return rta;
   }
 
+  async findCollaboratorNames(cod_cliente,periodo){
+
+    const query="SELECT colaborador.cod_colaborador,nombres,apellido_pat,apellido_mat FROM colaborador "+
+
+                "INNER JOIN mapa_recursos ON colaborador.cod_colaborador=mapa_recursos.cod_colaborador "+
+
+                "WHERE mapa_recursos.cod_cliente="+cod_cliente+" AND periodo='"+periodo+"' ;";
+
+    const [data] = await sequelize.query(query);
+
+    return data;
+
+  }
+
 
   //Servicio UH 4
   async findByAperturaMapaRecursosMensual(){
