@@ -32,10 +32,10 @@ router.get("/periods",async (req, res,next) =>{
 });
 
 //Retorna todos los clientes de un Delivery Manager
-router.get("/:idDM/clients/:period",async (req, res,next) =>{
+router.get("/:idDM/clients",async (req, res,next) =>{
   try{
-    const {idDM,period}=req.params;
-    const clients=await service.findClients(idDM,period);
+    const {idDM}=req.params;
+    const clients=await service.findClients(idDM);
     res.json(clients);
   }catch (e){
     next(e);

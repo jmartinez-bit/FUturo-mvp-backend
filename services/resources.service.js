@@ -60,24 +60,12 @@ class ResourcesService{
     return data;
   }
 
-  async findClients(idDM,periodo){
-    const split=periodo.split("-");
-    var year=parseInt(split[1],10);
-    var month=parseInt(split[0],10);
-    const date="01/"+month+"/"+year;//el primero de este mes
-    if(++month===13){
-      month=1;
-      year+=1;
-    }
-    const nextDate="01/"+month+"/"+year;//Se usa el dia primero del mes siguiente al periodo para hacer la comparacion con la fecha de asignacion del cliente
+  async findClients(idDM){
     const query="SELECT cartera_cliente.cod_cliente,nombre_corto FROM cliente "+
                 "INNER JOIN cartera_cliente ON cliente.cod_cliente=cartera_cliente.cod_cliente "+
-                "INNER JOIN servicio ON cliente.cod_cliente=servicio.cod_cliente "+
-                "WHERE servicio.fecha_ini_real<CAST('"+nextDate+"' AS date) "+
-                "AND (servicio.fecha_fin_real IS NULL OR servicio.fecha_fin_real>=CAST('"+date+"' AS date) ) "+
-                "AND cod_usuario="+idDM+";";
+                "WHERE cod_usuario="+idDM+" AND cartera_cliente.estado='A' ;";
     const [data] = await sequelize.query(query);
-    return data;
+     return data;
   }
 
   async findProfiles(){
