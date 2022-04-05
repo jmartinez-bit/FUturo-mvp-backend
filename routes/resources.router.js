@@ -5,25 +5,14 @@ const router = express.Router();
 const service = new ResourcesService();
 
 //Buscar recursos de un Delivery Manager
-router.post("/maparecursos",async (req, res,next) =>{
+router.post("/resourcesmap",async (req, res,next) =>{
   try{
-    const cod_cliente=req.body.cod_cliente;
-    const periodo=req.body.periodo;
+    const {cod_cliente,periodo}=req.body;
     const cod_perfil=req.body.cod_perfil||null;
-    const cod_colab=req.body.cod_colaborador||null;
-    if(cod_perfil===null && cod_colab===null){
-      const resources=await service.findByClientAndPeriod(cod_cliente,periodo);
-      res.json(resources);
-    }else if(cod_perfil===null && cod_colab!=null){
-      const resources=await service.findByClientPeriodAndNames(cod_cliente,periodo,cod_colab);
-      res.json(resources);
-    }else if(cod_perfil!=null && cod_colab===null){
-      const resources=await service.findByClientPeriodAndProfile(cod_cliente,periodo,cod_perfil);
-      res.json(resources);
-    }else if(cod_perfil!=null && cod_colab!=null){
-      const resources=await service.findByClientPeriodProfileAndNames(cod_cliente,periodo,cod_perfil,cod_colab);
-      res.json(resources);
-    }
+    const nombres=req.body.nombres||null;
+
+    const resources=await service.findByClientPeriodProfileAndNames(cod_cliente,periodo,cod_perfil,nombres);
+    res.json(resources);
 
   }catch (e){
     next(e);
@@ -32,7 +21,7 @@ router.post("/maparecursos",async (req, res,next) =>{
 });
 
 //Retorna todos los periodos
-router.get("/periodos",async (req, res,next) =>{
+router.get("/periods",async (req, res,next) =>{
   try{
     const periods=await service.findPeriods();
     res.json(periods);
@@ -43,11 +32,11 @@ router.get("/periodos",async (req, res,next) =>{
 });
 
 //Retorna todos los clientes de un Delivery Manager
-router.get("/:idDM/clientes",async (req, res,next) =>{
+router.get("/:idDM/clients/:period",async (req, res,next) =>{
   try{
-    const {idDM}=req.params;
-    const customers=await service.findCustomers(idDM);
-    res.json(customers);
+    const {idDM,period}=req.params;
+    const clients=await service.findClients(idDM,period);
+    res.json(clients);
   }catch (e){
     next(e);
   }
@@ -56,7 +45,7 @@ router.get("/:idDM/clientes",async (req, res,next) =>{
 });
 
 //Retorna todos los perfiles
-router.get("/perfiles",async (req, res,next) =>{
+router.get("/profiles",async (req, res,next) =>{
   try{
     const profiles=await service.findProfiles();
     res.json(profiles);
@@ -76,10 +65,10 @@ router.get('/colaborador/:resmapid', async (req, res, next) => {
 });
 
 //Retorna todos los nombres de los colaboradores
-router.get("/:id_cliente/colaboradores",async (req, res,next) =>{
+router.get("/:id_client/collaborators/:period",async (req, res,next) =>{
   try{
-    const {id_cliente}=req.params;
-    const profiles=await service.findCollaboratorNames(id_cliente);
+    const {id_client,period}=req.params;
+    const profiles=await service.findCollaboratorNames(id_client,period);
     res.json(profiles);
   }catch (e){
     next(e);
