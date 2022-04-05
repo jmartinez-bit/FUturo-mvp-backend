@@ -1,0 +1,64 @@
+--HISTORIA 1
+CREATE TABLE public.MapaRecursos
+(
+	periodo character varying(7),
+	cod_cliente numeric,
+	cod_mapa_recurso numeric NOT NULL,
+	linea_negocio character varying(10),
+	estado char,
+	cod_colaborador numeric(8),
+	asignacion numeric(5,2),
+	box character varying(6),
+	perfil character varying(30),
+	nivel character varying(30),
+	fecha_fin date,
+	fecha_inicio date,
+	fecha_fin_conrtrato date,
+	fecha_cese date,
+	horas_servicio numeric,
+	licencias numeric,
+	faltas numeric,
+	inicio_vacaciones date,
+	fin_vacaciones date,
+	vacaciones numeric,
+	horas_extras numeric,
+	produccion_horas_extras decimal(10,2),
+	total_horas_asignaciones numeric,
+	total_horas_facturables numeric,
+	eficiencia numeric(7,2),
+	rendimiento numeric(7,2),
+	capacity numeric,
+	clm numeric(10,2),
+	costo_asignacion numeric(10,2),
+	clm_efectivo numeric(10,2),
+	produccion numeric(10,2),
+	productividad numeric(7,2)
+)
+
+insert into maparecursos (periodo, cod_cliente, cod_mapa_recurso, linea_negocio, estado, cod_colaborador, asignacion, box, perfil, nivel, fecha_fin, fecha_inicio, fecha_fin_conrtrato, fecha_cese, horas_servicio, licencias, faltas, inicio_vacaciones, fin_vacaciones, vacaciones, horas_extras, produccion_horas_extras, total_horas_asignaciones, total_horas_facturables, eficiencia, rendimiento, capacity, clm, costo_asignacion, clm_efectivo, produccion, productividad) values ('2022-02', 77889553, 1, 'SWF_', 'i', 77884844, 0.8, 'box2', 'programador frontend', 'semi-senior', '2021-12-07', '2022-01-30', '2022-01-01', '2022-02-12', 113, 11, 12, '2021-01-13', '2021-08-08', 11, 11, 218, 102, 159, 1.3, 0.9, 19, 3551, 3919, 3007, 3717, 0.88);
+insert into maparecursos (periodo, cod_cliente, cod_mapa_recurso, linea_negocio, estado, cod_colaborador, asignacion, box, perfil, nivel, fecha_fin, fecha_inicio, fecha_fin_conrtrato, fecha_cese, horas_servicio, licencias, faltas, inicio_vacaciones, fin_vacaciones, vacaciones, horas_extras, produccion_horas_extras, total_horas_asignaciones, total_horas_facturables, eficiencia, rendimiento, capacity, clm, costo_asignacion, clm_efectivo, produccion, productividad) values ('2021-07', 76464364, 2, 'PRY_', 'a', 73268169, 0.6, 'box2', 'arquitecto', 'junior', '2021-08-04', '2021-01-10', '2022-03-09', '2021-09-02', 116, 11, 10, '2021-07-06', '2021-10-10', 12, 10, 270, 92, 153, 0.6, 1.3, 89, 2404, 2759, 1470, 5283, 0.93);
+insert into maparecursos (periodo, cod_cliente, cod_mapa_recurso, linea_negocio, estado, cod_colaborador, asignacion, box, perfil, nivel, fecha_fin, fecha_inicio, fecha_fin_conrtrato, fecha_cese, horas_servicio, licencias, faltas, inicio_vacaciones, fin_vacaciones, vacaciones, horas_extras, produccion_horas_extras, total_horas_asignaciones, total_horas_facturables, eficiencia, rendimiento, capacity, clm, costo_asignacion, clm_efectivo, produccion, productividad) values ('2022-02', 77889553, 3, 'SWF_', 'a', 72465846, 0.1, 'box1', 'programador frontend', 'semi-senior', '2022-06-20', '2021-08-03', '2021-09-10', '2021-08-26', 118, 10, 12, '2021-11-10', '2021-12-07', 11, 10, 315, 108, 153, 1.4, 1.2, 89, 2895, 1915, 1414, 2648, 1.63);
+insert into maparecursos (periodo, cod_cliente, cod_mapa_recurso, linea_negocio, estado, cod_colaborador, asignacion, box, perfil, nivel, fecha_fin, fecha_inicio, fecha_fin_conrtrato, fecha_cese, horas_servicio, licencias, faltas, inicio_vacaciones, fin_vacaciones, vacaciones, horas_extras, produccion_horas_extras, total_horas_asignaciones, total_horas_facturables, eficiencia, rendimiento, capacity, clm, costo_asignacion, clm_efectivo, produccion, productividad) values ('2021-12', 78145623, 4, 'SWF_', 'a', 75267463, 0.9, 'box1', 'arquitecto', 'senior', '2021-11-14', '2021-04-06', '2022-06-25', '2021-08-28', 115, 12, 11, '2021-10-09', '2021-12-17', 10, 12, 210, 166, 174, 0.3, 1.5, 89, 3463, 3283, 1991, 3435, 1.57);
+insert into maparecursos (periodo, cod_cliente, cod_mapa_recurso, linea_negocio, estado, cod_colaborador, asignacion, box, perfil, nivel, fecha_fin, fecha_inicio, fecha_fin_conrtrato, fecha_cese, horas_servicio, licencias, faltas, inicio_vacaciones, fin_vacaciones, vacaciones, horas_extras, produccion_horas_extras, total_horas_asignaciones, total_horas_facturables, eficiencia, rendimiento, capacity, clm, costo_asignacion, clm_efectivo, produccion, productividad) values ('2021-06', 71577727, 5, 'SWF_', 'i', 75180353, 0.3, 'box1', 'arquitecto', 'junior', '2021-06-25', '2022-01-01', '2022-06-26', '2021-11-29', 118, 11, 11, '2021-04-03', '2021-07-31', 11, 10, 244, 150, 166, 0.4, 1.2, 16, 2188, 1660, 1433, 5335, 1.61);
+insert into maparecursos (periodo, cod_cliente, cod_mapa_recurso, linea_negocio, estado, cod_colaborador, asignacion, box, perfil, nivel, fecha_fin, fecha_inicio, fecha_fin_conrtrato, fecha_cese, horas_servicio, licencias, faltas, inicio_vacaciones, fin_vacaciones, vacaciones, horas_extras, produccion_horas_extras, total_horas_asignaciones, total_horas_facturables, eficiencia, rendimiento, capacity, clm, costo_asignacion, clm_efectivo, produccion, productividad) values ('2021-11', 76843395, 6, 'SWF_', 'a', 77189358, 0.3, 'box1', 'programador frontend', 'senior', '2021-07-25', '2021-10-22', '2021-11-11', '2021-12-23', 103, 11, 11, '2022-01-23', '2021-08-06', 10, 12, 386, 125, 169, 0.5, 0.6, 58, 3513, 2950, 1631, 5881, 1.03);
+insert into maparecursos (periodo, cod_cliente, cod_mapa_recurso, linea_negocio, estado, cod_colaborador, asignacion, box, perfil, nivel, fecha_fin, fecha_inicio, fecha_fin_conrtrato, fecha_cese, horas_servicio, licencias, faltas, inicio_vacaciones, fin_vacaciones, vacaciones, horas_extras, produccion_horas_extras, total_horas_asignaciones, total_horas_facturables, eficiencia, rendimiento, capacity, clm, costo_asignacion, clm_efectivo, produccion, productividad) values ('2022-02', 75252571, 7, 'PRY_', 'a', 71627536, 0.2, 'box2', 'programador backend', 'junior', '2021-11-08', '2021-09-14', '2021-09-05', '2021-12-01', 120, 11, 12, '2021-04-10', '2021-12-04', 10, 12, 371, 120, 167, 0.9, 1.1, 100, 2593, 3134, 3287, 5484, 1.56);
+insert into maparecursos (periodo, cod_cliente, cod_mapa_recurso, linea_negocio, estado, cod_colaborador, asignacion, box, perfil, nivel, fecha_fin, fecha_inicio, fecha_fin_conrtrato, fecha_cese, horas_servicio, licencias, faltas, inicio_vacaciones, fin_vacaciones, vacaciones, horas_extras, produccion_horas_extras, total_horas_asignaciones, total_horas_facturables, eficiencia, rendimiento, capacity, clm, costo_asignacion, clm_efectivo, produccion, productividad) values ('2021-09', 76292279, 8, 'PRY_', 'a', 74621924, 0.9, 'box2', 'programador frontend', 'semi-senior', '2021-10-12', '2021-09-21', '2022-02-14', '2021-10-14', 117, 12, 12, '2021-03-09', '2022-04-21', 10, 10, 251, 169, 155, 0.6, 1.6, 54, 3003, 2971, 2741, 5705, 0.99);
+insert into maparecursos (periodo, cod_cliente, cod_mapa_recurso, linea_negocio, estado, cod_colaborador, asignacion, box, perfil, nivel, fecha_fin, fecha_inicio, fecha_fin_conrtrato, fecha_cese, horas_servicio, licencias, faltas, inicio_vacaciones, fin_vacaciones, vacaciones, horas_extras, produccion_horas_extras, total_horas_asignaciones, total_horas_facturables, eficiencia, rendimiento, capacity, clm, costo_asignacion, clm_efectivo, produccion, productividad) values ('2022-03', 73243841, 9, 'PRY_', 'i', 75149677, 0.4, 'box1', 'programador backend', 'senior', '2021-08-03', '2022-01-07', '2021-07-24', '2022-02-09', 111, 10, 12, '2022-01-15', '2021-10-01', 12, 11, 226, 80, 151, 0.9, 0.9, 71, 3328, 3765, 2940, 5853, 1.25);
+
+--RUTA--
+http://localhost:3000/api/v1/resources/montoservicio
+
+--DATOS DE ENTRADA--
+{
+    "cod_cliente":77889553,
+    "periodo":"2022-02"
+}
+
+--DATOS SALIDA--
+[
+  {
+    "clm_efectivo": "4421.00",
+    "produccion": "6365.00",
+    "productividad": "1.4397195204704818"
+  }
+]

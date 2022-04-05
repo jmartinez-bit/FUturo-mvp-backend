@@ -7,7 +7,7 @@ function getSelect(attributes = '*') {
 class ResourcesService{
 
   constructor(){
-    this.products=[]
+    this.resources=[]
   }
 
   async findByClientPeriodProfileAndNames(cod_cliente,periodo,cod_perfil,nombres){
@@ -96,98 +96,31 @@ class ResourcesService{
     return data;
   }
 
-  // async findByResourceMapID(id) {
-  //   // Columnas
-  //   const select = getSelect(['mapa_recursos.eficiencia', 'mapa_recursos.rendimiento',
-  //   'mapa_recursos.horas_servicio', 'mapa_recursos.licencias', 'mapa_recursos.faltas',
-  //   'mapa_recursos.vacaciones', 'mapa_recursos.horas_extras', 'mapa_recursos.total_horas_asignaciones',
-  //   'mapa_recursos.total_horas_facturables', 'mapa_recursos.capacity', 'mapa_recursos.cod_colaborador',
-  //   'mapa_recursos.fecha_inicio', 'mapa_recursos.fecha_fin']);
 
-  //   // Sentencia
-  //   try {
-  //     const query = `${ select }
-  //               WHERE mapa_recursos.cod_mapa_recurso=${ id };`;
-  //   const [[data]] = await sequelize.query(query);
-
-  //   if (!data) return {};
-  //   const getContract = await collaboratorService.findByCodColaboradorJoinContrato(data.cod_colaborador);
-  //   const getAssignments = await assignmentsService.findByCodColaboradorJoinServicio(data.cod_colaborador, data.fecha_inicio, data.fecha_fin);
-  //   delete data.codColaborador;
-  //   delete data.fechaInicio;
-  //   delete data.fechaFin;
-
-  //   return {productividad: data, contrato: getContract, asignaciones: getAssignments};
-  //   } catch(err) {
-  //     console.log(err);
-  //   }
+  //Servicio de calculo de monto total
+  async findByMontoServicio(cod_cliente,periodo,perfil,cod_colaborador){
+    // const client = await getConnection();
+    let query = "SELECT sum(clm_efectivo) as clm_efectivo, sum(produccion) as produccion, sum(produccion)/sum(clm_efectivo) as productividad FROM public.mapa_recursos WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"'"
+    if(perfil != null){
+      query = query + " AND perfil = '" + perfil + "'"
+    }
+    if(cod_colaborador != null){
+      query = query + " AND cod_colaborador = " + cod_colaborador
+    }
+    query = query + ";";
+    const [[rta]] = await sequelize.query(query);
+    return rta;
+  }
 
 
-  // }
-
-  // async findOne(id) {
-  //   try {
-  //     const mapaRecurso = await models.MapaRecurso.findByPk(id,
-  //       {
-  //         attributes: ['horasServicio', 'licencias', 'faltas',
-  //                      'vacaciones', 'horasExtras', 'totalHorasAsignaciones',
-  //                      'totalHorasFacturables', 'eficiencia', 'rendimiento', 'capacity'],
-  //         include: [
-  //           {
-  //             model: models.Colaborador,
-  //             as: 'colaborador',
-  //             attributes: ['codColaborador', 'nroDocumento', 'nombres',
-  //                          'apellidoPat', 'apellidoMat'],
-  //             required: true,
-  //             include: [
-  //               {
-  //                 model: models.Servicio,
-  //                 attributes: ['tipoServicio', 'descripcionServicio'],
-  //                 as: 'servicios',
-  //                 required: true,
-  //                 through: {
-  //                   attributes: ['porAsignacion', 'fechaInicio', 'fechaFin'],
-  //                   where: {
-  //                     [Op.and]: [
-  //                       {
-  //                         fechaInicio: {
-  //                           [Op.gte]: Sequelize.literal(`(SELECT "fechaInicio"
-  //                                                       FROM mapa_recursos
-  //                                                       WHERE mapa_recursos."codMapaRecurso" = ${id})`)
-  //                         }
-  //                       },
-  //                       {
-  //                         fechaFin: {
-  //                           [Op.lte]: Sequelize.literal(`(SELECT "fechaFin"
-  //                                                       FROM mapa_recursos
-  //                                                       WHERE mapa_recursos."codMapaRecurso" = ${id})`)
-  //                         }
-  //                       },
-  //                     ]
-  //                   }
-  //                 }
-  //               },
-  //               {
-  //                 model: models.Contrato,
-  //                 attributes: ['codContrato', 'modalidad', 'fechaFin',
-  //                              'sueldoPlanilla', 'bono', 'eps', 'clm'],
-  //                 as: 'contratos',
-  //                 required: true,
-  //                 order: [['codContrato', 'DESC']],
-  //                 limit: 1
-  //               }
-  //             ]
-  //           }
-  //         ]
-  //       }
-  //     );
-  //     if (!mapaRecurso) {
-  //       console.log('no hay recurso');
-  //     }
-  //     return mapaRecurso;
-  //   } catch(er) {
-  //     console.log(er);
-  //   }
+  //Servicio UH 4
+  async findByAperturaMapaRecursosMensual(){
+    // const client = await getConnection();
+    // const periodo = fecha.getMonth() + 1;
+    // console.log(periodo);
+    const rta = await sequelize.query("SELECT * FROM public.maparecursos");
+    return (await rta).rows;
+  }
 
   // }
 
