@@ -14,6 +14,7 @@ router.get("/",async (req, res,next) =>{
 
 });
 
+//Calculo del monto de servicio por periodo y cliente.
 router.get("/montoservicio",async (req, res,next) =>{
   try{
     const cod_cliente=req.body.cod_cliente;
@@ -29,16 +30,16 @@ router.get("/montoservicio",async (req, res,next) =>{
 
 });
 
-// router.get("/:cliente/:periodo",async (req, res,next) =>{
-//   console.log("hola goku")
-//   try{
-//     const {cliente,periodo}=req.params;
-//     const resources=await service.findByClientAndPeriod(cliente,periodo);
-//     res.json(resources);
-//   }catch (e){
-//     next(e);
-//   }
-// });
+//Proceso de apertura mensual de mapa de recursos.
+router.get("/aperturamaparecursos",async (req, res,next) =>{
+  try{
+    const resources=await service.findByAperturaMapaRecursosMensual();
+    res.json(resources);
+  }catch (e){
+    next(e);
+  }
+
+});
 
 
 module.exports = router;
