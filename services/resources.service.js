@@ -10,11 +10,11 @@ class ResourcesService{
   }
 
   async findByClientPeriodProfileAndNames(cod_cliente,periodo,cod_perfil,nombres){
-    const select="SELECT cod_mapa_recurso,mapa_recursos.cod_colaborador,linea_negocio,mapa_recursos.estado,perfil.nombre_perfil,mapa_recursos.nivel,"+
+    const select="SELECT cod_mapa_recurso,mapa_recursos.cod_colaborador,linea_negocio,mapa_recursos.estado,puesto AS perfil,mapa_recursos.nivel,"+
               "fecha_inicio,fecha_fin,asignacion,fecha_fin_contrato,clm_efectivo,produccion,productividad,CONCAT(nombres,' ',apellido_pat,' ',apellido_mat) AS nombre_colaborador "+
              "FROM mapa_recursos "+
              "INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador "+
-             "INNER JOIN perfil ON mapa_recursos.perfil=perfil.cod_perfil ";
+             "INNER JOIN puesto ON mapa_recursos.perfil=puesto.cod_puesto ";
     var query=select+
                 "WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"' ";
     if(cod_perfil!=null){
@@ -69,7 +69,7 @@ class ResourcesService{
   }
 
   async findProfiles(){
-    const query="SELECT cod_perfil,nombre_perfil FROM perfil "+
+    const query="SELECT cod_puesto,puesto FROM puesto "+
                 "WHERE estado='A';";
     const [data] = await sequelize.query(query);
     return data;
