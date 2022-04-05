@@ -11,11 +11,6 @@ const ColaboradorSchema = {
     type: DataTypes.INTEGER,
     field:'cod_colaborador'
   },
-  tipoDoc: {
-    allowNull: false,
-    type: DataTypes.STRING(10),
-    field:'tipo_doc'
-  },
   nroDocumento: {
     allowNull: false,
     type: DataTypes.STRING(15),
@@ -24,23 +19,21 @@ const ColaboradorSchema = {
   codPuesto: {
     allowNull: false,
     type: DataTypes.INTEGER,
-    unique: true,
     references: {
       model: PUESTO_TABLE,
       key: 'cod_puesto'
     },
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL',
-    field:'cod_puesto'
+    field: 'cod_puesto',
   },
   nivel: {
     allowNull: false,
-    type: DataTypes.STRING(20)
+    type: DataTypes.STRING(20),
   },
   codArea: {
     allowNull: false,
     type: DataTypes.INTEGER,
-    unique: true,
     references: {
       model: AREA_TABLE,
       key: 'cod_area'
@@ -51,7 +44,7 @@ const ColaboradorSchema = {
   },
   nombres: {
     allowNull: false,
-    type: DataTypes.STRING(100)
+    type: DataTypes.STRING(100),
   },
   apellidoMat: {
     allowNull: false,
@@ -105,7 +98,7 @@ const ColaboradorSchema = {
   },
   sexo: {
     allowNull: false,
-    type: DataTypes.STRING(1)
+    type: DataTypes.STRING(1),
   },
   usuarioReg: {
     allowNull: false,
@@ -119,31 +112,29 @@ const ColaboradorSchema = {
   },
   estado: {
     allowNull: false,
-    type: DataTypes.STRING(1)
+    type: DataTypes.STRING(1),
   },
-
-}
+};
 
 class Colaborador extends Model {
-
   static associate(models) {
     this.hasMany(models.MapaRecurso, {
       as: 'mapaRecursos',
-      foreignKey: 'codColaborador'
+      foreignKey: 'codColaborador',
     });
     this.belongsToMany(models.Servicio, {
       as: 'servicios',
       through: models.AsignacionRecurso,
       foreignKey: 'codColaborador',
-      otherKey: 'codServicio'
+      otherKey: 'codServicio',
     });
     this.hasMany(models.AsignacionRecurso, {
       as: 'asignaciones',
-      foreignKey: 'codColaborador'
+      foreignKey: 'codColaborador',
     });
     this.hasMany(models.Contrato, {
       as: 'contratos',
-      foreignKey: 'codColaborador'
+      foreignKey: 'codColaborador',
     });
   }
 
@@ -152,9 +143,9 @@ class Colaborador extends Model {
       sequelize,
       tableName: COLABORADOR_TABLE,
       modelName: 'Colaborador',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 
-module.exports = { Colaborador, ColaboradorSchema, COLABORADOR_TABLE }
+module.exports = { Colaborador, ColaboradorSchema, COLABORADOR_TABLE };
