@@ -8,7 +8,7 @@ const joinContrato = `INNER JOIN contrato ON colaborador.cod_colaborador = contr
 
 class CollaboratorService{
 
-  async findByCodColaboradorJoinContrato(codColaborador) {
+  async findByCodColaboradorJoinContrato(codColaborador, fechFin) {
     // Columnas
     const select = getSelect(['colaborador.cod_colaborador', 'colaborador.nro_documento',
     'colaborador."nombres"', 'colaborador.apellido_pat', 'colaborador.apellido_mat', 'contrato.sueldo_planilla',
@@ -17,6 +17,7 @@ class CollaboratorService{
     // Sentencia
     const query=`${ select } ${ joinContrato }
                 WHERE colaborador.cod_colaborador=${ codColaborador }
+                AND contrato.fecha_fin='${ fechFin.toString() }'
                 ORDER BY contrato.cod_contrato DESC LIMIT 1;`;
     const [[data]] = await sequelize.query(query);
 

@@ -37,10 +37,10 @@ router.get('/productividad/:resmapid', async (req, res, next) => {
   }
 });
 
-router.get('/contrato/:id', async (req, res, next) => {
+router.get('/contrato/:id/:fecFin', async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const contract = await collaboratorService.findByCodColaboradorJoinContrato(id);
+    const { id, fecFin } = req.params;
+    const contract = await collaboratorService.findByCodColaboradorJoinContrato(id, fecFin);
     res.json(contract);
   } catch (error) {
     next(error);
