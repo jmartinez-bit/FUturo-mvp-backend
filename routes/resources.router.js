@@ -53,13 +53,6 @@ router.get("/profiles",async (req, res,next) =>{
   try{
     const profiles=await service.findProfiles();
     res.json(profiles);
-    const cod_cliente=req.body.cod_cliente;
-    const periodo=req.body.periodo;
-    const perfil=req.body.perfil||null;
-    const cod_colaborador=req.body.cod_colaborador||null;
-
-    const resources=await service.findByMontoServicio(cod_cliente,periodo,perfil,cod_colaborador);
-    res.json(resources);
   }catch (e){
     next(e);
   }
