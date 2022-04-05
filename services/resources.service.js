@@ -117,7 +117,5 @@ class ResourcesService{
     return (await rta).rows;
   }
 
-  // }
-
 }
 module.exports = ResourcesService;
