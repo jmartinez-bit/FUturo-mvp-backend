@@ -1,4 +1,4 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const { COLABORADOR_TABLE } = require('./colaborador.model');
 
 const CONTRATO_TABLE = 'contrato';
@@ -8,17 +8,19 @@ const ContratoSchema = {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    field: 'cod_contrato',
   },
   codColaborador: {
     allowNull: false,
     type: DataTypes.INTEGER,
     references: {
       model: COLABORADOR_TABLE,
-      key: 'codColaborador'
+      key: 'cod_colaborador',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
+    field: 'cod_colaborador',
   },
   tipo: {
     allowNull: false,
@@ -30,122 +32,117 @@ const ContratoSchema = {
   },
   indEps: {
     allowNull: false,
-    type: DataTypes.STRING(1)
+    type: DataTypes.STRING(1),
+    field: 'ind_eps',
   },
   indSCTR: {
     allowNull: false,
-    type: DataTypes.STRING(1)
+    type: DataTypes.STRING(1),
+    field: 'ind_sctr',
   },
   indAsignFamiliar: {
     allowNull: false,
-    type: DataTypes.STRING(1)
+    type: DataTypes.STRING(1),
+    field: 'ind_asign_familiar',
   },
   sueldoPlanilla: {
     allowNull: false,
     type: DataTypes.DECIMAL(10, 2),
-    get() {
-      const value = this.getDataValue('sueldoPlanilla');
-      return value === null ? null : parseFloat(value);
-    }
+    field: 'sueldo_planilla',
   },
   asignacionFamiliar: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
+    type: DataTypes.DECIMAL(10, 2),
+    field: 'asignacion_familiar',
   },
   rxh: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
+    type: DataTypes.DECIMAL(10, 2),
   },
   bono: {
     allowNull: false,
     type: DataTypes.DECIMAL(10, 2),
-    get() {
-      const value = this.getDataValue('bono');
-      return value === null ? null : parseFloat(value);
-    }
   },
   eps: {
     allowNull: false,
     type: DataTypes.DECIMAL(10, 2),
-    get() {
-      const value = this.getDataValue('eps');
-      return value === null ? null : parseFloat(value);
-    }
   },
   sctr: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
+    type: DataTypes.DECIMAL(10, 2),
   },
   clm: {
     allowNull: false,
     type: DataTypes.DECIMAL(10, 2),
-    get() {
-      const value = this.getDataValue('clm');
-      return value === null ? null : parseFloat(value);
-    }
   },
   indIndefinido: {
-    allowNull: false,
-    type: DataTypes.STRING(1)
+    allowNull: true,
+    type: DataTypes.STRING(1),
+    field: 'ind_indefinido',
   },
   fechaInicio: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field: 'fecha_inicio',
   },
   fechaFin: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field: 'fecha_fin',
   },
   fechaCese: {
     allowNull: true,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field: 'fecha_cese',
   },
   nroContratoAnt: {
     allowNull: true,
     type: DataTypes.INTEGER,
     references: {
       model: CONTRATO_TABLE,
-      key: 'codContrato'
+      key: 'cod_contrato',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
+    field: 'nro_contrato_ant',
   },
   fechaReg: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field: 'fecha_reg',
   },
   usuarioRegistro: {
     allowNull: false,
-    type: DataTypes.STRING(10)
+    type: DataTypes.STRING(10),
+    field: 'usuario_registro',
   },
   fechaAct: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field: 'fecha_act',
   },
   usuarioAct: {
     allowNull: false,
-    type: DataTypes.STRING(10)
+    type: DataTypes.STRING(10),
+    field: 'usuario_act',
   },
   estado: {
     allowNull: false,
-    type: DataTypes.CHAR(2)
+    type: DataTypes.CHAR(2),
   },
-}
+};
 
 class Contrato extends Model {
-
-  static associate(models) {
-
-  }
+  static associate(models) {}
 
   static config(sequelize) {
     return {
       sequelize,
       tableName: CONTRATO_TABLE,
       modelName: 'Contrato',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 
-module.exports = { Contrato, ContratoSchema, CONTRATO_TABLE }
+module.exports = { Contrato, ContratoSchema, CONTRATO_TABLE };

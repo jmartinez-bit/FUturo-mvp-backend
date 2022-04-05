@@ -1,15 +1,16 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const { COLABORADOR_TABLE } = require('./colaborador.model');
 const { PERIODO_TABLE } = require('./periodo.model');
 
-const MAPA_RECURSOS_TABLE = 'mapa-recurso';
+const MAPA_RECURSOS_TABLE = 'mapa_recursos';
 
 const MapaRecursosSchema = {
   codMapaRecurso: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    field:'cod_mapa_recurso'
   },
   periodo: {
     allowNull: false,
@@ -23,11 +24,13 @@ const MapaRecursosSchema = {
   },
   codCliente: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    field:'cod_cliente'
   },
   lineaNegocio: {
     allowNull: false,
     type: DataTypes.STRING(10),
+    field:'linea_negocio'
   },
   asignacion: {
     allowNull: false,
@@ -38,10 +41,11 @@ const MapaRecursosSchema = {
     type: DataTypes.INTEGER,
     references: {
       model: COLABORADOR_TABLE,
-      key: 'codColaborador'
+      key: 'cod_colaborador'
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
+    field:'cod_colaborador'
   },
   box: {
     allowNull: false,
@@ -57,23 +61,28 @@ const MapaRecursosSchema = {
   },
   fechaInicio: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field:'fecha_inicio'
   },
   fechaFin: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field:'fecha_fin'
   },
   fechaCese: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field:'fecha_cese'
   },
   fechaFinContrato: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field:'fecha_fin_contrato'
   },
   horasServicio: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    field:'horas_servicio'
   },
   licencias: {
     allowNull: false,
@@ -85,47 +94,45 @@ const MapaRecursosSchema = {
   },
   inicioVacaciones: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field:'inicio_vacaciones'
   },
   finVacaciones: {
-    allowNull: true,
-    type: DataTypes.DATE
+    allowNull: false,
+    type: DataTypes.DATE,
+    field:'fin_vacaciones'
   },
   vacaciones: {
-    allowNull: true,
+    allowNull: false,
     type: DataTypes.INTEGER
   },
   horasExtras: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    field:'horas_extras'
   },
   produccionHorasExtras: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10,2)
+    type: DataTypes.DECIMAL(10,2),
+    field:'produccion_horas_extras'
   },
   totalHorasAsignaciones: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    field:'total_horas_asignaciones'
   },
   totalHorasFacturables: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    field:'total_horas_facturables'
   },
   eficiencia: {
     allowNull: false,
-    type: DataTypes.DECIMAL(5, 2),
-    get() {
-      const value = this.getDataValue('eficiencia');
-      return value === null ? null : parseFloat(value);
-    }
+    type: DataTypes.DECIMAL(5, 2)
   },
   rendimiento: {
     allowNull: false,
-    type: DataTypes.DECIMAL(5, 2),
-    get() {
-      const value = this.getDataValue('rendimiento');
-      return value === null ? null : parseFloat(value);
-    }
+    type: DataTypes.DECIMAL(5, 2)
   },
   capacity: {
     allowNull: false,
@@ -137,11 +144,13 @@ const MapaRecursosSchema = {
   },
   costoAsignacion: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
+    type: DataTypes.DECIMAL(10, 2),
+    field:'costo_asignacion'
   },
   clmEfectivo: {
     allowNull: false,
-    type: DataTypes.DECIMAL(10, 2)
+    type: DataTypes.DECIMAL(10, 2),
+    field:'clm_efectivo'
   },
   produccion: {
     allowNull: false,
@@ -153,7 +162,7 @@ const MapaRecursosSchema = {
   },
   estado: {
     allowNull: false,
-    type: DataTypes.CHAR(1)
+    type: DataTypes.CHAR(8)
   },
 }
 

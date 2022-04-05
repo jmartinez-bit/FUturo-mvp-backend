@@ -1,4 +1,4 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 
 const AREA_TABLE = 'area';
 
@@ -7,7 +7,8 @@ const AreaSchema = {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    field:'cod_area'
   },
   area: {
     allowNull: false,

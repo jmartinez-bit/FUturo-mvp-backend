@@ -1,4 +1,4 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const { AREA_TABLE } = require('./area.model');
 const { PUESTO_TABLE } = require('./puesto.model');
 const COLABORADOR_TABLE = 'colaborador';
@@ -8,125 +8,138 @@ const ColaboradorSchema = {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    field: 'cod_colaborador',
   },
   tipoDoc: {
     allowNull: false,
     type: DataTypes.STRING(10),
+    field: 'tipo_doc',
   },
   nroDocumento: {
     allowNull: false,
-    type: DataTypes.STRING(15)
+    type: DataTypes.STRING(15),
+    field: 'nro_documento',
   },
   codPuesto: {
     allowNull: false,
     type: DataTypes.INTEGER,
-    unique: true,
     references: {
       model: PUESTO_TABLE,
-      key: 'codPuesto'
+      key: 'cod_puesto',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
+    field: 'cod_puesto',
   },
   nivel: {
     allowNull: false,
-    type: DataTypes.STRING(20)
+    type: DataTypes.STRING(20),
   },
   codArea: {
     allowNull: false,
     type: DataTypes.INTEGER,
-    unique: true,
     references: {
       model: AREA_TABLE,
-      key: 'codArea'
+      key: 'cod_area',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
+    field: 'cod_area',
   },
   nombres: {
     allowNull: false,
-    type: DataTypes.STRING(100)
+    type: DataTypes.STRING(100),
   },
   apellidoMat: {
     allowNull: false,
-    type: DataTypes.STRING(100)
+    type: DataTypes.STRING(100),
+    field: 'apellido_mat',
   },
   apellidoPat: {
     allowNull: false,
-    type: DataTypes.STRING(100)
+    type: DataTypes.STRING(100),
+    field: 'apellido_pat',
   },
   fechaNacimiento: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field: 'fecha_nacimiento',
   },
   correoPersonal: {
     allowNull: false,
-    type: DataTypes.STRING(100)
+    type: DataTypes.STRING(100),
+    field: 'correo_personal',
   },
   correoTrabajo: {
     allowNull: false,
-    type: DataTypes.STRING(100)
+    type: DataTypes.STRING(100),
+    field: 'correo_trabajo',
   },
   celularPersonal: {
     allowNull: false,
-    type: DataTypes.STRING(100)
+    type: DataTypes.STRING(100),
+    field: 'celular_personal',
   },
   celularTrabajo: {
     allowNull: false,
-    type: DataTypes.STRING(100)
+    type: DataTypes.STRING(100),
+    field: 'celular_trabajo',
   },
   fechaReg: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field: 'fecha_reg',
   },
   fechaAct: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field: 'fecha_act',
   },
   fechaCese: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATE,
+    field: 'fecha_cese',
   },
   sexo: {
     allowNull: false,
-    type: DataTypes.STRING(1)
+    type: DataTypes.STRING(1),
   },
   usuarioReg: {
     allowNull: false,
-    type: DataTypes.STRING(20)
+    type: DataTypes.STRING(20),
+    field: 'usuario_reg',
   },
   usuarioAct: {
     allowNull: false,
-    type: DataTypes.STRING(20)
+    type: DataTypes.STRING(20),
+    field: 'usuario_act',
   },
   estado: {
     allowNull: false,
-    type: DataTypes.STRING(1)
+    type: DataTypes.STRING(1),
   },
-
-}
+};
 
 class Colaborador extends Model {
-
   static associate(models) {
     this.hasMany(models.MapaRecurso, {
       as: 'mapaRecursos',
-      foreignKey: 'codColaborador'
+      foreignKey: 'codColaborador',
     });
     this.belongsToMany(models.Servicio, {
       as: 'servicios',
       through: models.AsignacionRecurso,
       foreignKey: 'codColaborador',
-      otherKey: 'codServicio'
+      otherKey: 'codServicio',
     });
     this.hasMany(models.AsignacionRecurso, {
       as: 'asignaciones',
-      foreignKey: 'codColaborador'
+      foreignKey: 'codColaborador',
     });
     this.hasMany(models.Contrato, {
       as: 'contratos',
-      foreignKey: 'codColaborador'
+      foreignKey: 'codColaborador',
     });
   }
 
@@ -135,9 +148,9 @@ class Colaborador extends Model {
       sequelize,
       tableName: COLABORADOR_TABLE,
       modelName: 'Colaborador',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 
-module.exports = { Colaborador, ColaboradorSchema, COLABORADOR_TABLE }
+module.exports = { Colaborador, ColaboradorSchema, COLABORADOR_TABLE };

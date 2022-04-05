@@ -17,11 +17,41 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/colaborador/:resmapid', async (req, res, next) => {
+// router.get('/colaborador/:resmapid', async (req, res, next) => {
+//   try {
+//     const { resmapid } = req.params;
+//     const colaborador = await service.findByResourceMapID(resmapid);
+//     res.json(colaborador);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
+router.get('/productividad/:resmapid', async (req, res, next) => {
   try {
     const { resmapid } = req.params;
-    const colaborador = await service.findByResourceMapID(resmapid);
-    res.json(colaborador);
+    const resource = await service.findByResourceMapID(resmapid);
+    res.json(resource);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/contrato/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const contract = await collaboratorService.findByCodColaboradorJoinContrato(id);
+    res.json(contract);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/asignaciones/:id/:fecIni/:fecFin', async (req, res, next) => {
+  try {
+    const { id, fecIni, fecFin } = req.params;
+    const assignments = await assignmentsService.findByCodColaboradorJoinServicio(id, fecIni, fecFin);
+    res.json(assignments);
   } catch (error) {
     next(error);
   }

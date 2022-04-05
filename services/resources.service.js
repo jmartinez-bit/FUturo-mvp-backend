@@ -1,13 +1,13 @@
 const sequelize = require('../libs/sequelize');
-const CollaboratorService = require('./collaborator.service');
-const AssignmentsService = require('./assignments.service');
+// const CollaboratorService = require('./collaborator.service');
+// const AssignmentsService = require('./assignments.service');
 
 function getSelect(attributes = '*') {
-  return `SELECT ${ attributes.toString() } FROM "mapa-recurso"`;
+  return `SELECT ${ attributes.toString() } FROM mapa_recursos`;
 };
 
-const collaboratorService = new CollaboratorService();
-const assignmentsService = new AssignmentsService();
+// const collaboratorService = new CollaboratorService();
+// const assignmentsService = new AssignmentsService();
 
 class ResourcesService{
 
@@ -29,26 +29,47 @@ class ResourcesService{
 
   async findByResourceMapID(id) {
     // Columnas
-    const select = getSelect(['"mapa-recurso"."eficiencia"', '"mapa-recurso"."rendimiento"',
-    '"mapa-recurso"."horasServicio"', '"mapa-recurso"."licencias"', '"mapa-recurso"."faltas"',
-    '"mapa-recurso"."vacaciones"', '"mapa-recurso"."horasExtras"', '"mapa-recurso"."totalHorasAsignaciones"',
-    '"mapa-recurso"."totalHorasFacturables"', '"mapa-recurso"."capacity"', '"mapa-recurso"."codColaborador"',
-    '"mapa-recurso"."fechaInicio"', '"mapa-recurso"."fechaFin"']);
+    const select = getSelect(['mapa_recursos.eficiencia', 'mapa_recursos.rendimiento',
+    'mapa_recursos.horas_servicio', 'mapa_recursos.licencias', 'mapa_recursos.faltas',
+    'mapa_recursos.vacaciones', 'mapa_recursos.horas_extras', 'mapa_recursos.total_horas_asignaciones',
+    'mapa_recursos.total_horas_facturables', 'mapa_recursos.capacity']);
 
     // Sentencia
-    const query = `${ select }
-                WHERE "mapa-recurso"."codMapaRecurso"=${ id };`;
+    const query = `${ select } WHERE mapa_recursos.cod_mapa_recurso=${ id };`;
+
     const [[data]] = await sequelize.query(query);
 
-    const [getContract] = await collaboratorService.findByCodColaboradorJoinContrato(data.codColaborador);
-    const getAssignments = await assignmentsService.findByCodColaboradorJoinServicio(data.codColaborador, data.fechaInicio, data.fechaFin);
-    delete data.codColaborador;
-    delete data.fechaInicio;
-    delete data.fechaFin;
-
-    return {productividad: data, contrato: getContract, asignaciones: getAssignments};
-
+    return data;
   }
+
+  // async findByResourceMapID(id) {
+  //   // Columnas
+  //   const select = getSelect(['mapa_recursos.eficiencia', 'mapa_recursos.rendimiento',
+  //   'mapa_recursos.horas_servicio', 'mapa_recursos.licencias', 'mapa_recursos.faltas',
+  //   'mapa_recursos.vacaciones', 'mapa_recursos.horas_extras', 'mapa_recursos.total_horas_asignaciones',
+  //   'mapa_recursos.total_horas_facturables', 'mapa_recursos.capacity', 'mapa_recursos.cod_colaborador',
+  //   'mapa_recursos.fecha_inicio', 'mapa_recursos.fecha_fin']);
+
+  //   // Sentencia
+  //   try {
+  //     const query = `${ select }
+  //               WHERE mapa_recursos.cod_mapa_recurso=${ id };`;
+  //   const [[data]] = await sequelize.query(query);
+
+  //   if (!data) return {};
+  //   const getContract = await collaboratorService.findByCodColaboradorJoinContrato(data.cod_colaborador);
+  //   const getAssignments = await assignmentsService.findByCodColaboradorJoinServicio(data.cod_colaborador, data.fecha_inicio, data.fecha_fin);
+  //   delete data.codColaborador;
+  //   delete data.fechaInicio;
+  //   delete data.fechaFin;
+
+  //   return {productividad: data, contrato: getContract, asignaciones: getAssignments};
+  //   } catch(err) {
+  //     console.log(err);
+  //   }
+
+
+  // }
 
   // async findOne(id) {
   //   try {
@@ -77,15 +98,15 @@ class ResourcesService{
   //                       {
   //                         fechaInicio: {
   //                           [Op.gte]: Sequelize.literal(`(SELECT "fechaInicio"
-  //                                                       FROM "mapa-recurso"
-  //                                                       WHERE "mapa-recurso"."codMapaRecurso" = ${id})`)
+  //                                                       FROM mapa_recursos
+  //                                                       WHERE mapa_recursos."codMapaRecurso" = ${id})`)
   //                         }
   //                       },
   //                       {
   //                         fechaFin: {
   //                           [Op.lte]: Sequelize.literal(`(SELECT "fechaFin"
-  //                                                       FROM "mapa-recurso"
-  //                                                       WHERE "mapa-recurso"."codMapaRecurso" = ${id})`)
+  //                                                       FROM mapa_recursos
+  //                                                       WHERE mapa_recursos."codMapaRecurso" = ${id})`)
   //                         }
   //                       },
   //                     ]
@@ -114,46 +135,6 @@ class ResourcesService{
   //     console.log(er);
   //   }
 
-  // }
-
-  // async findByResourceMap(id) {
-  //   const query=`SELECT "MapaRecurso"."codMapaRecurso",
-  //   "MapaRecurso"."horasServicio",
-  //   "MapaRecurso"."licencias",
-  //   "MapaRecurso"."faltas",
-  //   "MapaRecurso"."vacaciones",
-  //   "MapaRecurso"."horasExtras",
-  //   "MapaRecurso"."totalHorasAsignaciones",
-  //   "MapaRecurso"."totalHorasFacturables",
-  //   "MapaRecurso"."eficiencia",
-  //   "MapaRecurso"."rendimiento",
-  //   "MapaRecurso"."capacity",
-  //   "colaborador"."codColaborador" AS "colaborador.codColaborador",
-  //   "colaborador"."nroDocumento" AS "colaborador.nroDocumento",
-  //   "colaborador"."nombres" AS "colaborador.nombres",
-  //   "colaborador"."apellidoPat" AS "colaborador.apellidoPat",
-  //   "colaborador"."apellidoMat" AS "colaborador.apellidoMat",
-  //   "servicios"."codServicio" AS "colaborador.servicios.codServicio",
-  //   "servicios"."tipoServicio" AS "colaborador.servicios.tipoServicio",
-  //   "servicios"."descripcionServicio" AS "colaborador.servicios.descripcionServicio",
-  //   "AsignacionRecurso"."codAsignacion" AS "colaborador.servicios.AsignacionRecurso.codAsignacion",
-  //   "AsignacionRecurso"."porAsignacion" AS "colaborador.servicios.AsignacionRecurso.porAsignacion",
-  //   "AsignacionRecurso"."fechaInicio" AS "colaborador.servicios.AsignacionRecurso.fechaInicio",
-  //   "AsignacionRecurso"."fechaFin" AS "colaborador.servicios.AsignacionRecurso.fechaFin"
-  //   FROM "mapa-recurso" AS "MapaRecurso"
-  //   INNER JOIN "colaborador" AS "colaborador"
-  //     ON "MapaRecurso"."codColaborador" = "colaborador"."codColaborador"
-  //   INNER JOIN ( "asignacion-recursi" AS "AsignacionRecurso"
-  //   INNER JOIN "servicio" AS "servicios" ON "servicios"."codServicio" = "AsignacionRecurso"."codServicio"
-  //         AND ("AsignacionRecurso"."fechaInicio" >=
-  //            (SELECT "fechaInicio"
-  //             FROM "mapa-recurso"
-  //             WHERE "mapa-recurso"."codMapaRecurso" = 1) AND "AsignacionRecurso"."fechaFin" <= (SELECT "fechaFin"
-  //             FROM "mapa-recurso"
-  //             WHERE "mapa-recurso"."codMapaRecurso" = 1))) ON "colaborador"."codColaborador" = "AsignacionRecurso"."codColaborador"
-  //             WHERE "MapaRecurso"."codMapaRecurso" = ${id};`
-  //   const [data] = await sequelize.query(query);
-  //   return data;
   // }
 
 }

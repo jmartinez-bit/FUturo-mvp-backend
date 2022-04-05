@@ -1,9 +1,9 @@
 const { Area, AreaSchema } = require('./area.model');
-const { AsignacionRecurso, AsignacionRecursoSchema } = require('./asignacion-recurso.model');
+const { AsignacionRecurso, AsignacionRecursoSchema } = require('./asignacion_recurso.model');
 const { Colaborador, ColaboradorSchema } = require('./colaborador.model');
 const { Contrato, ContratoSchema } = require('./contratos.model');
-const { LineaServicio, LineaServicioSchema } = require('./linea-servicio.model');
-const { MapaRecurso, MapaRecursosSchema } = require('./mapa-recursos.model');
+const { LineaServicio, LineaServicioSchema } = require('./linea_servicio.model');
+const { MapaRecurso, MapaRecursosSchema } = require('./mapa_recursos.model');
 const { Periodo, PeriodoSchema } = require('./periodo.model');
 const { Puesto, PuestoSchema } = require('./puesto.model');
 const { Servicio, ServicioSchema } = require('./servicio.model');
