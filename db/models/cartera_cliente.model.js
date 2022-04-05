@@ -1,4 +1,4 @@
-const { Model, DataTypes,Sequelize} = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const { USUARIO_TABLE } = require('./usuario.model');
 const { CLIENTE_TABLE } = require('./cliente.model');
 
@@ -17,7 +17,7 @@ const CarteraClienteSchema = {
     field:'cod_usuario'
   },
   codCliente: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.INTEGER,
     references: {
       model: CLIENTE_TABLE,
@@ -28,7 +28,7 @@ const CarteraClienteSchema = {
     field:'cod_cliente'
   },
   fechaAsignacion: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.DATE,
     field:'fecha_asignacion'
   },

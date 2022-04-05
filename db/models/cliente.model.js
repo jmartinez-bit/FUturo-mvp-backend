@@ -26,22 +26,22 @@ const ClienteSchema = {
     field:'nombre_corto'
   },
   fechaReg: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.DATE,
     field:'fecha_reg'
   },
   usuarioReg: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.STRING(20),
     field:'usuario_reg'
   },
   fechaAct: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.DATE,
     field:'fecha_act'
   },
   usuarioAct: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.STRING(20),
     field:'usuario_act'
   },

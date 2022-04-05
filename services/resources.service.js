@@ -11,11 +11,11 @@ class ResourcesService{
   }
 
   async findByClientPeriodProfileAndNames(cod_cliente,periodo,cod_perfil,nombres){
-    const select="SELECT cod_mapa_recurso,mapa_recursos.cod_colaborador,linea_negocio,mapa_recursos.estado,perfil.nombre_perfil,mapa_recursos.nivel,"+
+    const select="SELECT cod_mapa_recurso,mapa_recursos.cod_colaborador,linea_negocio,mapa_recursos.estado,puesto AS nombre_perfil,mapa_recursos.nivel,"+
               "fecha_inicio,fecha_fin,asignacion,fecha_fin_contrato,clm_efectivo,produccion,productividad,CONCAT(nombres,' ',apellido_pat,' ',apellido_mat) AS nombre_colaborador "+
              "FROM mapa_recursos "+
              "INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador "+
-             "INNER JOIN perfil ON mapa_recursos.perfil=perfil.cod_perfil ";
+             "INNER JOIN puesto ON mapa_recursos.perfil=puesto.cod_puesto ";
     var query=select+
                 "WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"' ";
     if(cod_perfil!=null){
@@ -61,24 +61,12 @@ class ResourcesService{
     return data;
   }
 
-  async findClients(idDM,periodo){
-    const split=periodo.split("-");
-    var year=parseInt(split[1],10);
-    var month=parseInt(split[0],10);
-    const date="01/"+month+"/"+year;//el primero de este mes
-    if(++month===13){
-      month=1;
-      year+=1;
-    }
-    const nextDate="01/"+month+"/"+year;//Se usa el dia primero del mes siguiente al periodo para hacer la comparacion con la fecha de asignacion del cliente
+  async findClients(idDM){
     const query="SELECT cartera_cliente.cod_cliente,nombre_corto FROM cliente "+
                 "INNER JOIN cartera_cliente ON cliente.cod_cliente=cartera_cliente.cod_cliente "+
-                "INNER JOIN servicio ON cliente.cod_cliente=servicio.cod_cliente "+
-                "WHERE servicio.fecha_ini_real<CAST('"+nextDate+"' AS date) "+
-                "AND (servicio.fecha_fin_real IS NULL OR servicio.fecha_fin_real>=CAST('"+date+"' AS date) ) "+
-                "AND cod_usuario="+idDM+";";
+                "WHERE cod_usuario="+idDM+" AND cartera_cliente.estado='A' ;";
     const [data] = await sequelize.query(query);
-    return data;
+     return data;
   }
 
   async findByResourceMapID(id) {
@@ -93,6 +81,13 @@ class ResourcesService{
 
     const [[data]] = await sequelize.query(query);
 
+    return data;
+  }
+
+  async findProfiles(){
+    const query="SELECT cod_puesto AS cod_perfil,puesto AS nombre_perfil FROM puesto "+
+                "WHERE estado='A';";
+    const [data] = await sequelize.query(query);
     return data;
   }
 
