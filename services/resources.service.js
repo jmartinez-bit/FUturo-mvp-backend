@@ -69,7 +69,7 @@ class ResourcesService{
   }
 
   async findProfiles(){
-    const query="SELECT cod_puesto AS cod_perfil,puesto AS perfil FROM puesto "+
+    const query="SELECT cod_puesto AS cod_perfil,puesto AS nombre_perfil FROM puesto "+
                 "WHERE estado='A';";
     const [data] = await sequelize.query(query);
     return data;
