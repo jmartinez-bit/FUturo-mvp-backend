@@ -103,20 +103,20 @@ router.get('/productividad/:resmapid', async (req, res, next) => {
   }
 });
 
-router.get('/contrato/:id/:fecFin', async (req, res, next) => {
+router.get('/contrato/:cod_colaborador/:periodo', async (req, res, next) => {
   try {
-    const { id, fecFin } = req.params;
-    const contract = await collaboratorService.findByCodColaboradorJoinContrato(id, fecFin);
+    const { cod_colaborador, periodo } = req.params;
+    const contract = await collaboratorService.findByCodColaboradorJoinContrato(cod_colaborador, periodo);
     res.json(contract);
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/asignaciones/:id/:fecIni/:fecFin', async (req, res, next) => {
+router.get('/asignaciones/:cod_colaborador/:periodo/:cod_cliente', async (req, res, next) => {
   try {
-    const { id, fecIni, fecFin } = req.params;
-    const assignments = await assignmentsService.findByCodColaboradorJoinServicio(id, fecIni, fecFin);
+    const { cod_colaborador, periodo, cod_cliente } = req.params;
+    const assignments = await assignmentsService.findByCodColaboradorJoinServicio(cod_colaborador, periodo, cod_cliente);
     res.json(assignments);
   } catch (error) {
     next(error);
