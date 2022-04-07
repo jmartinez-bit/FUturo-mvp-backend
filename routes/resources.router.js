@@ -83,16 +83,7 @@ router.get("/aperturamaparecursos",async (req, res,next) =>{
   }
 });
 
-// router.get('/colaborador/:resmapid', async (req, res, next) => {
-//   try {
-//     const { resmapid } = req.params;
-//     const colaborador = await service.findByResourceMapID(resmapid);
-//     res.json(colaborador);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
+// Obtener productividad del colaborador por codigo del mapa de recurso
 router.get('/productividad/:resmapid', async (req, res, next) => {
   try {
     const { resmapid } = req.params;
@@ -103,20 +94,22 @@ router.get('/productividad/:resmapid', async (req, res, next) => {
   }
 });
 
-router.get('/contrato/:id/:fecFin', async (req, res, next) => {
+// Obtener contrato por codigo del colaborador y periodo
+router.get('/contrato/:cod_colaborador/:periodo', async (req, res, next) => {
   try {
-    const { id, fecFin } = req.params;
-    const contract = await collaboratorService.findByCodColaboradorJoinContrato(id, fecFin);
+    const { cod_colaborador, periodo } = req.params;
+    const contract = await collaboratorService.findByCodColaboradorJoinContrato(cod_colaborador, periodo);
     res.json(contract);
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/asignaciones/:id/:fecIni/:fecFin', async (req, res, next) => {
+// Obtener servicios asignados por codigo del colaborador, periodo y codigo del cliente
+router.get('/asignaciones/:cod_colaborador/:periodo/:cod_cliente', async (req, res, next) => {
   try {
-    const { id, fecIni, fecFin } = req.params;
-    const assignments = await assignmentsService.findByCodColaboradorJoinServicio(id, fecIni, fecFin);
+    const { cod_colaborador, periodo, cod_cliente } = req.params;
+    const assignments = await assignmentsService.findByCodColaboradorJoinServicio(cod_colaborador, periodo, cod_cliente);
     res.json(assignments);
   } catch (error) {
     next(error);
