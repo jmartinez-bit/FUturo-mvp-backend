@@ -60,7 +60,7 @@ router.get("/profiles",async (req, res,next) =>{
 });
 
 //Calculo del monto de servicio por periodo y cliente.
-router.get("/montoservicio",async (req, res,next) =>{
+router.post("/montoservicio",async (req, res,next) =>{
   try{
     const cod_cliente=req.body.cod_cliente;
     const periodo=req.body.periodo;
