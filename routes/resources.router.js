@@ -83,16 +83,7 @@ router.get("/aperturamaparecursos",async (req, res,next) =>{
   }
 });
 
-// router.get('/colaborador/:resmapid', async (req, res, next) => {
-//   try {
-//     const { resmapid } = req.params;
-//     const colaborador = await service.findByResourceMapID(resmapid);
-//     res.json(colaborador);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
+// Obtener productividad del colaborador por codigo del mapa de recurso
 router.get('/productividad/:resmapid', async (req, res, next) => {
   try {
     const { resmapid } = req.params;
@@ -103,6 +94,7 @@ router.get('/productividad/:resmapid', async (req, res, next) => {
   }
 });
 
+// Obtener contrato por codigo del colaborador y periodo
 router.get('/contrato/:cod_colaborador/:periodo', async (req, res, next) => {
   try {
     const { cod_colaborador, periodo } = req.params;
@@ -113,6 +105,7 @@ router.get('/contrato/:cod_colaborador/:periodo', async (req, res, next) => {
   }
 });
 
+// Obtener servicios asignados por codigo del colaborador, periodo y codigo del cliente
 router.get('/asignaciones/:cod_colaborador/:periodo/:cod_cliente', async (req, res, next) => {
   try {
     const { cod_colaborador, periodo, cod_cliente } = req.params;
