@@ -10,11 +10,6 @@ class AssignmentsService{
 
   async findByCodColaboradorJoinServicio(cod_colaborador, periodo, cod_cliente) {
 
-    const {year, month} = {
-      year: parseInt(periodo.substr(3)),
-      month: parseInt(periodo.substring(0, 2))
-    }
-
       // Columnas
     const select = getSelect(['servicio.tipo_servicio', 'servicio.descripcion_servicio',
     'asignacion_recursos.por_asignacion', 'asignacion_recursos.fecha_inicio',
@@ -22,9 +17,8 @@ class AssignmentsService{
 
     const query=`${ select } ${ joinService }
                 WHERE asignacion_recursos.cod_colaborador=${ cod_colaborador }
-                AND (${ year } = extract(year from fecha_inicio) AND ${ year } = extract(year from fecha_fin))
-                AND (${ month } between extract(month from fecha_inicio) AND extract(month from fecha_fin))
-                AND servicio.cod_cliente = ${ cod_cliente };`;
+                AND servicio.cod_cliente = ${ cod_cliente }
+                AND to_date('${ periodo }', 'MM-YYYY') <= fecha_fin;`;
     const [data] = await sequelize.query(query);
     return data;
 
