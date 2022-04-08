@@ -65,8 +65,8 @@ router.post("/montoservicio",async (req, res,next) =>{
     const cod_cliente=req.body.cod_cliente;
     const periodo=req.body.periodo;
     const perfil=req.body.perfil||null;
-    const cod_colaborador=req.body.cod_colaborador||null;
-    const resources=await service.findByMontoServicio(cod_cliente,periodo,perfil,cod_colaborador);
+    const nombre=req.body.nombre||null;
+    const resources=await service.findByMontoServicio(cod_cliente,periodo,perfil,nombre);
     res.json(resources);
   }catch (e){
     next(e);
