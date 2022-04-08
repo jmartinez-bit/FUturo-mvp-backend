@@ -96,9 +96,9 @@ class ResourcesService{
   async findByMontoServicio(cod_cliente,periodo,perfil,nombres){
     // const client = await getConnection();
     let query = "SELECT sum(clm_efectivo) as clm_efectivo, sum(produccion) as produccion, sum(produccion)/sum(clm_efectivo) as productividad" +
-    "FROM public.mapa_recursos" +
-    "INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador" +
-    "WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"'"
+    " FROM public.mapa_recursos " +
+    " INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador" +
+    " WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"'"
     if(perfil != null){
       query = query + " AND perfil = '" + perfil + "'"
     }
