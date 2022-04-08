@@ -93,14 +93,18 @@ class ResourcesService{
 
 
   //Servicio de calculo de monto total
-  async findByMontoServicio(cod_cliente,periodo,perfil,cod_colaborador){
+  async findByMontoServicio(cod_cliente,periodo,perfil,nombres){
     // const client = await getConnection();
-    let query = "SELECT sum(clm_efectivo) as clm_efectivo, sum(produccion) as produccion, sum(produccion)/sum(clm_efectivo) as productividad FROM public.mapa_recursos WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"'"
+    let query = "SELECT sum(clm_efectivo) as clm_efectivo, sum(produccion) as produccion, sum(produccion)/sum(clm_efectivo) as productividad" +
+    "FROM public.mapa_recursos" +
+    "INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador" +
+    "WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"'"
     if(perfil != null){
       query = query + " AND perfil = '" + perfil + "'"
     }
-    if(cod_colaborador != null){
-      query = query + " AND cod_colaborador = " + cod_colaborador
+    if(nombres!=null){
+      nombres=nombres.toLowerCase();
+      query+=" AND lower(CONCAT(nombres,' ',apellido_pat,' ',apellido_mat)) like '%"+nombres+"%'";
     }
     query = query + ";";
     const [[rta]] = await sequelize.query(query);
