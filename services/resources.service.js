@@ -1,13 +1,8 @@
 const sequelize = require('../libs/sequelize');
-// const CollaboratorService = require('./collaborator.service');
-// const AssignmentsService = require('./assignments.service');
 
 function getSelect(attributes = '*') {
   return `SELECT ${ attributes.toString() } FROM mapa_recursos`;
 };
-
-// const collaboratorService = new CollaboratorService();
-// const assignmentsService = new AssignmentsService();
 
 class ResourcesService{
 
