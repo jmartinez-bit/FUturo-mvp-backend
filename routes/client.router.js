@@ -5,8 +5,7 @@ const { checkApiKey, checkRoles } = require('../middlewares/auth.handler');
 const router = express.Router();
 const clientService = new ClientService();
 
-// Obtener todas las lineas de servicio
-// TODO: Obtener codigo de usuario por header
+// Obtener todos los clientes asignados a un dm
 router.get('/user',
   checkApiKey,
   checkRoles('Delivery Manager', 'Jefe de Proyecto'),
