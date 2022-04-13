@@ -1,5 +1,6 @@
 const sequelize = require('../libs/sequelize');
 const { QueryTypes } = require('sequelize');
+const PaymentServicesService = require('./payment-services.service');
 
 // Sentencias
 function getSelect(attributes = '*') {
@@ -9,6 +10,8 @@ function getSelect(attributes = '*') {
 function getInsert(attributes = '*') {
   return `INSERT INTO servicio(${ attributes.toString() })`;
 };
+
+const paymentService  = new PaymentServicesService();
 
 class ServicesService{
 
