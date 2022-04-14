@@ -6,11 +6,13 @@ const businessLineService = new BusinessLineService();
 
 router.get("/",async (req, res,next) =>{
   try{
-    const resources=await businessLineService.findBusinessLines();
-    res.json(resources);
+    const data=await businessLineService.findBusinessLines();
+    res.json(data);
 
   }catch (e){
     next(e);
   }
 
 });
+
+module.exports = router;
