@@ -1,7 +1,10 @@
 const express = require('express');
 const ContractSolicitudeService = require('../services/contractSolicitude.service');
+const ContractService = require('../services/contract.service');
+
 
 const router = express.Router();
+const contractService = new ContractService();
 const contractSolicitudeService = new ContractSolicitudeService();
 
 router.post("/newSolicitude",async (req, res,next) =>{
@@ -15,12 +18,19 @@ router.post("/newSolicitude",async (req, res,next) =>{
       const ind_eps=req.body.ind_eps||null;
       const ind_sctr=req.body.ind_sctr||null;
       const condicional_adicional=req.body.condicional_adicional||null;
+    //se verifica si existe un contrato vigente
+    const existAContract=  await contractService.isThereAContractActive(nro_documento)
+    if (existAContract.length===0){
 
     await contractSolicitudeService.createSolicitude(tipo_documento, nro_documento, nombre, ape_paterno,
        ape_materno, fecha_nacimiento, nro_celular, correo, direccion, distrito, cod_cliente, cod_linea_negocio, cod_puesto,
         nivel,banda_salarial, modalidad, remuneracion, bono_men, ind_eps, ind_sctr, fecha_inicio, fecha_fin, condicional_adicional);
 
-    res.status(201).json("nueva solicitud creada");
+    res.status(201).json("Nueva solicitud de contratación creada");
+    }else{
+    res.status(409).json("Existe un contrato vigente con este número de documento");
+    }
+
 
   }catch (e){
     next(e);
