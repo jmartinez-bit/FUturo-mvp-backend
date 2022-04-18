@@ -3,6 +3,7 @@ const businessLineRouter = require('./businessLine.router');
 const salaryBandRouter = require('./salaryBand.router');
 const contractRouter = require('./contract.router');
 const contractSolicitudeRouter = require('./contractSolicitude.router');
+const epsRouter = require('./eps.router');
 
 
 
@@ -18,6 +19,7 @@ function routerApi(app) {
   router.use('/salaryBand', salaryBandRouter);
   router.use('/contract', contractRouter);
   router.use('/contractSolicitude', contractSolicitudeRouter);
+  router.use('/eps', epsRouter);
 
 
 

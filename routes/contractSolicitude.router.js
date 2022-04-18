@@ -30,8 +30,7 @@ router.post("/newSolicitude",async (req, res,next) =>{
       clm+=remuneracion*0.14;
     }
     //verificar si el clm está dentro de la banda salarial
-    const [data]=await salaryBandService.findMinAndMaxOfOneSalaryBand(cod_banda_salarial);
-    const maximo=data[maximo];
+    const maximo=await salaryBandService.findMax(cod_banda_salarial);
     if(clm<=maximo){
       var estado="Pendiente Aprobación";
     }else{

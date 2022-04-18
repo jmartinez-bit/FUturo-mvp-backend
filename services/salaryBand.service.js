@@ -9,11 +9,11 @@ class SalaryBandService{
      return data;
   }
 
-  async findMinAndMaxOfOneSalaryBand(cod_banda_salarial){
-    const query=`SELECT minimo,maximo FROM banda_salarial
+  async findMax(cod_banda_salarial){
+    const query=`SELECT maximo FROM banda_salarial
                 WHERE cod_banda_salarial=${cod_banda_salarial} ;`;
     const [data] = await sequelize.query(query);
-     return data;
+     return Object.values(data[0])[0];;
   }
 
 
