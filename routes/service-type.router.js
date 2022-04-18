@@ -4,7 +4,7 @@ const ServiceTypeService = require('./../services/service-type.service');
 const router = express.Router();
 const serviceTypesService = new ServiceTypeService();
 
-// Obtener todas las lineas de servicio
+// Buscar tipos de servicio por codigo de linea de servicio
 router.get('/linea-servicio/:codLineaServicio', async (req, res, next) => {
   try {
     const { codLineaServicio } = req.params;

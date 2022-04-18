@@ -4,6 +4,7 @@ const serviceLineRouter = require('./service-line.router');
 const clientRouter = require('./client.router');
 const paymentServicesRouter = require('./payment-services.router');
 const serviceTypeRouter = require('./service-type.router');
+const paymentMethodRouter = require('./payment-method.router');
 
 const express = require('express');
 
@@ -16,6 +17,7 @@ function routerApi(app) {
   router.use('/clients', clientRouter);
   router.use('/payment-service', paymentServicesRouter);
   router.use('/service-type', serviceTypeRouter);
+  router.use('/payment-method', paymentMethodRouter);
 }
 
 module.exports = routerApi;

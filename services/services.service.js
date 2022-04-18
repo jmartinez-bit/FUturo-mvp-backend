@@ -32,6 +32,32 @@ class ServicesService{
               'prueba', data.estado]
     });
 
+    let newPayment = null;
+    console.log(newService.forma_pago);
+    if (newService.forma_pago === 'total') {
+      newPayment = await paymentService.create({
+        cod_servicio: newService.cod_servicio,
+        descripcion_hito: newService.descripcion_servicio,
+        horas: newService.horas_venta,
+        monto: newService.valor_venta,
+        fecha_inicio: newService.fecha_ini_planificada,
+        fecha_fin: newService.fecha_fin_planificada
+      });
+    }
+
+    if (newService.forma_pago === 'consumo') {
+      newPayment = await paymentService.create({
+        cod_servicio: newService.cod_servicio,
+        descripcion_hito: newService.descripcion_servicio,
+        horas: newService.horas_venta,
+        monto: 0,
+        fecha_inicio: newService.fecha_ini_planificada,
+        fecha_fin: newService.fecha_fin_planificada
+      });
+    }
+
+    newService.newPayment = newPayment;
+
     return newService;
 
   }
