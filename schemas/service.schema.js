@@ -6,11 +6,11 @@ const tipo_servicio = Joi.string();
 const descripcion_servicio = Joi.string();
 const horas_venta = Joi.number().integer();
 const moneda = Joi.string();
-const valor_venta = Joi.number().integer();
+const valor_venta = Joi.number().precision(2);
 const fecha_ini_planificada = Joi.date();
-const fecha_fin_planificada = Joi.date();
+const fecha_fin_planificada = Joi.date().greater(Joi.ref('fecha_ini_planificada'));
 const fecha_ini_real = Joi.date();
-const fecha_fin_real = Joi.date();
+const fecha_fin_real = Joi.date().greater(Joi.ref('fecha_ini_real'));
 const forma_pago = Joi.string();
 const estado = Joi.string();
 
