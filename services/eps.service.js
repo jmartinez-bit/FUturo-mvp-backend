@@ -8,11 +8,11 @@ class EpsService{
      return data;
   }
 
-  async findAmount(cod_eps){
-    const query=`SELECT monto_eps from eps
+  async findAmount(cod_eps,parcial_total){
+    const query=`SELECT ${parcial_total} from eps
                 WHERE cod_eps=${cod_eps}; `;
     const [[data]] = await sequelize.query(query);
-    const monto=parseFloat(data.monto_eps);
+    const monto=parseFloat(Object.values(data));
     return monto;
 
   }
