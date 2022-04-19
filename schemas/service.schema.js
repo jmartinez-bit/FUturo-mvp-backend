@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const cod_cliente = Joi.number().integer();
-const cod_linea_servicio = Joi.number().integer();
+const cod_linea_servicio = Joi.string();
 const tipo_servicio = Joi.string();
 const descripcion_servicio = Joi.string();
 const horas_venta = Joi.number().integer();
