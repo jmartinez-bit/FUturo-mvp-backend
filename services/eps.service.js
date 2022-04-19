@@ -11,8 +11,9 @@ class EpsService{
   async findAmount(cod_eps){
     const query=`SELECT monto_eps from eps
                 WHERE cod_eps=${cod_eps}; `;
-    const [data] = await sequelize.query(query);
-    return Object.values(data[0])[0];;
+    const [[data]] = await sequelize.query(query);
+    const monto=parseFloat(data.monto_eps);
+    return monto;
 
   }
 }
