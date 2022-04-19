@@ -30,15 +30,15 @@ router.post("/newSolicitude",async (req, res,next) =>{
        ape_materno, fecha_nacimiento, nro_celular, correo, direccion, distrito, provincia, cod_cliente, cod_linea_negocio, cod_puesto,
         nivel, modalidad, remuneracion, bono_men,cod_eps,eps_parcial_total, ind_sctr, fecha_inicio, fecha_fin, condicional_adicional);
 
-      res.status(201).json({"error":"false",
+      res.status(201).json({"error":false,
                           "message":"Nueva solicitud de contratación creada"});
       }
       else{
-      res.status(409).json({"error":"true",
+      res.status(409).json({"error":true,
                           "message":"Existe una solicitud pendiente con este número de documento"});
       }
     }else{
-    res.status(409).json({"error":"true",
+    res.status(409).json({"error":true,
                         "message":"Existe un contrato vigente con este número de documento"});
     }
 
