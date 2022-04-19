@@ -7,7 +7,7 @@ const salaryBandService = new SalaryBandService();
 router.get("/:cod_puesto/:nivel",async (req, res,next) =>{
   try{
     const {cod_puesto,nivel}=req.params;
-    const data=await salaryBandService.findSalaryBand(nivel,cod_puesto);
+    const data=await salaryBandService.findSalaryBand(nivel.toLowerCase(),cod_puesto);
     res.json(data);
 
   }catch (e){
