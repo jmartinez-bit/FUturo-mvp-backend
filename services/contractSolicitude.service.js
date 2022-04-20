@@ -18,7 +18,7 @@ class ContractSolicitudeService{
             monto_eps=0;
         }
       //calculo del clm
-      var clm=(remuneracion)*process.env.FACTOR_SUELDO_Y_ASIG_FAMILIAR+monto_eps+bono_men;
+      var clm=(remuneracion)*process.env.FACTOR_SUELDO_Y_ASIG_FAMILIAR+monto_eps+parseFloat(bono_men);
       if(ind_sctr||ind_sctr==='S'){
         clm+=remuneracion*process.env.PORCENTAJE_SCTR;
       }
