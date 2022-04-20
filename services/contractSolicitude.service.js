@@ -22,7 +22,7 @@ class ContractSolicitudeService{
       var clm;
       if(mod==="planilla"){
         clm=(remuneracion)*process.env.FACTOR_PLANILLA+monto_eps;
-      } else if(mod==="rxh"||mod==="practicas"){
+      } else if(mod==="rxh"||mod==="practicante"){
         clm=remuneracion*process.env.FACTOR_RXH_PRACTICAS;
       }
       if(bono_men){
