@@ -1,11 +1,15 @@
 const express = require('express');
 const ContractSolicitudeService = require('../services/contractSolicitude.service');
 const ContractService = require('../services/contract.service');
+const SalaryBandService = require('../services/salaryBand.service');
+
 
 
 const router = express.Router();
 const contractService = new ContractService();
 const contractSolicitudeService = new ContractSolicitudeService();
+const salaryBandService = new SalaryBandService();
+
 
 
 router.post("/newSolicitude",async (req, res,next) =>{
@@ -22,16 +26,23 @@ router.post("/newSolicitude",async (req, res,next) =>{
       const condicional_adicional=req.body.condicional_adicional||null;
 
     //se verifica si existe un contrato vigente
+    const codBanda=await salaryBandService.findSalaryBand(nivel,cod_puesto);
     const existAContract=  await contractService.isThereAContractActive(nro_documento);
     const existASolicitude= await contractSolicitudeService.isThereAPreviousSolicitude(nro_documento);
     if (existAContract.length===0){
       if(existASolicitude.length===0){
-      await contractSolicitudeService.createSolicitude(tipo_documento, nro_documento, nombre, ape_paterno,
-       ape_materno, fecha_nacimiento, nro_celular, correo, direccion, distrito, provincia, cod_cliente, cod_linea_negocio, cod_puesto,
-        nivel, modalidad, remuneracion, bono_men,cod_eps,eps_parcial_total, ind_sctr, fecha_inicio, fecha_fin, condicional_adicional);
+        if(codBanda.length!=0){
+          await contractSolicitudeService.createSolicitude(tipo_documento, nro_documento, nombre, ape_paterno,
+            ape_materno, fecha_nacimiento, nro_celular, correo, direccion, distrito, provincia, cod_cliente, cod_linea_negocio, cod_puesto,
+             nivel, modalidad, remuneracion, bono_men,cod_eps,eps_parcial_total, ind_sctr, fecha_inicio, fecha_fin, condicional_adicional);
 
-      res.status(201).json({"error":false,
-                          "message":"Nueva solicitud de contratación creada"});
+           res.status(201).json({"error":false,
+                               "message":"Nueva solicitud de contratación creada"});
+        }
+      else{
+        res.status(409).json({"error":false,
+        "message":"No existe banda salarial para este nivel y puesto"});
+      }
       }
       else{
       res.status(409).json({"error":true,
