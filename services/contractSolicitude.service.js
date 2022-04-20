@@ -19,7 +19,7 @@ class ContractSolicitudeService{
         }
       //calculo del clm
       var clm=(remuneracion)*process.env.FACTOR_SUELDO_Y_ASIG_FAMILIAR+monto_eps+parseFloat(bono_men);
-      if(ind_sctr||ind_sctr==='S'){
+      if(ind_sctr==='S'){
         clm+=remuneracion*process.env.PORCENTAJE_SCTR;
       }
       //Se encuentra el cod_banda_salarial
