@@ -111,14 +111,6 @@ class ResourcesService{
     return rta;
   }
 
-  //Servicio para registrar un monto de servicio
-  async savePagoServicios(cod_servicio,nombre_hito,horas,monto,fecha_inicio,fecha_fin){
-    // const client = await getConnection();
-    let query = "INSERT INTO pagos_servicios (cod_servicio, descripcion_hito, horas, monto, fecha_inicio, fecha_fin)" +
-    " VALUES (" + cod_servicio + ", '" + nombre_hito + "', " + horas + ", " + monto + ", '" + fecha_inicio + "', '" + fecha_fin + "')";
-    const [[rta]] = await sequelize.query(query);
-    return rta;
-  }
 
   async findCollaboratorNames(cod_cliente,periodo){
 

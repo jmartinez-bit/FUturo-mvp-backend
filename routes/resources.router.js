@@ -127,22 +127,6 @@ router.get("/:id_client/collaborators/:period",async (req, res,next) =>{
   }
 });
 
-//Guardar pagos de servicios.
-router.post("/guardarpagosservicios",async (req, res,next) =>{
-  try{
-    const cod_servicio=req.body.cod_servicio;
-    const nombre_hito=req.body.nombre_hito;
-    const horas=req.body.horas||null;
-    const monto=req.body.monto||null;
-    const fecha_inicio=req.body.fecha_inicio||null;
-    const fecha_fin=req.body.fecha_fin||null;
-    const resources=await service.savePagoServicios(cod_servicio,nombre_hito,horas,monto,fecha_inicio,fecha_fin);
-    res.json(resources);
-  }catch (e){
-    next(e);
-  }
-});
-
 
 //Obtener los servicios de un DM.
 router.post("/mapaservicios",async (req, res,next) =>{
