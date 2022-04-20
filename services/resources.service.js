@@ -12,10 +12,10 @@ class ResourcesService{
 
   async findByClientPeriodProfileAndNames(cod_cliente,periodo,cod_perfil,nombres){
     const select="SELECT cod_mapa_recurso,mapa_recursos.cod_colaborador,linea_negocio,mapa_recursos.estado,puesto AS nombre_perfil,mapa_recursos.nivel,"+
-              "fecha_inicio,fecha_fin,asignacion,fecha_fin_contrato,clm_efectivo,produccion,productividad,CONCAT(nombres,' ',apellido_pat,' ',apellido_mat) AS nombre_colaborador "+
-             "FROM mapa_recursos "+
-             "INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador "+
-             "INNER JOIN puesto ON mapa_recursos.perfil=puesto.cod_puesto ";
+              " fecha_inicio,fecha_fin,asignacion,fecha_fin_contrato,clm_efectivo,produccion,productividad,CONCAT(nombres,' ',apellido_pat,' ',apellido_mat) AS nombre_colaborador "+
+             " FROM mapa_recursos "+
+             " INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador "+
+             " INNER JOIN puesto ON mapa_recursos.perfil=puesto.cod_puesto ";
     var query=select+
                 "WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"' ";
     if(cod_perfil!=null){
@@ -96,9 +96,9 @@ class ResourcesService{
   async findByMontoServicio(cod_cliente,periodo,perfil,nombres){
     // const client = await getConnection();
     let query = "SELECT sum(clm_efectivo) as clm_efectivo, sum(produccion) as produccion, sum(produccion)/sum(clm_efectivo) as productividad" +
-    "FROM public.mapa_recursos" +
-    "INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador" +
-    "WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"'"
+    " FROM public.mapa_recursos" +
+    " INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador" +
+    " WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"'"
     if(perfil != null){
       query = query + " AND perfil = '" + perfil + "'"
     }
@@ -107,6 +107,15 @@ class ResourcesService{
       query+=" AND lower(CONCAT(nombres,' ',apellido_pat,' ',apellido_mat)) like '%"+nombres+"%'";
     }
     query = query + ";";
+    const [[rta]] = await sequelize.query(query);
+    return rta;
+  }
+
+  //Servicio para registrar un monto de servicio
+  async savePagoServicios(cod_servicio,nombre_hito,horas,monto,fecha_inicio,fecha_fin){
+    // const client = await getConnection();
+    let query = "INSERT INTO pagos_servicios (cod_servicio, descripcion_hito, horas, monto, fecha_inicio, fecha_fin)" +
+    " VALUES (" + cod_servicio + ", '" + nombre_hito + "', " + horas + ", " + monto + ", '" + fecha_inicio + "', '" + fecha_fin + "')";
     const [[rta]] = await sequelize.query(query);
     return rta;
   }
@@ -135,5 +144,28 @@ class ResourcesService{
     return (await rta).rows;
   }
 
+  async findByMapaServicio(cod_cliente,cod_linea_negocio,estado){
+    let query = "Select cod_servicio, nombre_servicio, tipo_servicio, etapa, estado, horas_venta, "+
+    "valor_venta, fecha_ini_planificacion, fecha_fin_planificacion, fecha_ini_real, "+
+    "fecha_fin_real, horas_planificacion, valor_venta_planificada, horas_ejecutadas, "+
+    "produccion_ejecutadas"+
+    "from mapa_servicios "+
+    "WHERE "
+    if(cod_cliente != "Todos"){
+      query = query + "cod_cliente ="+cod_cliente
+    }
+    if(cod_linea_negocio!=null){
+      query+=" AND cod_linea_negocio = "+cod_linea_negocio;
+    }
+    if(estado!=null){
+      query+=" AND estado = '"+estado+"'";
+    }
+    query = query + ";";
+    const [[rta]] = await sequelize.query(query);
+    return rta;
+  }
+
 }
+
+
 module.exports = ResourcesService;
