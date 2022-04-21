@@ -72,7 +72,7 @@ class ContractSolicitudeService{
   }
 
   async findBy(body){
-    var query=`SELECT solicitud_contratacion.fecha_reg,cliente.nombre_corto,cod_linea_negocio,puesto.puesto,nivel,nro_documento,
+    var query=`SELECT cod_solicitud_contratacion,solicitud_contratacion.fecha_reg,cliente.nombre_corto,cod_linea_negocio,puesto.puesto,nivel,nro_documento,
     CONCAT(nombre,' ',ape_paterno,' ',ape_materno) AS nombre_apellidos,modalidad,remuneracion,bono_men,cod_eps,
     ind_sctr,solicitud_contratacion.estado,fecha_aprob,ind_aprobacion_gg,fecha_aprob_gg
     FROM solicitud_contratacion
