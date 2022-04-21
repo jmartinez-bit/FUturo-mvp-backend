@@ -37,9 +37,9 @@ class ContractSolicitudeService{
       //verificar si el clm está dentro de la banda salarial
       const maximo=await salaryBandService.findMax(cod_banda_salarial);
       if(clm<=maximo){
-        var estado="Pendiente Aprobación";
+        var estado="Pendiente Aprobacion";
       }else{
-        estado="Pendiente Aprobación GG";
+        estado="Pendiente Aprobacion GG";
       }
       //Se acondiciona el numero de decimales de "clm"
       clm=clm.toFixed(2);
