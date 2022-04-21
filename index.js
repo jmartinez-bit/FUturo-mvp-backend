@@ -1,6 +1,7 @@
 const express = require('express');
 const routerApi = require("./routes");
 const { logErrors, boomErrorHandler } = require("./middlewares/error.handler");
+const cors = require('cors');
 
 // swagger
 const swaggerUI = require("swagger-ui-express");
@@ -25,6 +26,7 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('Hola mundo');
