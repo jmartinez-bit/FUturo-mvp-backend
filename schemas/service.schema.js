@@ -26,8 +26,7 @@ const createServiceSchema = Joi.object({
   fecha_fin_planificada: fecha_fin_planificada.required(),
   fecha_ini_real: fecha_ini_real.allow(null),
   fecha_fin_real: fecha_fin_real.allow(null),
-  forma_pago: forma_pago.required(),
-  estado: estado.required()
+  forma_pago: forma_pago.required()
 });
 
 module.exports = { createServiceSchema }

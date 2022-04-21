@@ -29,7 +29,7 @@ class ServicesService{
       replacements: [data.cod_cliente, data.cod_linea_servicio, data.tipo_servicio, data.descripcion_servicio,
               data.horas_venta, data.moneda, data.valor_venta, data.fecha_ini_planificada,
               data.fecha_fin_planificada, data.fecha_ini_real, data.fecha_fin_real, data.forma_pago,
-              'prueba', data.estado]
+              'prueba', 'en proceso']
     });
 
     let newPayment = null;
