@@ -66,7 +66,7 @@ class ContractSolicitudeService{
     const query=`SELECT TRUE
                 WHERE EXISTS (SELECT 1
                               FROM solicitud_contratacion
-                              WHERE nro_documento = '${nroDocumento}'); `;
+                              WHERE nro_documento = '${nroDocumento}' AND estado<>'Rechazado'); `;
     const [data] = await sequelize.query(query);
      return data;
   }
@@ -101,6 +101,28 @@ class ContractSolicitudeService{
     const [data] = await sequelize.query(query);
      return data;
   }
+
+  async findOne(cod){
+    const query=`SELECT * from solicitud_contratacion
+                 WHERE cod_solicitud_contratacion=${cod}`;
+    const [data] = await sequelize.query(query);
+    return data;
+  }
+
+  async approve(cod){
+    const query=`UPDATE solicitud_contratacion
+                 SET estado='Aprobado'
+                 WHERE cod_solicitud_contratacion=${cod}`;
+    await sequelize.query(query);
+  }
+
+  async reject(cod){
+    const query=`UPDATE solicitud_contratacion
+                 SET estado='Rechazado'
+                 WHERE cod_solicitud_contratacion=${cod}`;
+    await sequelize.query(query);
+  }
+
 }
 
 module.exports = ContractSolicitudeService;

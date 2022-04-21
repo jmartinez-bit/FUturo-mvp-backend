@@ -70,4 +70,37 @@ router.post("/",async (req, res,next) =>{
 
 });
 
+router.get("/:cod",async (req, res,next) =>{
+  try{
+    const {cod}=req.params;
+    const [data]=await contractSolicitudeService.findOne(cod);
+    res.json(data);
+  }catch (e){
+    next(e);
+  }
+
+});
+
+router.get("/approve/:cod",async (req, res,next) =>{
+  try{
+    const {cod}=req.params;
+    await contractSolicitudeService.approve(cod);
+    res.status(200).json("Se cambió el estado a Aprobado");
+  }catch (e){
+    next(e);
+  }
+
+});
+
+router.get("/reject/:cod",async (req, res,next) =>{
+  try{
+    const {cod}=req.params;
+    await contractSolicitudeService.reject(cod);
+    res.status(200).json("Se cambió el estado a Rechazado");
+  }catch (e){
+    next(e);
+  }
+
+});
+
 module.exports = router;
