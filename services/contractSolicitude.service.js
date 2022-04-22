@@ -116,7 +116,7 @@ class ContractSolicitudeService{
     const query1=`SELECT cod_solicitud_contratacion,tipo_documento,nro_documento,nombre,ape_paterno,ape_materno,fecha_nacimiento,
               nro_celular,correo,direccion,distrito,provincia,nombre_corto,cod_linea_negocio,solicitud_contratacion.cod_puesto,
               puesto,nivel,cod_banda_salarial,modalidad,remuneracion,bono_men,cod_eps,
-              eps_parcial_total, ind_sctr,fecha_inicio,fecha_fin,condicional_adicional
+              eps_parcial_total, ind_sctr,fecha_inicio,fecha_fin,condicional_adicional,solicitud_contratacion.estado
                  FROM solicitud_contratacion
                  INNER JOIN cliente ON solicitud_contratacion.cod_cliente=cliente.cod_cliente
                  INNER JOIN puesto ON solicitud_contratacion.cod_puesto=puesto.cod_puesto
@@ -153,14 +153,15 @@ class ContractSolicitudeService{
     await resourcesService.createResourcefromSolicitude(data1[0],codCollaborator)
 
     const query=`UPDATE solicitud_contratacion
-                 SET estado='Aprobado'
+                 SET estado='Aprobado',fecha_aprob=CURRENT_DATE
                  WHERE cod_solicitud_contratacion=${cod}`;
     await sequelize.query(query);
+
   }
 
   async reject(cod){
     const query=`UPDATE solicitud_contratacion
-                 SET estado='Rechazado'
+                 SET estado='Rechazado',fecha_rechaz=CURRENT_DATE
                  WHERE cod_solicitud_contratacion=${cod}`;
     await sequelize.query(query);
   }

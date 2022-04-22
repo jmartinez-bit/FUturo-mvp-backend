@@ -73,14 +73,9 @@ router.post("/",async (req, res,next) =>{
 router.get("/:cod",async (req, res,next) =>{
   try{
     const {cod}=req.params;
-    const estado=await contractSolicitudeService.findState(cod);
-    if(estado==="Aprobado"||estado==="Rechazado"){
-      res.status(409).json({"error":false,
-                          "message":"A esta solicitud ya se le asigno el estado "+estado});
-    }else{
-      const [data]=await contractSolicitudeService.findOne(cod);
-      res.json(data);
-    }
+    const [data]=await contractSolicitudeService.findOne(cod);
+    res.json(data);
+
   }catch (e){
     next(e);
   }

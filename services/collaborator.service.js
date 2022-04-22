@@ -33,8 +33,10 @@ class CollaboratorService{
 
   async createCollaboratorfromSolicitude(d){
     const query=`INSERT INTO colaborador(tipo_doc, nro_documento, cod_puesto, nivel, nombres, apellido_mat,
-                 apellido_pat, fecha_nacimiento, correo_personal, celular_personal)
-                 VALUES ('${d.tipo_documento}','${d.nro_documento}',${d.cod_puesto},'${d.nivel}','${d.nombre}','${d.ape_materno}','${d.ape_paterno}','${d.fecha_nacimiento}', '${d.correo}','${d.nro_celular}');`;
+                 apellido_pat, fecha_nacimiento, correo_personal, celular_personal,direccion,distrito,provincia)
+                 VALUES ('${d.tipo_documento}','${d.nro_documento}',${d.cod_puesto},'${d.nivel}','${d.nombre}',
+                 '${d.ape_materno}','${d.ape_paterno}','${d.fecha_nacimiento}', '${d.correo}','${d.nro_celular}',
+                 '${d.direccion}','${d.distrito}','${d.provincia}');`;
     await sequelize.query(query);
   }
 

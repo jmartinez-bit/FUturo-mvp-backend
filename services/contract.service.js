@@ -54,8 +54,8 @@ class ContractService{
     }
     //Insert
     const query=`INSERT INTO contrato(
-      cod_colaborador, modalidad, ind_eps, ind_sctr, sueldo_planilla, rxh, bono, eps, sctr, clm, fecha_inicio, fecha_fin)
-      VALUES (${id},'${d.modalidad}', '${indEps}', ${indSctr}, ${sueldoPlanilla},${rxh}, ${bono}, ${eps}, ${sctr}, '${d.clm}', '${d.fecha_inicio}','${d.fecha_fin}');`;
+      cod_colaborador,tipo, modalidad, ind_eps, ind_sctr, sueldo_planilla, rxh, bono, eps, sctr, clm, fecha_inicio, fecha_fin,estado)
+      VALUES (${id},'C','${d.modalidad}', '${indEps}', ${indSctr}, ${sueldoPlanilla},${rxh}, ${bono}, ${eps}, ${sctr}, '${d.clm}', '${d.fecha_inicio}','${d.fecha_fin}','AC');`;
     await sequelize.query(query);
   }
 
