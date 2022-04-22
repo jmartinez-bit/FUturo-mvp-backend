@@ -73,8 +73,14 @@ router.post("/",async (req, res,next) =>{
 router.get("/:cod",async (req, res,next) =>{
   try{
     const {cod}=req.params;
-    const [data]=await contractSolicitudeService.findOne(cod);
-    res.json(data);
+    const estado=await contractSolicitudeService.findState(cod);
+    if(estado==="Aprobado"||estado==="Rechazado"){
+      res.status(409).json({"error":false,
+                          "message":"A esta solicitud ya se le asigno el estado "+estado});
+    }else{
+      const [data]=await contractSolicitudeService.findOne(cod);
+      res.json(data);
+    }
   }catch (e){
     next(e);
   }
@@ -84,8 +90,16 @@ router.get("/:cod",async (req, res,next) =>{
 router.get("/approve/:cod",async (req, res,next) =>{
   try{
     const {cod}=req.params;
-    await contractSolicitudeService.approve(cod);
-    res.status(200).json("Se cambió el estado a Aprobado");
+    const estado=await contractSolicitudeService.findState(cod);
+    if(estado==="Aprobado"||estado==="Rechazado"){
+      res.status(409).json({"error":false,
+      "message":"A esta solicitud ya se le asigno el estado "+estado});
+    }else{
+      await contractSolicitudeService.approve(cod);
+      res.status(200).json({"error":false,
+                          "message":"Se cambió el estado a Aprobado y se creo un nuevo contrato"});
+    }
+
   }catch (e){
     next(e);
   }
@@ -95,8 +109,16 @@ router.get("/approve/:cod",async (req, res,next) =>{
 router.get("/reject/:cod",async (req, res,next) =>{
   try{
     const {cod}=req.params;
-    await contractSolicitudeService.reject(cod);
-    res.status(200).json("Se cambió el estado a Rechazado");
+    const estado=await contractSolicitudeService.findState(cod);
+    if(estado==="Aprobado"||estado==="Rechazado"){
+      res.status(409).json({"error":false,
+      "message":"A esta solicitud ya se le asigno el estado "+estado});
+    }else{
+      await contractSolicitudeService.reject(cod);
+      res.status(200).json({"error":false,
+                          "message":"Se cambió el estado a Rechazado"});
+    }
+
   }catch (e){
     next(e);
   }

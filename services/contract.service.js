@@ -1,4 +1,7 @@
 const sequelize = require('../libs/sequelize');
+const EpsService = require('../services/eps.service');
+
+const epsService = new EpsService();
 
 class ContractService{
 
@@ -12,6 +15,50 @@ class ContractService{
     const [data] = await sequelize.query(query);
      return data;
   }
+
+  async createContractfromSolicitude(d,id){
+    //Acondicionamiento ind_eps
+    var indEps='N';
+    if(d.cod_eps!=null){
+      indEps='S';
+    }
+    //Acondicionamiento ind_sctr
+    var indSctr=null;
+    if(d.ind_sctr!=null){
+      indSctr=d.ind_sctr;
+      indSctr="'"+indSctr+"'";
+    }
+    //Acondicionamiento sueldo_planilla
+    var sueldoPlanilla=null;
+    var rxh="'"+d.remuneracion+"'";
+    if(d.modalidad.toLowerCase()==='planilla'){
+      sueldoPlanilla="'"+d.remuneracion+"'";
+      rxh=null;
+    }
+    //Acondicionamiento eps
+    var eps=null;
+    if(d.cod_eps!=null){
+       eps=await epsService.findAmount(d.cod_eps,d.eps_parcial_total);
+       eps="'"+eps+"'";
+    }
+    //Acondicionamiento sctr
+    var sctr=null;
+    if(d.ind_sctr==='s'||d.ind_sctr==='S'){
+      sctr=process.env.PORCENTAJE_SCTR*d.remuneracion;
+      sctr="'"+sctr+"'";
+    }
+    //Acondicionamiento bono
+    var bono=null;
+    if(d.bono!=null){
+      bono="'"+d.bono+"'";
+    }
+    //Insert
+    const query=`INSERT INTO contrato(
+      cod_colaborador, modalidad, ind_eps, ind_sctr, sueldo_planilla, rxh, bono, eps, sctr, clm, fecha_inicio, fecha_fin)
+      VALUES (${id},'${d.modalidad}', '${indEps}', ${indSctr}, ${sueldoPlanilla},${rxh}, ${bono}, ${eps}, ${sctr}, '${d.clm}', '${d.fecha_inicio}','${d.fecha_fin}');`;
+    await sequelize.query(query);
+  }
+
 
 }
 

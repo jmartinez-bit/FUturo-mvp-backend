@@ -1,9 +1,16 @@
 const sequelize = require('../libs/sequelize');
 const SalaryBandService = require('../services/salaryBand.service');
 const EpsService = require('../services/eps.service');
+const CollaboratorService = require('../services/collaborator.service');
+const ContractService = require('../services/contract.service');
+
 
 const salaryBandService = new SalaryBandService();
 const epsService = new EpsService();
+const collaboratorService = new CollaboratorService();
+const contractService = new ContractService();
+
+
 
 class ContractSolicitudeService{
 
@@ -97,7 +104,7 @@ class ContractSolicitudeService{
     if(body.estado){
       query+=`AND solicitud_contratacion.estado = '${body.estado}'`;
     }
-    query+=`;`;
+    query+=`ORDER BY cod_solicitud_contratacion DESC;`;
     const [data] = await sequelize.query(query);
      return data;
   }
@@ -128,7 +135,19 @@ class ContractSolicitudeService{
     return data1;
   }
 
+  async findState(cod){
+    const query=`SELECT estado FROM solicitud_contratacion
+                 WHERE cod_solicitud_contratacion=${cod}`;
+    const [data]=await sequelize.query(query);
+    return data[0].estado;
+  }
+
   async approve(cod){
+    const [data1]=await sequelize.query(`SELECT * from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
+    await collaboratorService.createCollaboratorfromSolicitude(data1[0]);
+    const codCollaborator= await collaboratorService.findIdCollaborator(data1[0].nro_documento);
+    await contractService.createContractfromSolicitude(data1[0],codCollaborator);
+
     const query=`UPDATE solicitud_contratacion
                  SET estado='Aprobado'
                  WHERE cod_solicitud_contratacion=${cod}`;

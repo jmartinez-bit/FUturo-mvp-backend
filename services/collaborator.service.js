@@ -31,5 +31,20 @@ class CollaboratorService{
     return data;
   }
 
+  async createCollaboratorfromSolicitude(d){
+    const query=`INSERT INTO colaborador(tipo_doc, nro_documento, cod_puesto, nivel, nombres, apellido_mat,
+                 apellido_pat, fecha_nacimiento, correo_personal, celular_personal)
+                 VALUES ('${d.tipo_documento}','${d.nro_documento}',${d.cod_puesto},'${d.nivel}','${d.nombre}','${d.ape_materno}','${d.ape_paterno}','${d.fecha_nacimiento}', '${d.correo}','${d.nro_celular}');`;
+    await sequelize.query(query);
+  }
+
+  async findIdCollaborator(nro_documento){
+    nro_documento="'"+nro_documento+"'";
+    const query=`SELECT cod_colaborador from colaborador
+                  WHERE nro_documento=${nro_documento} ;`;
+    const [data]= await sequelize.query(query);
+    return data[0].cod_colaborador;
+  }
+
 }
 module.exports = CollaboratorService;
