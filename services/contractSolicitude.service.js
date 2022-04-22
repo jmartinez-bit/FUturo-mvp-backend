@@ -103,17 +103,29 @@ class ContractSolicitudeService{
   }
 
   async findOne(cod){
-    const query=`SELECT cod_solicitud_contratacion,tipo_documento,nro_documento,nombre,ape_paterno,ape_materno,fecha_nacimiento,
+    const query1=`SELECT cod_solicitud_contratacion,tipo_documento,nro_documento,nombre,ape_paterno,ape_materno,fecha_nacimiento,
               nro_celular,correo,direccion,distrito,provincia,nombre_corto,cod_linea_negocio,solicitud_contratacion.cod_puesto,
-              puesto,nivel,cod_banda_salarial,modalidad,remuneracion,bono_men,solicitud_contratacion.cod_eps,plan_eps,
+              puesto,nivel,cod_banda_salarial,modalidad,remuneracion,bono_men,cod_eps,
               eps_parcial_total, ind_sctr,fecha_inicio,fecha_fin,condicional_adicional
                  FROM solicitud_contratacion
                  INNER JOIN cliente ON solicitud_contratacion.cod_cliente=cliente.cod_cliente
                  INNER JOIN puesto ON solicitud_contratacion.cod_puesto=puesto.cod_puesto
-                 INNER JOIN eps ON solicitud_contratacion.cod_eps=eps.cod_eps
                  WHERE cod_solicitud_contratacion=${cod} ;`;
-    const [data] = await sequelize.query(query);
-    return data;
+    var [data1] = await sequelize.query(query1);
+    const codEps=data1[0].cod_eps;
+  //Se verifica si el campo cod_eps está lleno
+    if(codEps){
+    const query2=`SELECT plan_eps FROM eps
+                  WHERE cod_eps=${codEps} ;`;
+    const [data2] = await sequelize.query(query2);
+  //Se añade el campo plan_eps
+    data1=[{
+      ...data1[0],
+      ...data2[0]
+    }]
+  }
+
+    return data1;
   }
 
   async approve(cod){
