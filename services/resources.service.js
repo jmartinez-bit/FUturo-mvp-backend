@@ -135,5 +135,11 @@ class ResourcesService{
     return (await rta).rows;
   }
 
+  async createResourcefromSolicitude(d,codColaborador){
+    const [data]=await sequelize.query(`SELECT periodo FROM periodo WHERE estado='A'`);
+    const query=`INSERT INTO mapa_recursos (periodo, cod_cliente, linea_negocio, cod_colaborador, perfil, nivel, clm, estado)
+      VALUES ('${data[0].periodo}',${d.cod_cliente},'${d.cod_linea_negocio}',${codColaborador},${d.cod_puesto},'${d.nivel}','${d.clm}','A');`;
+    await sequelize.query(query);
+  }
 }
 module.exports = ResourcesService;

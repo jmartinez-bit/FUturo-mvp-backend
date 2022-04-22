@@ -3,12 +3,15 @@ const SalaryBandService = require('../services/salaryBand.service');
 const EpsService = require('../services/eps.service');
 const CollaboratorService = require('../services/collaborator.service');
 const ContractService = require('../services/contract.service');
+const ResourcesService = require('../services/resources.service');
 
 
 const salaryBandService = new SalaryBandService();
 const epsService = new EpsService();
 const collaboratorService = new CollaboratorService();
 const contractService = new ContractService();
+const resourcesService = new ResourcesService();
+
 
 
 
@@ -147,6 +150,7 @@ class ContractSolicitudeService{
     await collaboratorService.createCollaboratorfromSolicitude(data1[0]);
     const codCollaborator= await collaboratorService.findIdCollaborator(data1[0].nro_documento);
     await contractService.createContractfromSolicitude(data1[0],codCollaborator);
+    await resourcesService.createResourcefromSolicitude(data1[0],codCollaborator)
 
     const query=`UPDATE solicitud_contratacion
                  SET estado='Aprobado'
