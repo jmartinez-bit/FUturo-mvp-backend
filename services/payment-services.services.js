@@ -14,7 +14,7 @@ class PaymentServicesService{
 
   async get(cod_servicio){
 
-    let query = "SELECT cod_servicio, numero_hito, descripcion_hito, horas, monto, fecha_inicio, fecha_fin "+
+    let query = "SELECT cod_hito, cod_servicio, numero_hito, descripcion_hito, horas, monto, fecha_inicio, fecha_fin "+
     "FROM pagos_servicios WHERE cod_servicio = " + cod_servicio + ";"
     const [rta] = await sequelize.query(query);
     return rta;
@@ -48,8 +48,8 @@ class PaymentServicesService{
 
 
   //Servicio para registrar un monto de servicio
-  async update(cod_hito,nombre_hito,horas,monto,fecha_inicio,fecha_fin){
-    let query = "UPDATE pagos_servicios SET descripcion_hito = '"+nombre_hito +
+  async update(cod_hito,descripcion_hito,horas,monto,fecha_inicio,fecha_fin){
+    let query = "UPDATE pagos_servicios SET descripcion_hito = '"+descripcion_hito +
     "', horas = "+ horas + ", monto = " + monto + ", fecha_inicio = '"+ fecha_inicio + "', fecha_fin = '" +
     fecha_fin + "' WHERE cod_hito = " + cod_hito + ";"
     const [[rta]] = await sequelize.query(query);

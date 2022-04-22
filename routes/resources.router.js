@@ -128,17 +128,5 @@ router.get("/:id_client/collaborators/:period",async (req, res,next) =>{
 });
 
 
-//Obtener los servicios de un DM.
-router.post("/mapaservicios",async (req, res,next) =>{
-  try{
-    const cod_cliente=req.body.cod_cliente;
-    const cod_linea_negocio=req.body.cod_linea_negocio||null;
-    const estado=req.body.estado||null;
-    const resources=await service.findByMapaServicio(cod_cliente,cod_linea_negocio,estado);
-    res.json(resources);
-  }catch (e){
-    next(e);
-  }
-});
 
 module.exports = router;
