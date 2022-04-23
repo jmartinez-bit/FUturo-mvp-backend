@@ -82,15 +82,15 @@ router.get("/:cod",async (req, res,next) =>{
 
 });
 
-router.get("/approve/:cod",async (req, res,next) =>{
+router.get("/approve/:cod/:indAsignFamiliar",async (req, res,next) =>{
   try{
-    const {cod}=req.params;
+    const {cod,indAsignFamiliar}=req.params;
     const estado=await contractSolicitudeService.findState(cod);
     if(estado==="Aprobado"||estado==="Rechazado"){
       res.status(409).json({"error":false,
       "message":"A esta solicitud ya se le asigno el estado "+estado});
     }else{
-      await contractSolicitudeService.approve(cod);
+      await contractSolicitudeService.approve(cod,indAsignFamiliar);
       res.status(200).json({"error":false,
                           "message":"Se cambió el estado a Aprobado y se creo un nuevo contrato"});
     }

@@ -6,12 +6,12 @@ const ContractService = require('../services/contract.service');
 const ResourcesService = require('../services/resources.service');
 
 
+
 const salaryBandService = new SalaryBandService();
 const epsService = new EpsService();
 const collaboratorService = new CollaboratorService();
 const contractService = new ContractService();
 const resourcesService = new ResourcesService();
-
 
 
 
@@ -145,12 +145,17 @@ class ContractSolicitudeService{
     return data[0].estado;
   }
 
-  async approve(cod){
-    const [data1]=await sequelize.query(`SELECT * from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
-    await collaboratorService.createCollaboratorfromSolicitude(data1[0]);
-    const codCollaborator= await collaboratorService.findIdCollaborator(data1[0].nro_documento);
-    await contractService.createContractfromSolicitude(data1[0],codCollaborator);
-    await resourcesService.createResourcefromSolicitude(data1[0],codCollaborator)
+  async approve(cod,indAsignFamiliar){
+    if(indAsignFamiliar){
+      const [data]=await sequelize.query(`SELECT clm from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
+      const clm=data[0]+process.env.ASIGN_FAMILIAR;
+      this.addFamiliarAssignment(cod,clm);
+    }
+    const [data]=await sequelize.query(`SELECT * from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
+    await collaboratorService.createCollaboratorfromSolicitude(data[0]);
+    const codCollaborator= await collaboratorService.findIdCollaborator(data[0].nro_documento);
+    await contractService.createContractfromSolicitude(data[0],codCollaborator);
+    await resourcesService.createResourcefromSolicitude(data[0],codCollaborator)
 
     const query=`UPDATE solicitud_contratacion
                  SET estado='Aprobado',fecha_aprob=CURRENT_DATE
@@ -162,6 +167,13 @@ class ContractSolicitudeService{
   async reject(cod){
     const query=`UPDATE solicitud_contratacion
                  SET estado='Rechazado',fecha_rechaz=CURRENT_DATE
+                 WHERE cod_solicitud_contratacion=${cod}`;
+    await sequelize.query(query);
+  }
+
+  async addFamiliarAssignment(cod,clm){
+    const query=`UPDATE solicitud_contratacion
+                 SET ind_asign_familiar='S',clm='${clm}'
                  WHERE cod_solicitud_contratacion=${cod}`;
     await sequelize.query(query);
   }
