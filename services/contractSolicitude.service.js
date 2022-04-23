@@ -63,11 +63,11 @@ class ContractSolicitudeService{
 
     const query=`INSERT INTO solicitud_contratacion (tipo_documento, nro_documento, nombre, ape_paterno, ape_materno,
      fecha_nacimiento, nro_celular, correo, direccion, distrito,provincia, cod_cliente, cod_linea_negocio, cod_puesto, nivel,
-    cod_banda_salarial, modalidad, remuneracion, bono_men, cod_eps,eps_parcial_total, ind_sctr, fecha_inicio, fecha_fin, condicional_adicional,clm,estado)
+    cod_banda_salarial, modalidad, remuneracion, bono_men, cod_eps,eps_parcial_total, ind_sctr, fecha_inicio, fecha_fin, condicional_adicional,clm,estado,fecha_reg)
     VALUES ('${tipo_documento}','${nro_documento}','${nombre}','${ape_paterno}','${ape_materno}','${fecha_nacimiento}',
     '${nro_celular}','${correo}','${direccion}','${distrito}','${provincia}','${cod_cliente}','${cod_linea_negocio}','${cod_puesto}',
     '${nivel}',${cod_banda_salarial},'${modalidad}','${remuneracion}',${bono_men},${cod_eps},${eps_parcial_total},${ind_sctr},'${fecha_inicio}',
-    '${fecha_fin}',${condicional_adicional},${clm},'${estado}');`;
+    '${fecha_fin}',${condicional_adicional},${clm},'${estado}',CURRENT_DATE);`;
 
     await sequelize.query(query);
   }
