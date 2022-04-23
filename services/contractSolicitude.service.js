@@ -148,7 +148,8 @@ class ContractSolicitudeService{
   async approve(cod,indAsignFamiliar){
     if(indAsignFamiliar){
       const [data]=await sequelize.query(`SELECT clm from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
-      const clm=data[0]+process.env.ASIGN_FAMILIAR;
+      var clm=parseFloat(data[0].clm)+parseFloat(process.env.ASIGN_FAMILIAR);
+      clm=clm.toFixed(2);
       this.addFamiliarAssignment(cod,clm);
     }
     const [data]=await sequelize.query(`SELECT * from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);

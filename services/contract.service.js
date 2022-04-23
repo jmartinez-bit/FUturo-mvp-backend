@@ -23,11 +23,17 @@ class ContractService{
       indEps='S';
     }
     //Acondicionamiento ind_sctr
-    var indSctr=null;
-    if(d.ind_sctr!=null){
-      indSctr=d.ind_sctr;
-      indSctr="'"+indSctr+"'";
+    if(d.ind_sctr===null){
+    var indSctr='N';
+    }else{
+      indSctr="'"+d.ind_sctr+"'";
     }
+    //Acondicionamiento ind_asign_familiar
+    if(d.ind_asign_familiar===null){
+      var indAsignFamiliar='N';
+      }else{
+        indAsignFamiliar="'"+d.ind_asign_familiar+"'";
+      }
     //Acondicionamiento sueldo_planilla
     var sueldoPlanilla=null;
     var rxh="'"+d.remuneracion+"'";
@@ -49,13 +55,13 @@ class ContractService{
     }
     //Acondicionamiento bono
     var bono=null;
-    if(d.bono!=null){
-      bono="'"+d.bono+"'";
+    if(d.bono_men!=null){
+      bono="'"+d.bono_men+"'";
     }
     //Insert
     const query=`INSERT INTO contrato(
-      cod_colaborador,tipo, modalidad, ind_eps, ind_sctr, sueldo_planilla, rxh, bono_men, eps, sctr, clm, fecha_inicio, fecha_fin,estado,fecha_reg)
-      VALUES (${id},'C','${d.modalidad}', '${indEps}', ${indSctr}, ${sueldoPlanilla},${rxh}, ${bono}, ${eps}, ${sctr}, '${d.clm}', '${d.fecha_inicio}','${d.fecha_fin}','AC',CURRENT_DATE);`;
+      cod_colaborador,tipo, modalidad, ind_eps, ind_sctr,ind_asign_familiar,asignacion_familiar, sueldo_planilla, rxh, bono, eps, sctr, clm, fecha_inicio, fecha_fin,estado,fecha_reg)
+      VALUES (${id},'C','${d.modalidad}', '${indEps}', ${indSctr},${indAsignFamiliar},${process.env.ASIGN_FAMILIAR}, ${sueldoPlanilla},${rxh}, ${bono}, ${eps}, ${sctr}, '${d.clm}', '${d.fecha_inicio}','${d.fecha_fin}','AC',CURRENT_DATE);`;
     await sequelize.query(query);
   }
 
