@@ -14,6 +14,15 @@ router.post('/', async (req, res, next) => {
   }
 );
 
+router.post("/cartera",async (req, res,next) =>{
+  try{
+    const cod_dm=req.body.cod_dm;
+    const resources=await service.cartera(cod_dm);
+    res.json(resources);
+  }catch (e){
+    next(e);
+  }
+});
 
 //Obtener los servicios de un DM.
 router.post("/get",async (req, res,next) =>{
