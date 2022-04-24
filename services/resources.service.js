@@ -136,27 +136,12 @@ class ResourcesService{
     return (await rta).rows;
   }
 
-  async findByMapaServicio(cod_cliente,cod_linea_negocio,estado){
-    let query = "Select cod_servicio, nombre_servicio, tipo_servicio, etapa, estado, horas_venta, "+
-    "valor_venta, fecha_ini_planificacion, fecha_fin_planificacion, fecha_ini_real, "+
-    "fecha_fin_real, horas_planificacion, valor_venta_planificada, horas_ejecutadas, "+
-    "produccion_ejecutadas"+
-    "from mapa_servicios "+
-    "WHERE "
-    if(cod_cliente != "Todos"){
-      query = query + "cod_cliente ="+cod_cliente
-    }
-    if(cod_linea_negocio!=null){
-      query+=" AND cod_linea_negocio = "+cod_linea_negocio;
-    }
-    if(estado!=null){
-      query+=" AND estado = '"+estado+"'";
-    }
-    query = query + ";";
-    const [[rta]] = await sequelize.query(query);
-    return rta;
+  async createResourcefromSolicitude(d,codColaborador){
+    const [data]=await sequelize.query(`SELECT periodo FROM periodo WHERE estado='A'`);
+    const query=`INSERT INTO mapa_recursos (periodo, cod_cliente, linea_negocio, cod_colaborador, perfil, nivel, clm, estado)
+      VALUES ('${data[0].periodo}',${d.cod_cliente},'${d.cod_linea_negocio}',${codColaborador},${d.cod_puesto},'${d.nivel}','${d.clm}','A');`;
+    await sequelize.query(query);
   }
-
 }
 
 
