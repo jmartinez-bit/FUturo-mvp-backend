@@ -65,8 +65,8 @@ router.post("/montoservicio",async (req, res,next) =>{
     const cod_cliente=req.body.cod_cliente;
     const periodo=req.body.periodo;
     const perfil=req.body.perfil||null;
-    const cod_colaborador=req.body.cod_colaborador||null;
-    const resources=await service.findByMontoServicio(cod_cliente,periodo,perfil,cod_colaborador);
+    const nombre=req.body.nombre||null;
+    const resources=await service.findByMontoServicio(cod_cliente,periodo,perfil,nombre);
     res.json(resources);
   }catch (e){
     next(e);
@@ -127,15 +127,6 @@ router.get("/:id_client/collaborators/:period",async (req, res,next) =>{
   }
 });
 
-// router.get('/:cliente/:periodo', async (req, res, next) => {
-//   try {
-//     const { cliente, periodo } = req.params;
-//     const resources = await service.findByClientAndPeriod(cliente, periodo);
-//     res.json(resources);
-//   } catch (e) {
-//     next(e);
-//   }
-// });
 
 
 module.exports = router;
