@@ -82,4 +82,16 @@ router.get('/user',
   }
 });
 
+
+router.get("/",async (req, res,next) =>{
+  try{
+    const data=await clientService.findAll();
+    res.json(data);
+
+  }catch (e){
+    next(e);
+  }
+
+});
+
 module.exports = router;

@@ -6,7 +6,11 @@ const paymentServicesRouter = require('./payment-services.router');
 const serviceTypeRouter = require('./service-type.router');
 const paymentMethodRouter = require('./payment-method.router');
 const periodRouter = require('./period.router');
-
+const businessLineRouter = require('./businessLine.router');
+const salaryBandRouter = require('./salaryBand.router');
+const contractRouter = require('./contract.router');
+const contractSolicitudeRouter = require('./contractSolicitude.router');
+const epsRouter = require('./eps.router');
 const express = require('express');
 
 
@@ -21,6 +25,11 @@ function routerApi(app) {
   router.use('/service-type', serviceTypeRouter);
   router.use('/payment-method', paymentMethodRouter);
   router.use('/period', periodRouter);
+  router.use('/businessLine', businessLineRouter);
+  router.use('/salaryBand', salaryBandRouter);
+  router.use('/contract', contractRouter);
+  router.use('/contractSolicitude', contractSolicitudeRouter);
+  router.use('/eps', epsRouter);
 }
 
 module.exports = routerApi;
