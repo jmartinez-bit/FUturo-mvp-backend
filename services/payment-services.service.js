@@ -12,14 +12,6 @@ function getInsert(attributes = '*') {
 
 class PaymentServicesService{
 
-  async get(cod_servicio){
-
-    let query = "SELECT cod_hito, cod_servicio, numero_hito, descripcion_hito, horas, monto, fecha_inicio, fecha_fin "+
-    "FROM pagos_servicios WHERE cod_servicio = " + cod_servicio + ";"
-    const [rta] = await sequelize.query(query);
-    return rta;
-  }
-
   async create(data) {
     // Columnas
     const insert = getInsert(['cod_servicio', 'numero_hito', 'descripcion_hito', 'horas', 'monto',
@@ -44,23 +36,6 @@ class PaymentServicesService{
     const [[data]] = await sequelize.query(query);
 
     return parseInt(data.count);
-  }
-
-
-  //Servicio para registrar un monto de servicio
-  async update(cod_hito,descripcion_hito,horas,monto,fecha_inicio,fecha_fin){
-    let query = "UPDATE pagos_servicios SET descripcion_hito = '"+descripcion_hito +
-    "', horas = "+ horas + ", monto = " + monto + ", fecha_inicio = '"+ fecha_inicio + "', fecha_fin = '" +
-    fecha_fin + "' WHERE cod_hito = " + cod_hito + ";"
-    const [[rta]] = await sequelize.query(query);
-    return rta;
-  }
-
-  //Servicio para eliminar un monto de servicio
-  async delete(cod_hito){
-    let query = "DELETE FROM pagos_servicios WHERE cod_hito = " + cod_hito
-    const [rta] = await sequelize.query(query);
-    return rta;
   }
 
 }

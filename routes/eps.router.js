@@ -1,12 +1,12 @@
 const express = require('express');
-const BusinessLineService = require('../services/businessLine.service');
+const EpsService = require('../services/eps.service');
 
 const router = express.Router();
-const businessLineService = new BusinessLineService();
+const epsService = new EpsService();
 
 router.get("/",async (req, res,next) =>{
   try{
-    const data=await businessLineService.findBusinessLines();
+    const data=await epsService.findAll();
     res.json(data);
 
   }catch (e){
