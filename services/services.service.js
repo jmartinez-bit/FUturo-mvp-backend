@@ -35,7 +35,7 @@ class ServicesService{
 
   async cartera(cod_dm){
     let query = "SELECT a.cod_cliente, b.nombre_corto " +
-    "FROM cartera_clientes a " +
+    "FROM cartera_cliente a " +
     "INNER JOIN cliente b ON a.cod_cliente = b.cod_cliente " +
     "WHERE cod_usuario = " + cod_dm + ";"
     const [rta] = await sequelize.query(query);
@@ -44,19 +44,19 @@ class ServicesService{
 
   async get(cod_cliente,cod_linea_negocio,estado){
 
-    let query = "SELECT a.cod_servicio, b.nombre_corto, tipo_servicio, etapa, estado, horas_venta, "+
+    let query = "SELECT a.cod_servicio, b.nombre_corto, tipo_servicio, etapa, a.estado, horas_venta, "+
     "valor_venta, fecha_ini_planificada, fecha_fin_planificada, fecha_ini_real, "+
     "fecha_fin_real, horas_planificadas, valor_venta_planificada, horas_ejecutadas, "+
     "horas_produccion_ejecutadas "+
-    "FROM servicio a"
+    "FROM servicio a " +
     "INNER JOIN cliente b ON a.cod_cliente = b.cod_cliente " +
-    "WHERE estado = " + estado + ";"
+    "WHERE a.estado = '" + estado + "' "
 
     if(cod_linea_negocio != "Todos"){
-      query += "AND cod_linea_negocio = " + cod_linea_negocio
+      query += " AND cod_linea_servicio = '" + cod_linea_negocio + "' "
     }
     if(cod_cliente != "Todos"){
-      query += "AND cod_cliente = " + cod_cliente
+      query += " AND a.cod_cliente = " + cod_cliente
     }
     const [rta] = await sequelize.query(query);
     return rta;
