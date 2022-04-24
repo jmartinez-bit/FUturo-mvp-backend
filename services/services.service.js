@@ -1,7 +1,6 @@
 const sequelize = require('../libs/sequelize');
 const { QueryTypes } = require('sequelize');
 const PaymentServicesService = require('./payment-services.service');
-const PeriodService = require('./period.service');
 
 // Sentencias
 function getSelect(attributes = '*') {
