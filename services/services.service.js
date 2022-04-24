@@ -13,7 +13,6 @@ function getInsert(attributes = '*') {
 };
 
 const paymentService = new PaymentServicesService();
-const periodService = new PeriodService();
 
 class ServicesService{
 
@@ -22,7 +21,7 @@ class ServicesService{
     // Columnas
     const insert = getInsert(['cod_cliente', 'cod_linea_servicio', 'tipo_servicio', 'descripcion_servicio',
               'horas_venta', 'moneda', 'tasa_cambio', 'costo_venta',
-              'costo_venta_dolar', 'valor_venta', 'valor_venta_dolar', 'tarifa',
+              'costo_venta_sol', 'valor_venta', 'valor_venta_sol', 'tarifa',
               'fecha_ini_planificada', 'fecha_fin_planificada', 'fecha_ini_real', 'fecha_fin_real',
               'forma_pago', 'usuario_reg', 'estado']);
 
@@ -37,9 +36,9 @@ class ServicesService{
         data.moneda,
         data.tasa_cambio,
         data.costo_venta,
-        data.costo_venta_dolar,
+        data.costo_venta_sol,
         data.valor_venta,
-        data.valor_venta_dolar,
+        data.valor_venta_sol,
         data.tarifa,
         data.fecha_ini_planificada,
         data.fecha_fin_planificada,
