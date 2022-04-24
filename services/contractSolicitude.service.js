@@ -19,7 +19,7 @@ class ContractSolicitudeService{
 
   async createSolicitude(tipo_documento, nro_documento, nombre, ape_paterno,
     ape_materno, fecha_nacimiento, nro_celular, correo, direccion, distrito,provincia, cod_cliente, cod_linea_negocio, cod_puesto,
-     nivel, modalidad, remuneracion, bono_men,cod_eps,eps_parcial_total, ind_sctr,ind_asign_familiar, fecha_inicio, fecha_fin, condicional_adicional){
+     nivel, modalidad, remuneracion, bono_men,cod_eps,eps_parcial_total, ind_sctr, fecha_inicio, fecha_fin, condicional_adicional){
 
       //hallar el monto del eps
       if(cod_eps!=null){
@@ -116,7 +116,7 @@ class ContractSolicitudeService{
     const query1=`SELECT cod_solicitud_contratacion,tipo_documento,nro_documento,nombre,ape_paterno,ape_materno,fecha_nacimiento,
               nro_celular,correo,direccion,distrito,provincia,nombre_corto,cod_linea_negocio,solicitud_contratacion.cod_puesto,
               puesto,nivel,cod_banda_salarial,modalidad,remuneracion,bono_men,cod_eps,
-              eps_parcial_total, ind_sctr,fecha_inicio,fecha_fin,condicional_adicional,solicitud_contratacion.estado
+              eps_parcial_total, ind_sctr,ind_asign_familiar,fecha_inicio,fecha_fin,condicional_adicional,solicitud_contratacion.estado
                  FROM solicitud_contratacion
                  INNER JOIN cliente ON solicitud_contratacion.cod_cliente=cliente.cod_cliente
                  INNER JOIN puesto ON solicitud_contratacion.cod_puesto=puesto.cod_puesto
@@ -146,7 +146,8 @@ class ContractSolicitudeService{
   }
 
   async approve(cod,indAsignFamiliar){
-    if(indAsignFamiliar==="true"){
+    console.log(indAsignFamiliar);
+    if(indAsignFamiliar===true){
       const [data]=await sequelize.query(`SELECT clm from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
       var clm=parseFloat(data[0].clm)+parseFloat(process.env.ASIGN_FAMILIAR);
       clm=clm.toFixed(2);
