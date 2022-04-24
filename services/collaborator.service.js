@@ -23,8 +23,8 @@ class CollaboratorService{
     // Sentencia
     const query=`${ select } ${ joinContrato }
                 WHERE colaborador.cod_colaborador=${ codColaborador }
-                AND (${ year } = EXTRACT(year FROM contrato.fecha_inicio) AND ${ year } = EXTRACT(year FROM contrato.fecha_fin))
-                AND (${ month } BETWEEN EXTRACT(month FROM contrato.fecha_inicio) AND EXTRACT(month FROM contrato.fecha_fin))
+                AND to_date('${ month + 1 }-${ year }', 'MM-YYYY') >= contrato.fecha_inicio
+                AND to_date('${ month }-${ year }', 'MM-YYYY') <= contrato.fecha_fin
                 ORDER BY contrato.cod_contrato DESC LIMIT 1;`;
     const [[data]] = await sequelize.query(query);
 
