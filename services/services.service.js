@@ -79,7 +79,7 @@ class ServicesService{
     let query = "SELECT a.cod_servicio, b.nombre_corto, tipo_servicio, etapa, a.estado, horas_venta, "+
     "valor_venta, fecha_ini_planificada, fecha_fin_planificada, fecha_ini_real, "+
     "fecha_fin_real, horas_planificadas, valor_venta_planificada, horas_ejecutadas, "+
-    "horas_produccion_ejecutadas "+
+    "produccion_ejecutadas "+
     "FROM servicio a " +
     "INNER JOIN cliente b ON a.cod_cliente = b.cod_cliente " +
     "WHERE a.estado = '" + estado + "' "
