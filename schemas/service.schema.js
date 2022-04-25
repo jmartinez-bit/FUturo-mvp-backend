@@ -27,7 +27,7 @@ const createServiceSchema = Joi.object({
   horas_venta: horas_venta.required(),
   moneda: moneda.required(),
   tasa_cambio: tasa_cambio.required(),
-  costo_venta: costo_venta.required(),
+  costo_venta: costo_venta.allow(null),
   costo_venta_sol: costo_venta_sol.allow(null),
   valor_venta: valor_venta.required(),
   valor_venta_sol: valor_venta_sol.allow(null),
