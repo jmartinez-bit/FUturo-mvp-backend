@@ -85,11 +85,8 @@ router.get("/:cod",async (req, res,next) =>{
 router.get("/approve/:cod/:indAsignFamiliar",async (req, res,next) =>{
   try{
     const {authorization}=req.headers;
-    console.log(authorization);
     const auth=JSON.parse(authorization);
-    console.log(auth);
-    const codUsuario=auth[0].id_sesion;
-    console.log(codUsuario);
+    const codUsuario=auth.id_sesion;
     const {cod,indAsignFamiliar}=req.params;
     const estado=await contractSolicitudeService.findState(cod);
     if(estado==="Aprobado"||estado==="Rechazado"){
