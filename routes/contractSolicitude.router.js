@@ -84,9 +84,11 @@ router.get("/:cod",async (req, res,next) =>{
 
 router.get("/approve/:cod/:indAsignFamiliar",async (req, res,next) =>{
   try{
-    const {Authorization}=req.headers;
-    console.log(Authorization);
-    const codUsuario=Authorization[0].id_sesion;
+    const {authorization}=req.headers;
+    console.log(authorization);
+    const auth=JSON.parse(authorization);
+    console.log(auth);
+    const codUsuario=auth[0].id_sesion;
     console.log(codUsuario);
     const {cod,indAsignFamiliar}=req.params;
     const estado=await contractSolicitudeService.findState(cod);
