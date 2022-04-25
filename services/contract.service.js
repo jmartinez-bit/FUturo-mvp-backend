@@ -16,7 +16,7 @@ class ContractService{
      return data;
   }
 
-  async createContractfromSolicitude(d,id){
+  async createContractfromSolicitude(d,id,usuarioReg){
     //Acondicionamiento ind_eps
     var indEps='N';
     if(d.cod_eps!=null){
@@ -33,6 +33,12 @@ class ContractService{
       var indAsignFamiliar='N';
       }else{
         indAsignFamiliar="'"+d.ind_asign_familiar+"'";
+      }
+    //Acondicionamiento ind_asign_familiar
+    if(d.ind_asign_familiar==='S'){
+      var asignFamiliar="'"+ process.env.ASIGN_FAMILIAR +"'"   ;
+      }else{
+        asignFamiliar=null;
       }
     //Acondicionamiento sueldo_planilla
     var sueldoPlanilla=null;
@@ -60,8 +66,8 @@ class ContractService{
     }
     //Insert
     const query=`INSERT INTO contrato(
-      cod_colaborador,tipo, modalidad, ind_eps, ind_sctr,ind_asign_familiar,asignacion_familiar, sueldo_planilla, rxh, bono, eps, sctr, clm, fecha_inicio, fecha_fin,estado,fecha_reg)
-      VALUES (${id},'C','${d.modalidad}', '${indEps}', ${indSctr},${indAsignFamiliar},${process.env.ASIGN_FAMILIAR}, ${sueldoPlanilla},${rxh}, ${bono}, ${eps}, ${sctr}, '${d.clm}', '${d.fecha_inicio}','${d.fecha_fin}','AC',CURRENT_DATE);`;
+      cod_colaborador,tipo, modalidad, ind_eps, ind_sctr,ind_asign_familiar,asignacion_familiar, sueldo_planilla, rxh, bono, eps, sctr, clm, fecha_inicio, fecha_fin,estado,fecha_reg,usuario_registro)
+      VALUES (${id},'C','${d.modalidad}', '${indEps}', ${indSctr},${indAsignFamiliar},${asignFamiliar}, ${sueldoPlanilla},${rxh}, ${bono}, ${eps}, ${sctr}, '${d.clm}', '${d.fecha_inicio}','${d.fecha_fin}','AC',CURRENT_DATE,'${usuarioReg}');`;
     await sequelize.query(query);
   }
 

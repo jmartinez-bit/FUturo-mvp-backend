@@ -116,7 +116,7 @@ class ContractSolicitudeService{
     const query1=`SELECT cod_solicitud_contratacion,tipo_documento,nro_documento,nombre,ape_paterno,ape_materno,fecha_nacimiento,
               nro_celular,correo,direccion,distrito,provincia,nombre_corto,cod_linea_negocio,solicitud_contratacion.cod_puesto,
               puesto,nivel,cod_banda_salarial,modalidad,remuneracion,bono_men,cod_eps,
-              eps_parcial_total, ind_sctr,fecha_inicio,fecha_fin,condicional_adicional,solicitud_contratacion.estado
+              eps_parcial_total, ind_sctr,ind_asign_familiar,fecha_inicio,fecha_fin,condicional_adicional,solicitud_contratacion.estado
                  FROM solicitud_contratacion
                  INNER JOIN cliente ON solicitud_contratacion.cod_cliente=cliente.cod_cliente
                  INNER JOIN puesto ON solicitud_contratacion.cod_puesto=puesto.cod_puesto
@@ -145,17 +145,23 @@ class ContractSolicitudeService{
     return data[0].estado;
   }
 
-  async approve(cod,indAsignFamiliar){
-    if(indAsignFamiliar){
+  async approve(cod,indAsignFamiliar,codUsuario){
+    if(indAsignFamiliar===true){
       const [data]=await sequelize.query(`SELECT clm from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
       var clm=parseFloat(data[0].clm)+parseFloat(process.env.ASIGN_FAMILIAR);
       clm=clm.toFixed(2);
       this.addFamiliarAssignment(cod,clm);
+    }else{
+      await sequelize.query(`UPDATE solicitud_contratacion
+      SET ind_asign_familiar='N'
+      WHERE cod_solicitud_contratacion=${cod}`);
     }
+    const [user]=await sequelize.query(`SELECT usuario from usuario WHERE cod_usuario=${codUsuario}`);
+    const usuarioReg=user[0].usuario;
     const [data]=await sequelize.query(`SELECT * from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
-    await collaboratorService.createCollaboratorfromSolicitude(data[0]);
+    await collaboratorService.createCollaboratorfromSolicitude(data[0],usuarioReg);
     const codCollaborator= await collaboratorService.findIdCollaborator(data[0].nro_documento);
-    await contractService.createContractfromSolicitude(data[0],codCollaborator);
+    await contractService.createContractfromSolicitude(data[0],codCollaborator,usuarioReg);
     await resourcesService.createResourcefromSolicitude(data[0],codCollaborator)
 
     const query=`UPDATE solicitud_contratacion
