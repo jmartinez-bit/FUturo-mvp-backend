@@ -69,6 +69,18 @@ const clientService = new ClientService();
  *              type: object
  *              $ref: '#/components/schemas/Unauthorized'
  */
+ router.get("/",async (req, res,next) =>{
+  try{
+    const data=await clientService.findAll();
+    res.json(data);
+
+  }catch (e){
+    next(e);
+  }
+
+});
+
+
 router.get('/user',
   checkApiKey,
   checkRoles('Delivery Manager', 'Jefe de Proyecto'),
@@ -83,15 +95,5 @@ router.get('/user',
 });
 
 
-router.get("/",async (req, res,next) =>{
-  try{
-    const data=await clientService.findAll();
-    res.json(data);
-
-  }catch (e){
-    next(e);
-  }
-
-});
 
 module.exports = router;
