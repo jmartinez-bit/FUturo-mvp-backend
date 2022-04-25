@@ -61,6 +61,15 @@ const paymentService = new PaymentServicesService();
  *      201:
  *        description: nuevo hito creado
  */
+ router.post('/create', async (req, res, next) => {
+  try {
+    const body = req.body;
+    res.status(201).json(await paymentService.create(body));
+  } catch (error) {
+    next(error);
+  }
+});
+
 //Obtener todos los registros para un servicio
  router.post("/get",async (req, res,next) =>{
   try{
@@ -69,15 +78,6 @@ const paymentService = new PaymentServicesService();
     res.json(resources);
   }catch (e){
     next(e);
-  }
-});
-
-router.post('/create', async (req, res, next) => {
-  try {
-    const body = req.body;
-    res.status(201).json(await paymentService.create(body));
-  } catch (error) {
-    next(error);
   }
 });
 
