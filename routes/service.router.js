@@ -1,7 +1,7 @@
 const express = require('express');
 const ServicesService = require('./../services/services.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createServiceSchema } = require('./../schemas/service.schema');
+const { createServiceSchema, updateServiceSchema } = require('./../schemas/service.schema');
 
 
 const router = express.Router();
@@ -125,6 +125,55 @@ router.post('/create',
     try {
       const body = req.body;
       res.status(201).json(await service.create(body));
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// Actualizar servicio
+/**
+ * @swagger
+ * /api/v1/services/update/{codServicio}:
+ *  put:
+ *    summary: actualizar un servicio
+ *    tags: [Servicio]
+ *    parameters:
+ *      - in: path
+ *        name: codServicio
+ *        schema:
+ *          type: integer
+ *        required: true
+ *        description: codigo del servicio a editar
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: '#/components/schemas/CreateService'
+ *    responses:
+ *      200:
+ *        description: servicio actualizado
+ */
+router.put('/update/:codServicio',
+  validatorHandler(updateServiceSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { codServicio } = req.params;
+      const body = req.body;
+      res.json(await service.update(codServicio, body));
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get('/assignments/payment-services/:codServicio',
+  async (req, res, next) => {
+    try {
+      const { codServicio } = req.params;
+      res.json(await service.getServicePaymentServiceAndAssignments(codServicio));
     } catch (error) {
       next(error);
     }

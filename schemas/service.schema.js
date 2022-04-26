@@ -27,10 +27,10 @@ const createServiceSchema = Joi.object({
   horas_venta: horas_venta.required(),
   moneda: moneda.required(),
   tasa_cambio: tasa_cambio.required(),
-  costo_venta: costo_venta.required(),
+  costo_venta: costo_venta.allow(null),
   costo_venta_sol: costo_venta_sol.allow(null),
   valor_venta: valor_venta.required(),
-  valor_venta_sol: valor_venta_sol.allow(null),
+  valor_venta_sol: valor_venta_sol.required(),
   tarifa: tarifa.required(),
   fecha_ini_planificada: fecha_ini_planificada.required(),
   fecha_fin_planificada: fecha_fin_planificada.required(),
@@ -39,4 +39,24 @@ const createServiceSchema = Joi.object({
   forma_pago: forma_pago.required()
 });
 
-module.exports = { createServiceSchema }
+const updateServiceSchema = Joi.object({
+  cod_cliente: cod_cliente.required(),
+  cod_linea_servicio: cod_linea_servicio.required(),
+  tipo_servicio: tipo_servicio.required(),
+  descripcion_servicio: descripcion_servicio.required(),
+  horas_venta: horas_venta.required(),
+  moneda: moneda.required(),
+  tasa_cambio: tasa_cambio.required(),
+  costo_venta: costo_venta.allow(null),
+  costo_venta_sol: costo_venta_sol.allow(null),
+  valor_venta: valor_venta.required(),
+  valor_venta_sol: valor_venta_sol.required(),
+  tarifa: tarifa.required(),
+  fecha_ini_planificada: fecha_ini_planificada.required(),
+  fecha_fin_planificada: fecha_fin_planificada.required(),
+  fecha_ini_real: fecha_ini_real.allow(null),
+  fecha_fin_real: fecha_fin_real.allow(null),
+  forma_pago: forma_pago.required()
+});
+
+module.exports = { createServiceSchema, updateServiceSchema }

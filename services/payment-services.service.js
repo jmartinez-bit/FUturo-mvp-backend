@@ -38,5 +38,24 @@ class PaymentServicesService{
     return parseInt(data.count);
   }
 
+  async findOneByCodServicio(codServicio) {
+
+    // Columnas
+    const select = getSelect(['pagos_servicios.cod_servicio',
+                              'pagos_servicios.numero_hito',
+                              'pagos_servicios.descripcion_hito',
+                              'pagos_servicios.horas',
+                              'pagos_servicios.monto',
+                              'pagos_servicios.fecha_inicio',
+                              'pagos_servicios.fecha_fin'
+                            ]);
+
+    const query=`${ select }
+                  WHERE pagos_servicios.cod_servicio=${ codServicio };`;
+    const [data] = await sequelize.query(query);
+    return data;
+
+  }
+
 }
 module.exports = PaymentServicesService;
