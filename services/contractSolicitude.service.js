@@ -185,6 +185,13 @@ class ContractSolicitudeService{
     await sequelize.query(query);
   }
 
+  async approvegg(cod){
+    const query=`UPDATE solicitud_contratacion
+                 SET estado='Pendiente Aprobacion',fecha_aprob_gg=CURRENT_DATE
+                 WHERE cod_solicitud_contratacion=${cod}`;
+    await sequelize.query(query);
+  }
+
 }
 
 module.exports = ContractSolicitudeService;
