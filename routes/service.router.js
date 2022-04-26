@@ -83,8 +83,8 @@ const service = new ServicesService();
  *        - forma_pago
  *      example:
  *        cod_cliente: 1
- *        cod_linea_servicio: swf
- *        tipo_servicio: rq
+ *        cod_linea_servicio: SWF
+ *        tipo_servicio: RQ
  *        descripcion_servicio: nuevo servicio
  *        horas_venta: 30
  *        moneda: SOL
@@ -138,6 +138,13 @@ router.post('/create',
  *  post:
  *    summary: actualizar un servicio
  *    tags: [Servicio]
+ *    parameters:
+ *      - in: path
+ *        name: codServicio
+ *        schema:
+ *          type: integer
+ *        required: true
+ *        description: codigo del servicio a editar
  *    requestBody:
  *      required: true
  *      content:
