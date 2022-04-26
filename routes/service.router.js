@@ -135,7 +135,7 @@ router.post('/create',
 /**
  * @swagger
  * /api/v1/services/update/{codServicio}:
- *  post:
+ *  put:
  *    summary: actualizar un servicio
  *    tags: [Servicio]
  *    parameters:
@@ -153,10 +153,10 @@ router.post('/create',
  *            type: object
  *            $ref: '#/components/schemas/CreateService'
  *    responses:
- *      201:
+ *      200:
  *        description: servicio actualizado
  */
-router.post('/update/:codServicio',
+router.put('/update/:codServicio',
   validatorHandler(updateServiceSchema, 'body'),
   async (req, res, next) => {
     try {
