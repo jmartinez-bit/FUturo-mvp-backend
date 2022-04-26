@@ -107,12 +107,11 @@ class ServicesService{
 
   async get(cod_cliente,cod_linea_negocio,estado){
 
-    let query = "SELECT a.cod_servicio, b.nombre_corto, tipo_servicio, etapa, a.estado, horas_venta, "+
+    let query = "SELECT a.cod_servicio, descripcion_servicio, tipo_servicio, etapa, a.estado, horas_venta, "+
     "valor_venta, fecha_ini_planificada, fecha_fin_planificada, fecha_ini_real, "+
     "fecha_fin_real, horas_planificadas, valor_venta_planificada, horas_ejecutadas, "+
     "produccion_ejecutadas "+
     "FROM servicio a " +
-    "INNER JOIN cliente b ON a.cod_cliente = b.cod_cliente " +
     "WHERE a.estado = '" + estado + "' "
 
     if(cod_linea_negocio != "Todos"){
