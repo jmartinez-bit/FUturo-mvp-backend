@@ -1,5 +1,6 @@
 const sequelize = require('../libs/sequelize');
 
+
 function getSelect(attributes = '*') {
   return `SELECT ${ attributes.toString() } FROM mapa_recursos`;
 };
@@ -114,11 +115,11 @@ class ResourcesService{
 
   async findCollaboratorNames(cod_cliente,periodo){
 
-    const query="SELECT colaborador.cod_colaborador,nombres,apellido_pat,apellido_mat FROM colaborador "+
+    const query=`SELECT colaborador.cod_colaborador,nombres,apellido_pat,apellido_mat FROM colaborador
 
-                "INNER JOIN mapa_recursos ON colaborador.cod_colaborador=mapa_recursos.cod_colaborador "+
+                 INNER JOIN mapa_recursos ON colaborador.cod_colaborador=mapa_recursos.cod_colaborador
 
-                "WHERE mapa_recursos.cod_cliente="+cod_cliente+" AND periodo='"+periodo+"' ;";
+                 WHERE mapa_recursos.cod_cliente=${cod_cliente} AND periodo='${periodo}' ;`;
 
     const [data] = await sequelize.query(query);
 
@@ -126,6 +127,32 @@ class ResourcesService{
 
   }
 
+  async findCollaboratorsByClientPeriodAndState(cod_cliente,estado,name,nroDoc){
+    var [data] = await sequelize.query(`SELECT periodo FROM periodo WHERE estado='A' ;`);
+    const periodo=data[0].periodo;
+    var query=`SELECT colaborador.cod_colaborador,nro_documento,nombres,apellido_pat,
+                 apellido_mat,puesto,mapa_recursos.nivel,contrato.fecha_fin,modalidad,
+                 CASE
+                WHEN sueldo_planilla IS NOT NULL THEN sueldo_planilla
+                WHEN rxh IS NOT NULL THEN rxh
+                END importe,bono,mapa_recursos.clm FROM colaborador
+
+                 INNER JOIN mapa_recursos ON colaborador.cod_colaborador=mapa_recursos.cod_colaborador
+                 INNER JOIN puesto ON colaborador.cod_puesto=puesto.cod_puesto
+                 INNER JOIN contrato ON colaborador.cod_colaborador=contrato.cod_colaborador
+                 WHERE mapa_recursos.cod_cliente=${cod_cliente} AND periodo='${periodo}' AND mapa_recursos.estado='${estado}' `;
+    if(name){
+      name=name.toLowerCase();
+      query+=` AND lower(CONCAT(nombres,' ',apellido_pat,' ',apellido_mat)) like '%${name}%' `;
+    }
+    if(nroDoc){
+      query+=` AND nro_documento='${nroDoc}' `;
+    }
+    query+=" ;";
+     [data] = await sequelize.query(query);
+    return data;
+
+  }
 
   //Servicio UH 4
   async findByAperturaMapaRecursosMensual(){
