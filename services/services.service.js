@@ -3,10 +3,6 @@ const { QueryTypes } = require('sequelize');
 const PaymentServicesService = require('./payment-services.service');
 
 // Sentencias
-function getSelect(attributes = '*') {
-  return `SELECT ${ attributes.toString() } FROM servicio`;
-};
-
 function getInsert(attributes = '*') {
   return `INSERT INTO servicio(${ attributes.toString() })`;
 };
