@@ -33,9 +33,12 @@ const createServiceSchema = Joi.object({
   costo_venta_sol: costo_venta_sol.allow(null),
   valor_venta: valor_venta.required(),
   valor_venta_sol: valor_venta_sol.required(),
+  prod_venta: prod_venta.allow(null),
   tarifa: tarifa.required(),
   fecha_ini_planificada: fecha_ini_planificada.required(),
   fecha_fin_planificada: fecha_fin_planificada.required(),
+  fecha_ini_real: fecha_ini_real.allow(null),
+  fecha_fin_real: fecha_fin_real.allow(null),
   forma_pago: forma_pago.required()
 });
 
