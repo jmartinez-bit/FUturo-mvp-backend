@@ -11,6 +11,7 @@ const salaryBandRouter = require('./salaryBand.router');
 const contractRouter = require('./contract.router');
 const contractSolicitudeRouter = require('./contractSolicitude.router');
 const epsRouter = require('./eps.router');
+const workDaysRouter = require('./workDays.router');
 const express = require('express');
 
 
@@ -30,6 +31,7 @@ function routerApi(app) {
   router.use('/contract', contractRouter);
   router.use('/contractSolicitude', contractSolicitudeRouter);
   router.use('/eps', epsRouter);
+  router.use('/workDays', workDaysRouter);
 }
 
 module.exports = routerApi;
