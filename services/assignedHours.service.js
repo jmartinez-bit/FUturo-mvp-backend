@@ -1,6 +1,6 @@
 const sequelize = require('../libs/sequelize');
 
-class AsignedHoursService{
+class AssignedHoursService{
 
   async findHoursPerDay(){
     const query=`SELECT valor from parametro_negocio WHERE parametro='horas_dias'; `;
@@ -17,7 +17,7 @@ class AsignedHoursService{
 
   }
 
-  async findAsignedHours(fechaIni,fechaFin,porcAsign){
+  async findAssignedHours(fechaIni,fechaFin,porcAsign){
     const nroFeriados=await this.findNumberOfFeriados(fechaIni,fechaFin);
     const workDays=countWorkDay(fechaIni,fechaFin)-nroFeriados;
     const hoursPerDay= await this.findHoursPerDay();
@@ -50,4 +50,4 @@ function countWorkDay(fechaIniString,fechFinString){
   }
 }
 
-module.exports = AsignedHoursService;
+module.exports = AssignedHoursService;
