@@ -1,5 +1,5 @@
 const express = require('express');
-const PaymentServicesService = require('./../services/payment-services.service');
+const PaymentServicesService = require('./../services/payment-services.services');
 
 const router = express.Router();
 const paymentService = new PaymentServicesService();
@@ -61,12 +61,50 @@ const paymentService = new PaymentServicesService();
  *      201:
  *        description: nuevo hito creado
  */
-router.post('/create', async (req, res, next) => {
+ router.post('/create', async (req, res, next) => {
   try {
     const body = req.body;
     res.status(201).json(await paymentService.create(body));
   } catch (error) {
     next(error);
+  }
+});
+
+//Obtener todos los registros para un servicio
+ router.post("/get",async (req, res,next) =>{
+  try{
+    const cod_servicio=req.body.cod_servicio;
+    const resources=await paymentService.get(cod_servicio);
+    res.json(resources);
+  }catch (e){
+    next(e);
+  }
+});
+
+
+//Actualizar pagos de servicios.
+router.post("/update",async (req, res,next) =>{
+  try{
+    const cod_hito=req.body.cod_hito;
+    const descripcion_hito=req.body.descripcion_hito||null;
+    const horas=req.body.horas||null;
+    const monto=req.body.monto||null;
+    const fecha_inicio=req.body.fecha_inicio||null;
+    const fecha_fin=req.body.fecha_fin||null;
+    const resources=await paymentService.update(cod_hito,descripcion_hito,horas,monto,fecha_inicio,fecha_fin);
+    res.json(resources);
+  }catch (e){
+    next(e);
+  }
+});
+
+router.post("/delete",async (req, res,next) =>{
+  try{
+    const cod_hito=req.body.cod_hito;
+    const resources=await paymentService.delete(cod_hito);
+    res.json(resources);
+  }catch (e){
+    next(e);
   }
 });
 

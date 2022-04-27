@@ -32,7 +32,7 @@ class ServicesService{
       replacements: [data.cod_cliente,
         data.cod_linea_servicio,
         data.tipo_servicio,
-        data.descripcion_servicio,
+        data.descripcion_servicio.toLowerCase(),
         data.horas_venta,
         data.moneda,
         data.tasa_cambio,
@@ -160,5 +160,34 @@ class ServicesService{
     return data;
   }
 
+  async cartera(cod_dm){
+    let query = "SELECT a.cod_cliente, b.nombre_corto " +
+    "FROM cartera_cliente a " +
+    "INNER JOIN cliente b ON a.cod_cliente = b.cod_cliente " +
+    "WHERE cod_usuario = " + cod_dm + ";"
+    const [rta] = await sequelize.query(query);
+    return rta;
+  }
+
+  async get(cod_cliente,cod_linea_negocio,estado){
+
+    let query = "SELECT a.cod_servicio, descripcion_servicio, tipo_servicio, etapa, a.estado, horas_venta, "+
+    "valor_venta, fecha_ini_planificada, fecha_fin_planificada, fecha_ini_real, "+
+    "fecha_fin_real, horas_planificadas, valor_venta_planificada, horas_ejecutadas, "+
+    "produccion_ejecutadas "+
+    "FROM servicio a " +
+    "WHERE a.estado = '" + estado + "' "
+
+    if(cod_linea_negocio != "Todos"){
+      query += " AND cod_linea_servicio = '" + cod_linea_negocio + "' "
+    }
+    if(cod_cliente != "Todos"){
+      query += " AND a.cod_cliente = " + cod_cliente
+    }
+    const [rta] = await sequelize.query(query);
+    return rta;
+  }
+
 }
+
 module.exports = ServicesService;

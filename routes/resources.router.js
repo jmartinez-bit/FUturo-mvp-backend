@@ -8,25 +8,82 @@ const service = new ResourcesService();
 const collaboratorService = new CollaboratorService();
 const assignmentsService = new AssignmentsService();
 
-router.get('/', async (req, res, next) => {
-  try {
-    const resources = await service.findAll();
+//Buscar recursos de un Delivery Manager
+router.post("/resourcesmap",async (req, res,next) =>{
+  try{
+    const {cod_cliente,periodo}=req.body;
+    const cod_perfil=req.body.cod_perfil||null;
+    const nombres=req.body.nombres||null;
+
+    const resources=await service.findByClientPeriodProfileAndNames(cod_cliente,periodo,cod_perfil,nombres);
     res.json(resources);
-  } catch (e) {
+
+  }catch (e){
+    next(e);
+  }
+
+});
+
+//Retorna todos los periodos
+router.get("/periods",async (req, res,next) =>{
+  try{
+    const periods=await service.findPeriods();
+    res.json(periods);
+  }catch (e){
+    next(e);
+  }
+
+});
+
+//Retorna todos los clientes de un Delivery Manager
+router.get("/:idDM/clients",async (req, res,next) =>{
+  try{
+    const {idDM}=req.params;
+    const clients=await service.findClients(idDM);
+    res.json(clients);
+  }catch (e){
+    next(e);
+  }
+
+
+});
+
+//Retorna todos los perfiles
+router.get("/profiles",async (req, res,next) =>{
+  try{
+    const profiles=await service.findProfiles();
+    res.json(profiles);
+  }catch (e){
+    next(e);
+  }
+
+});
+
+//Calculo del monto de servicio por periodo y cliente.
+router.post("/montoservicio",async (req, res,next) =>{
+  try{
+    const cod_cliente=req.body.cod_cliente;
+    const periodo=req.body.periodo;
+    const perfil=req.body.perfil||null;
+    const nombre=req.body.nombre||null;
+    const resources=await service.findByMontoServicio(cod_cliente,periodo,perfil,nombre);
+    res.json(resources);
+  }catch (e){
     next(e);
   }
 });
 
-// router.get('/colaborador/:resmapid', async (req, res, next) => {
-//   try {
-//     const { resmapid } = req.params;
-//     const colaborador = await service.findByResourceMapID(resmapid);
-//     res.json(colaborador);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+//Proceso de apertura mensual de mapa de recursos.
+router.get("/aperturamaparecursos",async (req, res,next) =>{
+  try{
+    const resources=await service.findByAperturaMapaRecursosMensual();
+    res.json(resources);
+  }catch (e){
+    next(e);
+  }
+});
 
+// Obtener productividad del colaborador por codigo del mapa de recurso
 router.get('/productividad/:resmapid', async (req, res, next) => {
   try {
     const { resmapid } = req.params;
@@ -37,34 +94,39 @@ router.get('/productividad/:resmapid', async (req, res, next) => {
   }
 });
 
-router.get('/contrato/:id/:fecFin', async (req, res, next) => {
+// Obtener contrato por codigo del colaborador y periodo
+router.get('/contrato/:cod_colaborador/:periodo', async (req, res, next) => {
   try {
-    const { id, fecFin } = req.params;
-    const contract = await collaboratorService.findByCodColaboradorJoinContrato(id, fecFin);
+    const { cod_colaborador, periodo } = req.params;
+    const contract = await collaboratorService.findByCodColaboradorJoinContrato(cod_colaborador, periodo);
     res.json(contract);
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/asignaciones/:id/:fecIni/:fecFin', async (req, res, next) => {
+// Obtener servicios asignados por codigo del colaborador, periodo y codigo del cliente
+router.get('/asignaciones/:cod_colaborador/:periodo/:cod_cliente', async (req, res, next) => {
   try {
-    const { id, fecIni, fecFin } = req.params;
-    const assignments = await assignmentsService.findByCodColaboradorJoinServicio(id, fecIni, fecFin);
+    const { cod_colaborador, periodo, cod_cliente } = req.params;
+    const assignments = await assignmentsService.findByCodColaboradorJoinServicio(cod_colaborador, periodo, cod_cliente);
     res.json(assignments);
   } catch (error) {
     next(error);
   }
 });
 
-// router.get('/:cliente/:periodo', async (req, res, next) => {
-//   try {
-//     const { cliente, periodo } = req.params;
-//     const resources = await service.findByClientAndPeriod(cliente, periodo);
-//     res.json(resources);
-//   } catch (e) {
-//     next(e);
-//   }
-// });
+//Retorna todos los nombres de los colaboradores
+router.get("/:id_client/collaborators/:period",async (req, res,next) =>{
+  try{
+    const {id_client,period}=req.params;
+    const profiles=await service.findCollaboratorNames(id_client,period);
+    res.json(profiles);
+  }catch (e){
+    next(e);
+  }
+});
+
+
 
 module.exports = router;

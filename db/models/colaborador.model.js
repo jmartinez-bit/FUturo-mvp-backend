@@ -9,24 +9,19 @@ const ColaboradorSchema = {
     autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER,
-    field: 'cod_colaborador',
-  },
-  tipoDoc: {
-    allowNull: false,
-    type: DataTypes.STRING(10),
-    field: 'tipo_doc',
+    field:'cod_colaborador'
   },
   nroDocumento: {
     allowNull: false,
     type: DataTypes.STRING(15),
-    field: 'nro_documento',
+    field:'nro_documento'
   },
   codPuesto: {
     allowNull: false,
     type: DataTypes.INTEGER,
     references: {
       model: PUESTO_TABLE,
-      key: 'cod_puesto',
+      key: 'cod_puesto'
     },
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL',
@@ -41,11 +36,11 @@ const ColaboradorSchema = {
     type: DataTypes.INTEGER,
     references: {
       model: AREA_TABLE,
-      key: 'cod_area',
+      key: 'cod_area'
     },
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL',
-    field: 'cod_area',
+    field:'cod_area'
   },
   nombres: {
     allowNull: false,
@@ -54,52 +49,52 @@ const ColaboradorSchema = {
   apellidoMat: {
     allowNull: false,
     type: DataTypes.STRING(100),
-    field: 'apellido_mat',
+    field:'apellido_mat'
   },
   apellidoPat: {
     allowNull: false,
     type: DataTypes.STRING(100),
-    field: 'apellido_pat',
+    field:'apellido_pat'
   },
   fechaNacimiento: {
     allowNull: false,
     type: DataTypes.DATE,
-    field: 'fecha_nacimiento',
+    field:'fecha_nacimiento'
   },
   correoPersonal: {
     allowNull: false,
     type: DataTypes.STRING(100),
-    field: 'correo_personal',
+    field:'correo_personal'
   },
   correoTrabajo: {
     allowNull: false,
     type: DataTypes.STRING(100),
-    field: 'correo_trabajo',
+    field:'correo_trabajo'
   },
   celularPersonal: {
     allowNull: false,
     type: DataTypes.STRING(100),
-    field: 'celular_personal',
+    field:'celular_personal'
   },
   celularTrabajo: {
     allowNull: false,
     type: DataTypes.STRING(100),
-    field: 'celular_trabajo',
+    field:'celular_trabajo'
   },
   fechaReg: {
     allowNull: false,
     type: DataTypes.DATE,
-    field: 'fecha_reg',
+    field:'fecha_reg'
   },
   fechaAct: {
     allowNull: false,
     type: DataTypes.DATE,
-    field: 'fecha_act',
+    field:'fecha_act'
   },
   fechaCese: {
     allowNull: false,
     type: DataTypes.DATE,
-    field: 'fecha_cese',
+    field:'fecha_cese'
   },
   sexo: {
     allowNull: false,
@@ -108,12 +103,12 @@ const ColaboradorSchema = {
   usuarioReg: {
     allowNull: false,
     type: DataTypes.STRING(20),
-    field: 'usuario_reg',
+    field:'usuario_reg'
   },
   usuarioAct: {
     allowNull: false,
     type: DataTypes.STRING(20),
-    field: 'usuario_act',
+    field:'usuario_act'
   },
   estado: {
     allowNull: false,

@@ -69,6 +69,18 @@ const clientService = new ClientService();
  *              type: object
  *              $ref: '#/components/schemas/Unauthorized'
  */
+ router.get("/",async (req, res,next) =>{
+  try{
+    const data=await clientService.findAll();
+    res.json(data);
+
+  }catch (e){
+    next(e);
+  }
+
+});
+
+
 router.get('/user',
   async (req, res, next) => {
   try {
@@ -82,5 +94,7 @@ router.get('/user',
     next(error);
   }
 });
+
+
 
 module.exports = router;

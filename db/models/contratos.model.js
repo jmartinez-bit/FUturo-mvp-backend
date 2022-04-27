@@ -76,7 +76,7 @@ const ContratoSchema = {
     type: DataTypes.DECIMAL(10, 2),
   },
   indIndefinido: {
-    allowNull: true,
+    allowNull: false,
     type: DataTypes.STRING(1),
     field: 'ind_indefinido',
   },
@@ -91,7 +91,7 @@ const ContratoSchema = {
     field: 'fecha_fin',
   },
   fechaCese: {
-    allowNull: true,
+    allowNull: false,
     type: DataTypes.DATE,
     field: 'fecha_cese',
   },

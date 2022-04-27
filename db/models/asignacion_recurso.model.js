@@ -1,4 +1,4 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
+const { Model, DataTypes,Sequelize} = require('sequelize');
 const { COLABORADOR_TABLE } = require('./colaborador.model');
 const { SERVICIO_TABLE } = require('./servicio.model');
 
@@ -10,7 +10,7 @@ const AsignacionRecursoSchema = {
     autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER,
-    field: 'cod_asignacion',
+    field:'cod_asignacion'
   },
   codServicio: {
     allowNull: false,
@@ -21,7 +21,7 @@ const AsignacionRecursoSchema = {
     },
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL',
-    field: 'cod_servicio'
+    field:'cod_servicio'
   },
   codColaborador: {
     allowNull: false,
@@ -32,7 +32,7 @@ const AsignacionRecursoSchema = {
     },
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL',
-    field: 'cod_colaborador'
+    field:'cod_colaborador'
   },
   porAsignacion: {
     allowNull: false,
@@ -40,12 +40,12 @@ const AsignacionRecursoSchema = {
     field:'por_asignacion'
   },
   fechaInicio: {
-    allowNull: false,
-    type: DataTypes.DATE,
+    allowNull: true,
+    type: DataTypes.DATEONLY,
     field:'fecha_inicio'
   },
   fechaFin: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.DATE,
     field:'fecha_fin'
   },
@@ -55,11 +55,11 @@ const AsignacionRecursoSchema = {
     field:'horas_asignacion'
   },
   puesto: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.INTEGER
   },
   nivel: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.STRING(20)
   },
   tarifa: {
@@ -67,27 +67,27 @@ const AsignacionRecursoSchema = {
     type: DataTypes.DECIMAL(5, 2)
   },
   prodPlanificada: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.DECIMAL(10, 2),
     field:'prod_planificada'
   },
   fechaReg: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.DATE,
     field:'fecha_reg'
   },
   usuarioReg: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.STRING(20),
     field:'usuario_reg'
   },
   fechaAct: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.DATE,
     field:'fecha_act'
   },
   usuarioAct: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.STRING(20),
     field:'usuario_act'
   }
