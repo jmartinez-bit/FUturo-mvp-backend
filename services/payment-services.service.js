@@ -41,7 +41,7 @@ class PaymentServicesService{
   async findOneByCodServicio(codServicio) {
 
     // Columnas
-    const select = getSelect(['pagos_servicios.cod_servicio',
+    const select = getSelect(['pagos_servicios.cod_hito',
                               'pagos_servicios.numero_hito',
                               'pagos_servicios.descripcion_hito',
                               'pagos_servicios.horas',

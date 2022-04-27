@@ -30,7 +30,7 @@ class AssignmentsService{
   async findOneByCodServicioJoinColaborador(codServicio) {
 
     // Columnas
-    const select = getSelect(['asignacion_recursos.cod_servicio',
+    const select = getSelect(['asignacion_recursos.cod_asignacion',
                               'asignacion_recursos.puesto',
                               'asignacion_recursos.nivel',
                               'asignacion_recursos.por_asignacion',
