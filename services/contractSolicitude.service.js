@@ -156,7 +156,7 @@ class ContractSolicitudeService{
       SET ind_asign_familiar='N'
       WHERE cod_solicitud_contratacion=${cod}`);
     }
-    const [user]=await sequelize.query(`SELECT usuario from usuario WHERE cod_usuario=${codUsuario}`);
+    const [user]=await sequelize.query(`SELECT nombres_apellidos from usuario WHERE cod_usuario=${codUsuario}`);
     const usuarioReg=user[0].usuario;
     const [data]=await sequelize.query(`SELECT * from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
     await collaboratorService.createCollaboratorfromSolicitude(data[0],usuarioReg);
