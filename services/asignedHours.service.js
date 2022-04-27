@@ -1,6 +1,6 @@
 const sequelize = require('../libs/sequelize');
 
-class WorkDaysService{
+class AsignedHoursService{
 
   async findHoursPerDay(){
     const query=`SELECT valor from parametro_negocio WHERE parametro='horas_dias'; `;
@@ -50,4 +50,4 @@ function countWorkDay(fechaIniString,fechFinString){
   }
 }
 
-module.exports = WorkDaysService;
+module.exports = AsignedHoursService;
