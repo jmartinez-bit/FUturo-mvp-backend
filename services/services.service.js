@@ -1,3 +1,4 @@
+const boom = require('@hapi/boom');
 const sequelize = require('../libs/sequelize');
 const { QueryTypes } = require('sequelize');
 const PaymentServicesService = require('./payment-services.service');
@@ -81,6 +82,7 @@ class ServicesService{
     costo_venta_sol = ?,
     valor_venta = ?,
     valor_venta_sol = ?,
+    prod_venta = ?,
     tarifa = ?,
     fecha_ini_planificada = ?,
     fecha_fin_planificada = ?,
@@ -102,6 +104,7 @@ class ServicesService{
                     data.costo_venta_sol,
                     data.valor_venta,
                     data.valor_venta_sol,
+                    data.prod_venta,
                     data.tarifa,
                     data.fecha_ini_planificada,
                     data.fecha_fin_planificada,
@@ -112,6 +115,10 @@ class ServicesService{
                     codServicio],
       type: sequelize.QueryTypes.UPDATE
     });
+
+    if (!updateService) {
+      throw boom.notFound('service not found');
+    }
 
     return updateService;
 
@@ -143,7 +150,8 @@ class ServicesService{
 
     const query=`${ select }
                 WHERE servicio.cod_servicio = ${ codServicio };`;
-    const [data] = await sequelize.query(query);
+    const [[data]] = await sequelize.query(query);
+
     return data;
   }
 
@@ -151,8 +159,12 @@ class ServicesService{
 
     const service = await this.findOneByCodServicio(codServicio);
 
+    if (!service) {
+      throw boom.notFound('service not found');
+    }
+
     const data = {
-      ...service[0],
+      ...service,
       pagos_servicios: await paymentService.findOneByCodServicio(codServicio),
       asignaciones: await assignmentsService.findOneByCodServicioJoinColaborador(codServicio)
     };
