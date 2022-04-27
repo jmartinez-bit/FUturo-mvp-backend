@@ -141,6 +141,7 @@ class ServicesService{
                               'servicio.costo_venta_sol',
                               'servicio.valor_venta',
                               'servicio.valor_venta_sol',
+                              'servicio.prod_venta',
                               'servicio.tarifa',
                               'servicio.fecha_ini_planificada',
                               'servicio.fecha_fin_planificada',
