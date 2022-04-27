@@ -4,11 +4,11 @@ const PaymentServicesService = require('./payment-services.service');
 const AssignmentsService = require('./assignments.service');
 
 // Sentencias
-function getSelect(attributes = '*') {
+const getSelect = (attributes = '*') => {
   return `SELECT ${ attributes.toString() } FROM servicio`;
 };
 
-function getInsert(attributes = '*') {
+const getInsert = (attributes = '*') => {
   return `INSERT INTO servicio(${ attributes.toString() })`;
 };
 

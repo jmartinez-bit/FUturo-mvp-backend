@@ -1,6 +1,6 @@
 const sequelize = require('../libs/sequelize');
 
-function getSelect(attributes = '*') {
+const getSelect = (attributes = '*') => {
   return `SELECT ${ attributes.toString() } FROM mapa_recursos`;
 };
 

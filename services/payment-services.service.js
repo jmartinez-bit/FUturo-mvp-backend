@@ -2,11 +2,11 @@ const sequelize = require('../libs/sequelize');
 const { QueryTypes } = require('sequelize');
 
 // Sentencias
-function getSelect(attributes = '*') {
+const getSelect = (attributes = '*') => {
   return `SELECT ${ attributes.toString() } FROM pagos_servicios`;
 };
 
-function getInsert(attributes = '*') {
+const getInsert = (attributes = '*') => {
   return `INSERT INTO pagos_servicios(${ attributes.toString() })`;
 };
 
