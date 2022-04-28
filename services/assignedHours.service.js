@@ -3,7 +3,7 @@ const sequelize = require('../libs/sequelize');
 class AssignedHoursService{
 
   async findHoursPerDay(){
-    const query=`SELECT valor from parametro_negocio WHERE parametro='horas_dias'; `;
+    const query=`SELECT valor_num_1 from parametro_negocio WHERE parametro='horas_dias'; `;
     const [[data]] = await sequelize.query(query);
      return data.valor;
   }
