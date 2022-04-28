@@ -1,6 +1,5 @@
 const express = require('express');
 const ClientService = require('./../services/client.service');
-const { checkApiKey, checkRoles } = require('../middlewares/auth.handler');
 
 const router = express.Router();
 const clientService = new ClientService();
@@ -82,6 +81,7 @@ const clientService = new ClientService();
 
 
 router.get('/user',
+
   async (req, res, next) => {
   try {
     const {authorization}=req.headers;
