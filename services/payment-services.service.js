@@ -2,11 +2,11 @@ const sequelize = require('../libs/sequelize');
 const { QueryTypes } = require('sequelize');
 
 // Sentencias
-function getSelect(attributes = '*') {
+const getSelect = (attributes = '*') => {
   return `SELECT ${ attributes.toString() } FROM pagos_servicios`;
 };
 
-function getInsert(attributes = '*') {
+const getInsert = (attributes = '*') => {
   return `INSERT INTO pagos_servicios(${ attributes.toString() })`;
 };
 
@@ -36,6 +36,25 @@ class PaymentServicesService{
     const [[data]] = await sequelize.query(query);
 
     return parseInt(data.count);
+  }
+
+  async findOneByCodServicio(codServicio) {
+
+    // Columnas
+    const select = getSelect(['pagos_servicios.cod_hito',
+                              'pagos_servicios.numero_hito',
+                              'pagos_servicios.descripcion_hito',
+                              'pagos_servicios.horas',
+                              'pagos_servicios.monto',
+                              'pagos_servicios.fecha_inicio',
+                              'pagos_servicios.fecha_fin'
+                            ]);
+
+    const query=`${ select }
+                  WHERE pagos_servicios.cod_servicio=${ codServicio };`;
+    const [data] = await sequelize.query(query);
+    return data;
+
   }
 
 }

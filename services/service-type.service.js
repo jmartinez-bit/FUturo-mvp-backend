@@ -1,7 +1,7 @@
 const sequelize = require('../libs/sequelize');
 
 // Sentencias
-function getSelect(attributes = '*') {
+const getSelect = (attributes = '*') => {
   return `SELECT ${ attributes.toString() } FROM tipo_servicio`;
 };
 

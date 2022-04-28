@@ -82,11 +82,12 @@ const clientService = new ClientService();
 
 
 router.get('/user',
-  checkApiKey,
-  checkRoles('Delivery Manager', 'Jefe de Proyecto'),
   async (req, res, next) => {
   try {
-    const codUsuario = req.headers['api'];
+    const {authorization}=req.headers;
+    const auth=JSON.parse(authorization);
+    const codUsuario=auth.id_sesion;
+
     const serviceLines = await clientService.findClientsJoinCarteraClienteByCodUsuario(codUsuario);
     res.json(serviceLines);
   } catch (error) {
