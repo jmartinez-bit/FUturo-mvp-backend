@@ -196,12 +196,12 @@ class ServicesService{
 
   async get(cod_cliente,cod_linea_negocio,estado){
 
-    let query = "SELECT cod_servicio, descripcion_servicio, tipo_servicio, etapa, estado_servicio, horas_venta, "+
+    let query = "SELECT cod_servicio, descripcion_servicio, tipo_servicio, etapa, estado_config, horas_venta, "+
     "valor_venta, fecha_ini_planificada, fecha_fin_planificada, fecha_ini_real, "+
     "fecha_fin_real, horas_planificadas, valor_venta_planificada, horas_ejecutadas, "+
     "produccion_ejecutadas "+
     "FROM servicio " +
-    "WHERE estado_servicio = '" + estado + "' "
+    "WHERE estado_config = '" + estado + "' "
 
     if(cod_linea_negocio != "Todos"){
       query += " AND cod_linea_servicio = '" + cod_linea_negocio + "' "
