@@ -70,5 +70,63 @@ class AssignmentsService{
     return max;
   }
 
+  async validateDates(fechaIni, fechaFin, codColab,codServ) {
+
+  var [[data]] = await sequelize.query(`SELECT fecha_inicio,fecha_fin FROM contrato WHERE cod_colaborador=${codColab} AND estado='AC' ;`);
+  const fechaInicioContrato=data.fecha_inicio;
+  const fechaFinContrato=data.fecha_fin;
+  [[data]] = await sequelize.query(`SELECT fecha_ini_planificada,fecha_fin_planificada,fecha_ini_real,fecha_fin_real FROM servicio WHERE cod_servicio=${codServ};`);
+  const fechaIniPlanificada=data.fecha_ini_planificada;
+  const fechaFinPlanificada=data.fecha_fin_planificada;
+  const fechaIniReal=data.fecha_ini_real;
+  const fechaFinReal=data.fecha_fin_real;
+
+  var rta;
+  var error=false;
+  if(fechaFin<fechaIni && !error){
+    rta={"error":true,"message":"La fecha fin asignada es menor a la fecha de inicio asignada"};
+    error=true;
+  }
+  if(fechaIni<fechaInicioContrato && !error){
+    rta={"error":true,"message":"La fecha inicio asignada es menor a la fecha de inicio de contrato"};
+    error=true;
+  }
+  if(fechaFin>fechaFinContrato && !error){
+    rta={"error":true,"message":"La fecha fin asignada es mayor a la fecha fin de contrato"};
+    error=true;
+  }
+  if(fechaIniReal===null && !error){
+    if(fechaIni<fechaIniPlanificada){
+      rta={"error":true,"message":"La fecha inicial asignada es menor a la fecha inicial planificada"};
+      error=true;
+    }
+  }else{
+    if(fechaIni<fechaIniReal && !error){
+      rta={"error":true,"message":"La fecha inicial asignada es menor a la fecha inicial real"};
+      error=true;
+    }
+  }
+  if(fechaFinReal===null && !error){
+    if(fechaFin>fechaFinPlanificada){
+      rta={"error":true,"message":"La fecha fin asignada es mayor a la fecha fin planificada"};
+      error=true;
+    }
+  }else{
+    if(fechaFin>fechaFinReal && !error){
+      rta={"error":true,"message":"La fecha fin asignada es mayor a la fecha fin real"};
+      error=true;
+    }
+  }
+
+  if(!error){
+    rta={"error":false,"message":"Las fechas de asignacion son validas"};
+  }
+
+  return rta;
+
 }
+
+
+}
+
 module.exports = AssignmentsService;

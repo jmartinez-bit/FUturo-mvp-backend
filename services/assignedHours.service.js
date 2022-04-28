@@ -5,7 +5,7 @@ class AssignedHoursService{
   async findHoursPerDay(){
     const query=`SELECT valor_num_1 from parametro_negocio WHERE parametro='horas_dias'; `;
     const [[data]] = await sequelize.query(query);
-     return data.valor;
+     return data.valor_num_1;
   }
 
   async findNumberOfFeriados(fechaIni,fechaFin){
