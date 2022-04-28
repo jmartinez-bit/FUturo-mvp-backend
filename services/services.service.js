@@ -207,7 +207,7 @@ class ServicesService{
       query += " AND cod_linea_servicio = '" + cod_linea_negocio + "' "
     }
     if(cod_cliente != "Todos"){
-      query += " AND a.cod_cliente = " + cod_cliente
+      query += " AND cod_cliente = " + cod_cliente
     }
     const [rta] = await sequelize.query(query);
     return rta;
