@@ -26,8 +26,8 @@ class ServicesService{
       'horas_venta', 'moneda', 'tasa_cambio', 'costo_venta',
       'costo_venta_sol', 'valor_venta', 'valor_venta_sol', 'prod_venta',
       'tarifa', 'fecha_ini_planificada', 'fecha_fin_planificada', 'fecha_ini_real',
-      'fecha_fin_real', 'forma_pago', 'etapa', 'estado',
-      'usuario_reg', 'estado_servicio'
+      'fecha_fin_real', 'forma_pago', 'etapa', 'estado_servicio',
+      'usuario_reg', 'estado_config'
     ]);
 
     const query = `${ insert } VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *;`;
@@ -52,7 +52,7 @@ class ServicesService{
         data.fecha_fin_real,
         data.forma_pago,
         data.etapa,
-        data.estado,
+        data.estado_servicio,
         'prueba', 'en proceso']
     });
 
@@ -97,7 +97,7 @@ class ServicesService{
     fecha_act = ?,
     forma_pago = ?,
     etapa = ?,
-    estado = ?
+    estado_servicio = ?
     WHERE cod_servicio = ${ codServicio } RETURNING *;`;
 
     const [[updateService]] = await sequelize.query(query, {
@@ -121,7 +121,7 @@ class ServicesService{
                     new Date().toISOString().split('T')[0],
                     data.forma_pago,
                     data.etapa,
-                    data.estado,
+                    data.estado_servicio,
                     codServicio],
       type: sequelize.QueryTypes.UPDATE
     });
@@ -158,7 +158,7 @@ class ServicesService{
                               'servicio.usuario_reg',
                               'servicio.estado_servicio',
                               'servicio.etapa',
-                              'servicio.estado'
+                              'servicio.estado_config'
                             ]);
 
     const query=`${ select }
@@ -196,12 +196,12 @@ class ServicesService{
 
   async get(cod_cliente,cod_linea_negocio,estado){
 
-    let query = "SELECT a.cod_servicio, descripcion_servicio, tipo_servicio, etapa, a.estado, horas_venta, "+
+    let query = "SELECT cod_servicio, descripcion_servicio, tipo_servicio, etapa, estado_servicio, horas_venta, "+
     "valor_venta, fecha_ini_planificada, fecha_fin_planificada, fecha_ini_real, "+
     "fecha_fin_real, horas_planificadas, valor_venta_planificada, horas_ejecutadas, "+
     "produccion_ejecutadas "+
-    "FROM servicio a " +
-    "WHERE a.estado = '" + estado + "' "
+    "FROM servicio " +
+    "WHERE estado_servicio = '" + estado + "' "
 
     if(cod_linea_negocio != "Todos"){
       query += " AND cod_linea_servicio = '" + cod_linea_negocio + "' "
