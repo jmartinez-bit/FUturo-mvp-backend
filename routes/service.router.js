@@ -148,6 +148,12 @@ const service = new ServicesService();
  *        forma_pago:
  *          type: string
  *          description: forma de pago del servicio
+ *        etapa:
+ *          type: string
+ *          description: etapa del proyecto
+ *        estado:
+ *          type: string
+ *          description: estado del proyecto
  *      required:
  *        - cod_cliente
  *        - cod_linea_servicio
@@ -183,6 +189,8 @@ const service = new ServicesService();
  *        fecha_ini_real: 2022-04-19
  *        fecha_fin_real: 2022-05-15
  *        forma_pago: consumo
+ *        etapa: desarrollo
+ *        estado: por planificar
  */
 
 // Crear un servicio

@@ -21,15 +21,16 @@ class ServicesService{
   async create(data) {
 
     // Columnas
-    const insert = getInsert(['cod_cliente',
-    'cod_linea_servicio', 'tipo_servicio', 'descripcion_servicio',
-    'horas_venta', 'moneda', 'tasa_cambio',
-    'costo_venta', 'costo_venta_sol', 'valor_venta',
-    'valor_venta_sol', 'prod_venta', 'tarifa', 'fecha_ini_planificada',
-    'fecha_fin_planificada', 'fecha_ini_real', 'fecha_fin_real',
-    'forma_pago', 'usuario_reg', 'estado']);
+    const insert = getInsert([
+      'cod_cliente', 'cod_linea_servicio', 'tipo_servicio', 'descripcion_servicio',
+      'horas_venta', 'moneda', 'tasa_cambio', 'costo_venta',
+      'costo_venta_sol', 'valor_venta', 'valor_venta_sol', 'prod_venta',
+      'tarifa', 'fecha_ini_planificada', 'fecha_fin_planificada', 'fecha_ini_real',
+      'fecha_fin_real', 'forma_pago', 'etapa', 'estado',
+      'usuario_reg', 'estado_servicio'
+    ]);
 
-    const query = `${ insert } VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *;`;
+    const query = `${ insert } VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *;`;
     const [[newService]] = await sequelize.query(query, {
       type: QueryTypes.INSERT,
       replacements: [data.cod_cliente,
@@ -50,6 +51,8 @@ class ServicesService{
         data.fecha_ini_real,
         data.fecha_fin_real,
         data.forma_pago,
+        data.etapa,
+        data.estado,
         'prueba', 'en proceso']
     });
 
@@ -92,7 +95,9 @@ class ServicesService{
     fecha_ini_real = ?,
     fecha_fin_real = ?,
     fecha_act = ?,
-    forma_pago = ?
+    forma_pago = ?,
+    etapa = ?,
+    estado = ?
     WHERE cod_servicio = ${ codServicio } RETURNING *;`;
 
     const [[updateService]] = await sequelize.query(query, {
@@ -115,6 +120,8 @@ class ServicesService{
                     data.fecha_fin_real,
                     new Date().toISOString().split('T')[0],
                     data.forma_pago,
+                    data.etapa,
+                    data.estado,
                     codServicio],
       type: sequelize.QueryTypes.UPDATE
     });
@@ -149,7 +156,9 @@ class ServicesService{
                               'servicio.fecha_fin_real',
                               'servicio.forma_pago',
                               'servicio.usuario_reg',
-                              'servicio.estado',
+                              'servicio.estado_servicio',
+                              'servicio.etapa',
+                              'servicio.estado'
                             ]);
 
     const query=`${ select }
