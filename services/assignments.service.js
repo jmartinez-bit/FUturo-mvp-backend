@@ -30,7 +30,7 @@ class AssignmentsService{
   }
 
   async maxAccumulatedAssignedPercentageInAnInterval(fechaIni,fechaFin,codColaborador){
-    const query=`SELECT cod_asignacion,fecha_inicio,fecha_fin,por_asignacion FROM asignacion_recurso
+    const query=`SELECT cod_asignacion,fecha_inicio,fecha_fin,por_asignacion FROM asignacion_recursos
                  WHERE cod_colaborador=${codColaborador}
                  AND (
                  fecha_inicio<= to_date('${ fechaFin }', 'YYYY-MM-DD') AND fecha_fin>=to_date('${ fechaIni }', 'YYYY-MM-DD')
