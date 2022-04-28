@@ -4,6 +4,8 @@ const EpsService = require('../services/eps.service');
 const CollaboratorService = require('../services/collaborator.service');
 const ContractService = require('../services/contract.service');
 const ResourcesService = require('../services/resources.service');
+const UserService = require('../services/user.service');
+
 
 
 
@@ -12,6 +14,7 @@ const epsService = new EpsService();
 const collaboratorService = new CollaboratorService();
 const contractService = new ContractService();
 const resourcesService = new ResourcesService();
+const userService = new UserService();
 
 
 
@@ -156,8 +159,7 @@ class ContractSolicitudeService{
       SET ind_asign_familiar='N'
       WHERE cod_solicitud_contratacion=${cod}`);
     }
-    const [user]=await sequelize.query(`SELECT nombres_apellidos from usuario WHERE cod_usuario=${codUsuario}`);
-    const usuarioReg=user[0].usuario;
+    const usuarioReg=await userService.findNames(codUsuario);
     const [data]=await sequelize.query(`SELECT * from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
     await collaboratorService.createCollaboratorfromSolicitude(data[0],usuarioReg);
     const codCollaborator= await collaboratorService.findIdCollaborator(data[0].nro_documento);
