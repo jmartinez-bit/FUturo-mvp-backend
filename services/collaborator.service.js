@@ -1,7 +1,7 @@
 const sequelize = require('../libs/sequelize');
 
 // Sentencias
-function getSelect(attributes = '*') {
+const getSelect = (attributes = '*') => {
   return `SELECT ${ attributes.toString() } FROM colaborador`;
 };
 const joinContrato = `INNER JOIN contrato ON colaborador.cod_colaborador = contrato.cod_colaborador`;
