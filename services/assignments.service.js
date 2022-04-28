@@ -1,7 +1,9 @@
 const sequelize = require('../libs/sequelize');
 const UserService = require('../services/user.service');
+const PeriodService = require('../services/period.service');
 
 const userService = new UserService();
+const periodService = new PeriodService();
 
 // Sentencias
 function getSelect(attributes = '*') {
@@ -131,7 +133,7 @@ class AssignmentsService{
 
 
 async validatePercentage(fechaIni, fechaFin, codColab,percent) {
-  const max= this.maxAccumulatedAssignedPercentageInAnInterval(fechaIni, fechaFin, codColab);
+  const max=await this.maxAccumulatedAssignedPercentageInAnInterval(fechaIni, fechaFin, codColab);
   if(percent>100-max){
     return false;
   }else{
@@ -152,8 +154,8 @@ async saleValue(codServ) {
 }
 
 async validatesumPlannedProductions(codServ, codAsignacion,prodPlanificada) {
-  const sum= this.sumPlannedProductions(codServ, codAsignacion);
-  const saleValue=this.validatesumPlannedProductions(codServ);
+  const sum= await this.sumPlannedProductions(codServ, codAsignacion);
+  const saleValue=await this.validatesumPlannedProductions(codServ);
   (sum+prodPlanificada)>saleValue?false:true;
 }
 
@@ -168,6 +170,32 @@ async createAssingment(d,prodPlanificada,codUsuario){
   const rta={"error":false,"message":"Se creo asignación satisfactoriamente"};;
   return rta;
 }
+
+async updateStartDateOnResourcesMap(codColab,fechaIniNueva){
+ var data=await periodService.getLastPeriod();
+ const periodo=data.periodo;
+ [[data]]=await sequelize.query(`SELECT fecha_inicio FROM mapa_recursos
+                                  WHERE periodo='${periodo}' AND cod_colaborador=${codColab};`);
+  const fechaIniAnt=data.fecha_inicio;
+  if(fechaIniAnt===null || new Date(fechaIniNueva).getTime()<new Date(fechaIniAnt).getTime()){
+    await sequelize.query(`UPDATE mapa_recursos
+                          SET fecha_inicio='${fechaIniNueva}'
+                          WHERE periodo='${periodo}' AND cod_colaborador=${codColab};`);
+  }
+}
+
+async updateEndDateOnResourcesMap(codColab,fechaFinNueva){
+  var data=await periodService.getLastPeriod();
+  const periodo=data.periodo;
+  [[data]]=await sequelize.query(`SELECT fecha_fin FROM mapa_recursos
+                                   WHERE periodo='${periodo}' AND cod_colaborador=${codColab};`);
+   const fechaFinAnt=data.fecha_fin;
+   if(fechaFinNueva===null || new Date(fechaFinNueva).getTime()>new Date(fechaFinAnt).getTime()){
+     await sequelize.query(`UPDATE mapa_recursos
+                           SET fecha_inicio='${fechaFinNueva}'
+                           WHERE periodo='${periodo}' AND cod_colaborador=${codColab};`);
+   }
+ }
 
 }
 
