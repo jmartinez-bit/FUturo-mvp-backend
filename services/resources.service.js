@@ -12,10 +12,10 @@ class ResourcesService{
 
   async findByClientPeriodProfileAndNames(cod_cliente,periodo,cod_perfil,nombres){
     const select="SELECT cod_mapa_recurso,mapa_recursos.cod_colaborador,linea_negocio,mapa_recursos.estado,puesto AS nombre_perfil,mapa_recursos.nivel,"+
-              "fecha_inicio,fecha_fin,asignacion,fecha_fin_contrato,clm_efectivo,produccion,productividad,CONCAT(nombres,' ',apellido_pat,' ',apellido_mat) AS nombre_colaborador "+
-             "FROM mapa_recursos "+
-             "INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador "+
-             "INNER JOIN puesto ON mapa_recursos.perfil=puesto.cod_puesto ";
+              " fecha_inicio,fecha_fin,asignacion,fecha_fin_contrato,clm_efectivo,produccion,productividad,CONCAT(nombres,' ',apellido_pat,' ',apellido_mat) AS nombre_colaborador "+
+             " FROM mapa_recursos "+
+             " INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador "+
+             " INNER JOIN puesto ON mapa_recursos.perfil=puesto.cod_puesto ";
     var query=select+
                 "WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"' ";
     if(cod_perfil!=null){
@@ -96,9 +96,9 @@ class ResourcesService{
   async findByMontoServicio(cod_cliente,periodo,perfil,nombres){
     // const client = await getConnection();
     let query = "SELECT sum(clm_efectivo) as clm_efectivo, sum(produccion) as produccion, sum(produccion)/sum(clm_efectivo) as productividad" +
-    "FROM public.mapa_recursos" +
-    "INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador" +
-    "WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"'"
+    " FROM public.mapa_recursos" +
+    " INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador" +
+    " WHERE cod_cliente="+cod_cliente+" AND periodo='"+periodo+"'"
     if(perfil != null){
       query = query + " AND perfil = '" + perfil + "'"
     }
@@ -110,6 +110,7 @@ class ResourcesService{
     const [[rta]] = await sequelize.query(query);
     return rta;
   }
+
 
   async findCollaboratorNames(cod_cliente,periodo){
 
@@ -135,5 +136,13 @@ class ResourcesService{
     return (await rta).rows;
   }
 
+  async createResourcefromSolicitude(d,codColaborador){
+    const [data]=await sequelize.query(`SELECT periodo FROM periodo WHERE estado='A'`);
+    const query=`INSERT INTO mapa_recursos (periodo, cod_cliente, linea_negocio, cod_colaborador, perfil, nivel, clm, estado)
+      VALUES ('${data[0].periodo}',${d.cod_cliente},'${d.cod_linea_negocio}',${codColaborador},${d.cod_puesto},'${d.nivel}','${d.clm}','A');`;
+    await sequelize.query(query);
+  }
 }
+
+
 module.exports = ResourcesService;
