@@ -55,15 +55,15 @@ class AssignmentsService{
        porc+=element.modificador_porcentaje;
        porcentajes.push(porc);//el array porcentaje tendrá los acumulados
     })
-    console.log(sortedFechas);
-    console.log(porcentajes);
+    //console.log(sortedFechas);
+    //console.log(porcentajes);
 
-    let indexIni = sortedFechas.findIndex(a=> a.ind == "INI");
-    let indexFin = sortedFechas.findIndex(a=> a.ind == "FIN");
-    console.log(indexIni);
-    console.log(indexFin);
+    var indexIni = sortedFechas.findIndex(a=> a.ind == "INI");
+    var indexFin = sortedFechas.findIndex(a=> a.ind == "FIN");
+    //console.log(indexIni);
+    //console.log(indexFin);
     porcentajes=porcentajes.slice(indexIni+1, indexFin+1)
-    console.log(porcentajes);
+    //console.log(porcentajes);
 
     var max = Math.max(...porcentajes);
 
