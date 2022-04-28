@@ -1,4 +1,7 @@
 const sequelize = require('../libs/sequelize');
+const UserService = require('../services/user.service');
+
+const userService = new UserService();
 
 // Sentencias
 function getSelect(attributes = '*') {
@@ -134,6 +137,36 @@ async validatePercentage(fechaIni, fechaFin, codColab,percent) {
   }else{
     return true;
   }
+}
+
+async sumPlannedProductions(codServ, codAsignacion) {
+  const [[data]]=await sequelize.query(`SELECT SUM(prod_planificada) FROM asignacion_recurso
+                                      WHERE cod_servicio=${codServ} AND cod_asignacion<>${codAsignacion} ;`);
+  return data.sum;
+}
+
+async saleValue(codServ) {
+  const [[data]]=await sequelize.query(`SELECT valor_venta_sol
+                                        FROM servicio WHERE cod_servicio=${codServ};`);
+  return data.valor_venta_sol;
+}
+
+async validatesumPlannedProductions(codServ, codAsignacion,prodPlanificada) {
+  const sum= this.sumPlannedProductions(codServ, codAsignacion);
+  const saleValue=this.validatesumPlannedProductions(codServ);
+  (sum+prodPlanificada)>saleValue?false:true;
+}
+
+async createAssingment(d,prodPlanificada,codUsuario){
+  const usuarioReg=await userService.findNames(codUsuario);
+  const {cod_servicio,cod_colaborador,percent,fecha_ini,fecha_fin,horas_asignadas,cod_puesto,nivel,tarifa}=d;
+  const query=`INSERT INTO asignacion_recurso(cod_servicio, cod_colaborador, por_asignacion, fecha_inicio, fecha_fin,
+               horas_asignacion, puesto, nivel, tarifa, prod_planificada, fecha_reg, usuario_reg)
+               VALUES (${cod_servicio},${cod_colaborador},'${percent}','${fecha_ini}','${fecha_fin}','${horas_asignadas}',
+               ${cod_puesto},'${nivel}','${tarifa}','${prodPlanificada}',CURRENT_DATE,'${usuarioReg}');`;
+  await sequelize.query(query);
+  const rta={"error":false,"message":"Se creo asignación satisfactoriamente"};;
+  return rta;
 }
 
 }

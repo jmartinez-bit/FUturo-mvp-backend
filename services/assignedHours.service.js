@@ -21,8 +21,8 @@ class AssignedHoursService{
     const nroFeriados=await this.findNumberOfFeriados(fechaIni,fechaFin);
     const workDays=countWorkDay(fechaIni,fechaFin)-nroFeriados;
     const hoursPerDay= await this.findHoursPerDay();
-    const workHours=workDays*hoursPerDay*porcAsign/100;
-    return workHours;
+    const assignedHours=workDays*hoursPerDay*porcAsign/100;
+    return assignedHours;
   }
 }
 

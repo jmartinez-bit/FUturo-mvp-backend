@@ -131,7 +131,7 @@ class ResourcesService{
     var [data] = await sequelize.query(`SELECT periodo FROM periodo WHERE estado='A' ;`);
     const periodo=data[0].periodo;
     var query=`SELECT colaborador.cod_colaborador,nro_documento,nombres,apellido_pat,
-                 apellido_mat,puesto,mapa_recursos.nivel,contrato.fecha_fin,modalidad,
+                 apellido_mat,colaborador.cod_puesto,puesto,mapa_recursos.nivel,contrato.fecha_fin,modalidad,
                  CASE
                 WHEN sueldo_planilla IS NOT NULL THEN sueldo_planilla
                 WHEN rxh IS NOT NULL THEN rxh
