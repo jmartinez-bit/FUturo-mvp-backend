@@ -116,11 +116,24 @@ router.get('/asignaciones/:cod_colaborador/:periodo/:cod_cliente', async (req, r
   }
 });
 
-//Retorna todos los nombres de los colaboradores
+//Retorna todos los nombres y códigos de los colaboradores de un cliente en un periodo dado
 router.get("/:id_client/collaborators/:period",async (req, res,next) =>{
   try{
     const {id_client,period}=req.params;
     const profiles=await service.findCollaboratorNames(id_client,period);
+    res.json(profiles);
+  }catch (e){
+    next(e);
+  }
+});
+
+//Retorna datos de los colaboradores activos de un cliente en un periodo dado
+router.post("/:id_client/collaboratorsActives",async (req, res,next) =>{
+  try{
+    const {id_client}=req.params;
+    const name=req.body.nombres||null;
+    const nroDoc=req.body.nro_documento||null;
+    const profiles=await service.findCollaboratorsByClientPeriodAndState(id_client,'A',name,nroDoc);
     res.json(profiles);
   }catch (e){
     next(e);

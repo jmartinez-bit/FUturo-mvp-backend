@@ -20,8 +20,8 @@ const fecha_ini_real = Joi.date();
 const fecha_fin_real = Joi.date().greater(Joi.ref('fecha_ini_real'));
 const forma_pago = Joi.string();
 const etapa = Joi.string();
-const estado = Joi.string();
 const estado_servicio = Joi.string();
+const estado_config = Joi.string();
 
 const createServiceSchema = Joi.object({
   cod_cliente: cod_cliente.required(),
@@ -43,7 +43,7 @@ const createServiceSchema = Joi.object({
   fecha_fin_real: fecha_fin_real.allow(null),
   forma_pago: forma_pago.required(),
   etapa: etapa.allow(null),
-  estado: estado.allow(null)
+  estado_servicio: estado_servicio.allow(null)
 });
 
 const updateServiceSchema = Joi.object({
@@ -66,7 +66,7 @@ const updateServiceSchema = Joi.object({
   fecha_fin_real: fecha_fin_real.allow(null),
   forma_pago: forma_pago.required(),
   etapa: etapa.allow(null),
-  estado: estado.allow(null)
+  estado_servicio: estado_servicio.allow(null)
 });
 
 const getServiceSchema = Joi.object({

@@ -11,6 +11,9 @@ const salaryBandRouter = require('./salaryBand.router');
 const contractRouter = require('./contract.router');
 const contractSolicitudeRouter = require('./contractSolicitude.router');
 const epsRouter = require('./eps.router');
+const assignedHoursRouter = require('./assignedHours.router');
+const assignmentsRouter = require('./assignments.router');
+
 const express = require('express');
 
 
@@ -30,6 +33,9 @@ function routerApi(app) {
   router.use('/contract', contractRouter);
   router.use('/contractSolicitude', contractSolicitudeRouter);
   router.use('/eps', epsRouter);
+  router.use('/assignedHours', assignedHoursRouter);
+  router.use('/assignments', assignmentsRouter);
+
 }
 
 module.exports = routerApi;

@@ -151,7 +151,7 @@ const service = new ServicesService();
  *        etapa:
  *          type: string
  *          description: etapa del proyecto
- *        estado:
+ *        estado_servicio:
  *          type: string
  *          description: estado del proyecto
  *      required:
@@ -190,7 +190,7 @@ const service = new ServicesService();
  *        fecha_fin_real: 2022-05-15
  *        forma_pago: consumo
  *        etapa: desarrollo
- *        estado: por planificar
+ *        estado_servicio: por planificar
  */
 
 // Crear un servicio
