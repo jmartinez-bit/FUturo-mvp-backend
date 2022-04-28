@@ -129,7 +129,7 @@ class AssignmentsService{
 
 async validatePercentage(fechaIni, fechaFin, codColab,percent) {
   const max= this.maxAccumulatedAssignedPercentageInAnInterval(fechaIni, fechaFin, codColab);
-  if(percent>max){
+  if(percent>100-max){
     return false;
   }else{
     return true;
