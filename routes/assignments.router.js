@@ -20,7 +20,8 @@ router.get("/maxAccumPercent/:fechaIni/:fechaFin/:codColab",async (req, res,next
 
 router.post("/createOrEditAssignment",async (req, res,next) =>{
   try{
-    const {fecha_ini,fecha_fin,cod_colaborador,cod_servicio,percent,cod_asignacion,horas_asignadas,tarifa}=req.body;
+    const {fecha_ini,fecha_fin,cod_colaborador,cod_servicio,percent,horas_asignadas,tarifa}=req.body;
+    const cod_asignacion=req.body.cod_asignacion||null;
     var rta=await assignmentsService.validateDates(fecha_ini, fecha_fin, cod_colaborador,cod_servicio);
     var e=rta.error;
     if(!(await assignmentsService.validatePercentage(fecha_ini, fecha_fin, cod_colaborador,percent)) && !e){
@@ -28,7 +29,7 @@ router.post("/createOrEditAssignment",async (req, res,next) =>{
     e=true;
     }
     const prodPlanificada=horas_asignadas*tarifa;
-    if(!(await assignmentsService.validatesumPlannedProductions(cod_servicio, cod_asignacion,prodPlanificada)) && !e){
+    if((await assignmentsService.validatesumPlannedProductions(cod_servicio, cod_asignacion,prodPlanificada)) && !e){
       rta={"error":true,"message":"La suma de las producciones planificadas del equipo asignado es mayor al valor de la venta en soles"};
       e=true;
     }

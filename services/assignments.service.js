@@ -104,11 +104,11 @@ class AssignmentsService{
                                       WHERE cod_colaborador=${codColab} AND cod_servicio=${codServ}
                                       AND (    (fecha_inicio<=to_date('${ fechaIni }', 'YYYY-MM-DD') AND fecha_fin>=to_date('${ fechaIni }', 'YYYY-MM-DD'))
                                             OR (fecha_inicio<=to_date('${ fechaFin }', 'YYYY-MM-DD') AND fecha_fin>=to_date('${ fechaFin }', 'YYYY-MM-DD'))
-                                          ); `)
-    if(data.count===0){
+                                          ); `);
+    if(parseFloat(data.count)===0){
     var  rta={"error":false,"message":"Las fechas de asignacion son validas"};
     }else{
-         rta={"error":true,"message":"La fecha fin asignada es menor a la fecha de inicio asignada"};
+         rta={"error":true,"message":"Las fechas de asignacion se cruzan con asignaciones del mismo colaborador en el mismo servicio"};
     }
 
     return rta;
@@ -163,9 +163,8 @@ class AssignmentsService{
   }
 
   if(!error){
-    const data=await this.validateCrosses(fechaIni, fechaFin, codColab,codServ);
-  if(data.error){
-    rta={"error":true,"message":"Las fechas de asignacion se cruzan con asignaciones del mismo colaborador en el mismo servicio"};
+    rta=await this.validateCrosses(fechaIni, fechaFin, codColab,codServ);
+  if(rta.error){
     error=true;
   }
   }
@@ -189,27 +188,28 @@ async validatePercentage(fechaIni, fechaFin, codColab,percent) {
 }
 
 async sumPlannedProductions(codServ, codAsignacion) {
-  const [[data]]=await sequelize.query(`SELECT SUM(prod_planificada) FROM asignacion_recurso
+  const [[data]]=await sequelize.query(`SELECT SUM(prod_planificada) FROM asignacion_recursos
                                       WHERE cod_servicio=${codServ} AND cod_asignacion<>${codAsignacion} ;`);
-  return data.sum;
+  return parseFloat(data.sum||0);
 }
 
 async saleValue(codServ) {
   const [[data]]=await sequelize.query(`SELECT valor_venta_sol
                                         FROM servicio WHERE cod_servicio=${codServ};`);
-  return data.valor_venta_sol;
+  return parseFloat(data.valor_venta_sol);
 }
 
 async validatesumPlannedProductions(codServ, codAsignacion,prodPlanificada) {
   const sum= await this.sumPlannedProductions(codServ, codAsignacion);
   const saleValue=await this.saleValue(codServ);
-  (sum+prodPlanificada)>saleValue?false:true;
+  const rta=(((sum+prodPlanificada)>saleValue)?true:false);
+  return rta;
 }
 
 async createAssingment(d,prodPlanificada,codUsuario){
   const usuarioReg=await userService.findNames(codUsuario);
   const {cod_servicio,cod_colaborador,percent,fecha_ini,fecha_fin,horas_asignadas,cod_puesto,nivel,tarifa}=d;
-  const query=`INSERT INTO asignacion_recurso(cod_servicio, cod_colaborador, por_asignacion, fecha_inicio, fecha_fin,
+  const query=`INSERT INTO asignacion_recursos(cod_servicio, cod_colaborador, por_asignacion, fecha_inicio, fecha_fin,
                horas_asignacion, puesto, nivel, tarifa, prod_planificada, fecha_reg, usuario_reg)
                VALUES (${cod_servicio},${cod_colaborador},'${percent}','${fecha_ini}','${fecha_fin}','${horas_asignadas}',
                ${cod_puesto},'${nivel}','${tarifa}','${prodPlanificada}',CURRENT_DATE,'${usuarioReg}');`;
