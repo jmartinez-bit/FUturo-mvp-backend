@@ -20,23 +20,26 @@ router.get("/maxAccumPercent/:fechaIni/:fechaFin/:codColab",async (req, res,next
 
 router.post("/createOrEditAssignment",async (req, res,next) =>{
   try{
-    const {fechaIni,fechaFin,codColab,codServ,percent,codAsignacion,horasAsignadas,tarifa}=req.body;
-    var rta=await assignmentsService.validateDates(fechaIni, fechaFin, codColab,codServ);
+    const {fecha_ini,fecha_fin,cod_colaborador,cod_servicio,percent,horas_asignadas,tarifa}=req.body;
+    const cod_asignacion=req.body.cod_asignacion||-1;
+    var rta=await assignmentsService.validateDates(fecha_ini, fecha_fin, cod_colaborador,cod_servicio);
     var e=rta.error;
-    if(!(await assignmentsService.validatePercentage(fechaIni, fechaFin, codColab,percent)) && !e){
+    if(!(await assignmentsService.validatePercentage(fecha_ini, fecha_fin, cod_colaborador,percent)) && !e){
     rta={"error":true,"message":"El porcentaje de asignación excede el 100% en algun punto del periodo seleccionado"};
     e=true;
     }
-    const prodPlanificada=horasAsignadas*tarifa;
-    if(!(await assignmentsService.validatesumPlannedProductions(codServ, codAsignacion,prodPlanificada)) && !e){
+    const prodPlanificada=horas_asignadas*tarifa;
+    if((await assignmentsService.validatesumPlannedProductions(cod_servicio, cod_asignacion,prodPlanificada)) && !e){
       rta={"error":true,"message":"La suma de las producciones planificadas del equipo asignado es mayor al valor de la venta en soles"};
       e=true;
     }
+    console.log("se valido la producion planificada");
     if(!e ){
         const {authorization}=req.headers;
         const auth=JSON.parse(authorization);
         const codUsuario=auth.id_sesion;
-      if(codAsignacion===null){
+        console.log("entro antes de crear");
+      if(cod_asignacion===-1){
         rta=await assignmentsService.createAssingment(req.body,prodPlanificada,codUsuario);
       }else{
        ;

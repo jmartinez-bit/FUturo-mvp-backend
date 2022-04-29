@@ -6,11 +6,11 @@ const router = express.Router();
 const assignedHoursService = new AssignedHoursService();
 
 
-router.get("/:fechaIni/:fechaFin/:porcAsign",async (req, res,next) =>{
+router.get("/:fechaIni/:fechaFin",async (req, res,next) =>{
   try{
-    const {fechaIni,fechaFin,porcAsign}=req.params;
-    const assignedHours=await assignedHoursService.findAssignedHours(fechaIni,fechaFin,porcAsign);
-    res.json({"horas_asignadas":assignedHours});
+    const {fechaIni,fechaFin}=req.params;
+    const assignedHours=await assignedHoursService.findAssignedHoursTotalAssignment(fechaIni,fechaFin);
+    res.json({"horas_asignadas_asignacion_total":assignedHours});
 
   }catch (e){
     next(e);

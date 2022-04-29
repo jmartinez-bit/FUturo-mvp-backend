@@ -99,16 +99,31 @@ class AssignmentsService{
     return max;
   }
 
+  async validateCrosses(fechaIni, fechaFin, codColab,codServ) {
+    const [[data]]=await sequelize.query(`SELECT COUNT(*) FROM asignacion_recursos
+                                      WHERE cod_colaborador=${codColab} AND cod_servicio=${codServ}
+                                      AND (    (fecha_inicio<=to_date('${ fechaIni }', 'YYYY-MM-DD') AND fecha_fin>=to_date('${ fechaIni }', 'YYYY-MM-DD'))
+                                            OR (fecha_inicio<=to_date('${ fechaFin }', 'YYYY-MM-DD') AND fecha_fin>=to_date('${ fechaFin }', 'YYYY-MM-DD'))
+                                          ); `);
+    if(parseFloat(data.count)===0){
+    var  rta={"error":false,"message":"Las fechas de asignacion son validas"};
+    }else{
+         rta={"error":true,"message":"Las fechas de asignacion se cruzan con asignaciones del mismo colaborador en el mismo servicio"};
+    }
+
+    return rta;
+  }
+
   async validateDates(fechaIni, fechaFin, codColab,codServ) {
 
   var [[data]] = await sequelize.query(`SELECT fecha_inicio,fecha_fin FROM contrato WHERE cod_colaborador=${codColab} AND estado='AC' ;`);
-  const fechaInicioContrato=data.fecha_inicio;
-  const fechaFinContrato=data.fecha_fin;
+  const fechaInicioContrato=new Date(data.fecha_inicio).getTime();
+  const fechaFinContrato=new Date(data.fecha_fin).getTime();
   [[data]] = await sequelize.query(`SELECT fecha_ini_planificada,fecha_fin_planificada,fecha_ini_real,fecha_fin_real FROM servicio WHERE cod_servicio=${codServ};`);
-  const fechaIniPlanificada=data.fecha_ini_planificada;
-  const fechaFinPlanificada=data.fecha_fin_planificada;
-  const fechaIniReal=data.fecha_ini_real;
-  const fechaFinReal=data.fecha_fin_real;
+  const fechaIniPlanificada=new Date(data.fecha_ini_planificada).getTime();
+  const fechaFinPlanificada=new Date(data.fecha_fin_planificada).getTime();
+  const fechaIniReal=new Date(data.fecha_ini_real).getTime();
+  const fechaFinReal=new Date(data.fecha_fin_real).getTime();
 
   var rta;
   var error=false;
@@ -148,6 +163,13 @@ class AssignmentsService{
   }
 
   if(!error){
+    rta=await this.validateCrosses(fechaIni, fechaFin, codColab,codServ);
+  if(rta.error){
+    error=true;
+  }
+  }
+
+  if(!error){
     rta={"error":false,"message":"Las fechas de asignacion son validas"};
   }
 
@@ -166,27 +188,28 @@ async validatePercentage(fechaIni, fechaFin, codColab,percent) {
 }
 
 async sumPlannedProductions(codServ, codAsignacion) {
-  const [[data]]=await sequelize.query(`SELECT SUM(prod_planificada) FROM asignacion_recurso
+  const [[data]]=await sequelize.query(`SELECT SUM(prod_planificada) FROM asignacion_recursos
                                       WHERE cod_servicio=${codServ} AND cod_asignacion<>${codAsignacion} ;`);
-  return data.sum;
+  return parseFloat(data.sum||0);
 }
 
 async saleValue(codServ) {
   const [[data]]=await sequelize.query(`SELECT valor_venta_sol
                                         FROM servicio WHERE cod_servicio=${codServ};`);
-  return data.valor_venta_sol;
+  return parseFloat(data.valor_venta_sol);
 }
 
 async validatesumPlannedProductions(codServ, codAsignacion,prodPlanificada) {
   const sum= await this.sumPlannedProductions(codServ, codAsignacion);
-  const saleValue=await this.validatesumPlannedProductions(codServ);
-  (sum+prodPlanificada)>saleValue?false:true;
+  const saleValue=await this.saleValue(codServ);
+  const rta=(((sum+prodPlanificada)>saleValue)?true:false);
+  return rta;
 }
 
 async createAssingment(d,prodPlanificada,codUsuario){
   const usuarioReg=await userService.findNames(codUsuario);
   const {cod_servicio,cod_colaborador,percent,fecha_ini,fecha_fin,horas_asignadas,cod_puesto,nivel,tarifa}=d;
-  const query=`INSERT INTO asignacion_recurso(cod_servicio, cod_colaborador, por_asignacion, fecha_inicio, fecha_fin,
+  const query=`INSERT INTO asignacion_recursos(cod_servicio, cod_colaborador, por_asignacion, fecha_inicio, fecha_fin,
                horas_asignacion, puesto, nivel, tarifa, prod_planificada, fecha_reg, usuario_reg)
                VALUES (${cod_servicio},${cod_colaborador},'${percent}','${fecha_ini}','${fecha_fin}','${horas_asignadas}',
                ${cod_puesto},'${nivel}','${tarifa}','${prodPlanificada}',CURRENT_DATE,'${usuarioReg}');`;
