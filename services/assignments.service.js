@@ -99,6 +99,21 @@ class AssignmentsService{
     return max;
   }
 
+  async validateCrosses(fechaIni, fechaFin, codColab,codServ) {
+    const [[data]]=await sequelize.query(`SELECT COUNT(*) FROM asignacion_recursos
+                                      WHERE cod_colaborador=${codColab} AND cod_servicio=${codServ}
+                                      AND (    (fecha_inicio<=to_date('${ fechaIni }', 'YYYY-MM-DD') AND fecha_fin>=to_date('${ fechaIni }', 'YYYY-MM-DD'))
+                                            OR (fecha_inicio<=to_date('${ fechaFin }', 'YYYY-MM-DD') AND fecha_fin>=to_date('${ fechaFin }', 'YYYY-MM-DD'))
+                                          ); `)
+    if(data.count===0){
+    var  rta={"error":false,"message":"Las fechas de asignacion son validas"};
+    }else{
+         rta={"error":true,"message":"La fecha fin asignada es menor a la fecha de inicio asignada"};
+    }
+
+    return rta;
+  }
+
   async validateDates(fechaIni, fechaFin, codColab,codServ) {
 
   var [[data]] = await sequelize.query(`SELECT fecha_inicio,fecha_fin FROM contrato WHERE cod_colaborador=${codColab} AND estado='AC' ;`);
@@ -145,6 +160,14 @@ class AssignmentsService{
       rta={"error":true,"message":"La fecha fin asignada es mayor a la fecha fin real"};
       error=true;
     }
+  }
+
+  if(!error){
+    const data=await this.validateCrosses(fechaIni, fechaFin, codColab,codServ);
+  if(data.error){
+    rta={"error":true,"message":"Las fechas de asignacion se cruzan con asignaciones del mismo colaborador en el mismo servicio"};
+    error=true;
+  }
   }
 
   if(!error){
