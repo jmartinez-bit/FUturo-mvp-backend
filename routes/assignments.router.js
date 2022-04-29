@@ -33,12 +33,10 @@ router.post("/createOrEditAssignment",async (req, res,next) =>{
       rta={"error":true,"message":"La suma de las producciones planificadas del equipo asignado es mayor al valor de la venta en soles"};
       e=true;
     }
-    console.log("se valido la producion planificada");
     if(!e ){
         const {authorization}=req.headers;
         const auth=JSON.parse(authorization);
         const codUsuario=auth.id_sesion;
-        console.log("entro antes de crear");
       if(cod_asignacion===-1){
         rta=await assignmentsService.createAssingment(req.body,prodPlanificada,codUsuario);
       }else{
@@ -47,6 +45,18 @@ router.post("/createOrEditAssignment",async (req, res,next) =>{
 
     }
     res.json(rta);
+  }catch (e){
+    next(e);
+  }
+
+});
+
+router.get("/validateDates/:fechaIni/:fechaFin/:codColab/:codServ",async (req, res,next) =>{
+  try{
+    const {fechaIni,fechaFin,codColab,codServ}=req.params;
+    const rta=await assignmentsService.validateDates(fechaIni,fechaFin,codColab,codServ);
+    res.json(rta);
+
   }catch (e){
     next(e);
   }

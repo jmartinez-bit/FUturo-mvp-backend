@@ -117,13 +117,13 @@ class AssignmentsService{
   async validateDates(fechaIni, fechaFin, codColab,codServ) {
 
   var [[data]] = await sequelize.query(`SELECT fecha_inicio,fecha_fin FROM contrato WHERE cod_colaborador=${codColab} AND estado='AC' ;`);
-  const fechaInicioContrato=new Date(data.fecha_inicio).getTime();
-  const fechaFinContrato=new Date(data.fecha_fin).getTime();
+  const fechaInicioContrato=data.fecha_inicio;
+  const fechaFinContrato=data.fecha_fin;
   [[data]] = await sequelize.query(`SELECT fecha_ini_planificada,fecha_fin_planificada,fecha_ini_real,fecha_fin_real FROM servicio WHERE cod_servicio=${codServ};`);
-  const fechaIniPlanificada=new Date(data.fecha_ini_planificada).getTime();
-  const fechaFinPlanificada=new Date(data.fecha_fin_planificada).getTime();
-  const fechaIniReal=new Date(data.fecha_ini_real).getTime();
-  const fechaFinReal=new Date(data.fecha_fin_real).getTime();
+  const fechaFinPlanificada=data.fecha_fin_planificada;
+  const fechaIniPlanificada=data.fecha_ini_planificada;
+  const fechaIniReal=data.fecha_ini_real;
+  const fechaFinReal=data.fecha_fin_real;
 
   var rta;
   var error=false;
