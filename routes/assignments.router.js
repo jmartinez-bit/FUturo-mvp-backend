@@ -63,4 +63,16 @@ router.get("/validateDates/:fechaIni/:fechaFin/:codColab/:codServ",async (req, r
 
 });
 
+router.get("/showgrid/:codServ",async (req, res,next) =>{
+  try{
+    const {codServ}=req.params;
+    const rta=await assignmentsService.showAssignments(codServ);
+    res.json(rta);
+
+  }catch (e){
+    next(e);
+  }
+
+});
+
 module.exports = router;

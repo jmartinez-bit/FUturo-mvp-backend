@@ -254,7 +254,7 @@ async updateEndDateOnResourcesMap(codColab,codCliente,fechaFinNueva,codLinServ){
  }
 
  async showAssignments(codServ){
-  const query=`SELECT puesto,nivel,nro_documento,CONCAT(nombres,' ',apellido_pat,' ',apellido_mat) AS nombres_apellidos,
+  const query=`SELECT puesto.puesto,colaborador.nivel,nro_documento,CONCAT(nombres,' ',apellido_pat,' ',apellido_mat) AS nombres_apellidos,
                 fecha_inicio,fecha_fin,por_asignacion,horas_asignacion
                 FROM asignacion_recursos
                 INNER JOIN colaborador ON asignacion_recursos.cod_colaborador=colaborador.cod_colaborador
