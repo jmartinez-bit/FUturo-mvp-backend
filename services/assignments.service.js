@@ -179,7 +179,7 @@ async saleValue(codServ) {
 
 async validatesumPlannedProductions(codServ, codAsignacion,prodPlanificada) {
   const sum= await this.sumPlannedProductions(codServ, codAsignacion);
-  const saleValue=await this.validatesumPlannedProductions(codServ);
+  const saleValue=await this.saleValue(codServ);
   (sum+prodPlanificada)>saleValue?false:true;
 }
 

@@ -17,11 +17,11 @@ class AssignedHoursService{
 
   }
 
-  async findAssignedHours(fechaIni,fechaFin,porcAsign){
+  async findAssignedHoursTotalAssignment(fechaIni,fechaFin){
     const nroFeriados=await this.findNumberOfFeriados(fechaIni,fechaFin);
     const workDays=countWorkDay(fechaIni,fechaFin)-nroFeriados;
     const hoursPerDay= await this.findHoursPerDay();
-    const assignedHours=workDays*hoursPerDay*porcAsign/100;
+    const assignedHours=workDays*hoursPerDay;
     return assignedHours;
   }
 }
@@ -44,7 +44,7 @@ function countWorkDay(fechaIniString,fechFinString){
 
   // Si no hay ni una semana completa
   if (weeks <= 0) {
-      return (f?f:6)-i+(i?1:0)+(f==6?-1:0);
+      return (f?f:6)-i+(i?1:0)+(f==6?-1:0)+diffDay/7;
   }else{
       return weeks*5 + (f==6?5:f) + ( i >= 1 && i <= 5 ? (6-i):0);
   }
