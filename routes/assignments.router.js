@@ -33,11 +33,13 @@ router.post("/createOrEditAssignment",async (req, res,next) =>{
       rta={"error":true,"message":"La suma de las producciones planificadas del equipo asignado es mayor al valor de la venta en soles"};
       e=true;
     }
+    console.log("se valido la producion planificada");
     if(!e ){
         const {authorization}=req.headers;
         const auth=JSON.parse(authorization);
         const codUsuario=auth.id_sesion;
-      if(cod_asignacion===null){
+        console.log("entro antes de crear");
+      if(cod_asignacion===-1){
         rta=await assignmentsService.createAssingment(req.body,prodPlanificada,codUsuario);
       }else{
        ;
