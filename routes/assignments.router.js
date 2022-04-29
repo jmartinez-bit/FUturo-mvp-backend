@@ -21,7 +21,7 @@ router.get("/maxAccumPercent/:fechaIni/:fechaFin/:codColab",async (req, res,next
 router.post("/createOrEditAssignment",async (req, res,next) =>{
   try{
     const {fecha_ini,fecha_fin,cod_colaborador,cod_servicio,percent,horas_asignadas,tarifa}=req.body;
-    const cod_asignacion=req.body.cod_asignacion||null;
+    const cod_asignacion=req.body.cod_asignacion||-1;
     var rta=await assignmentsService.validateDates(fecha_ini, fecha_fin, cod_colaborador,cod_servicio);
     var e=rta.error;
     if(!(await assignmentsService.validatePercentage(fecha_ini, fecha_fin, cod_colaborador,percent)) && !e){
