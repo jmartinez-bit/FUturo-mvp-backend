@@ -43,8 +43,10 @@ function countWorkDay(fechaIniString,fechFinString){
   var weeks = Math.floor(diffWeekDay/7);
 
   // Si no hay ni una semana completa
-  if (weeks <= 0) {
-      return (f?f:6)-i+(i?1:0)+(f==6?-1:0)+diffDay/7;
+  if (weeks <= 0 && diffDay>=7) {
+      return (f?f:6)-i+(i?1:0)+(f==6?-1:0)+5;
+  }else if(weeks <= 0 && diffDay<7){
+      return (f?f:6)-i+(i?1:0)+(f==6?-1:0)+5;
   }else{
       return weeks*5 + (f==6?5:f) + ( i >= 1 && i <= 5 ? (6-i):0);
   }
