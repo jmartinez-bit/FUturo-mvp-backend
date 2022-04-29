@@ -71,7 +71,7 @@ class AssignmentsService{
     fechas.push({"fecha":fechaIni,"modificador_porcentaje":0,"ind":"INI"});
     fechas.push({"fecha":fechaFin,"modificador_porcentaje":0,"ind":"FIN"});
     var sortedFechas=fechas.sort((a, b) =>{
-      if (new Date(a.fecha).getTime() === new Date(b.fecha).getTime()) {
+      if (a.fecha=== b.fecha) {
         return b.modificador_porcentaje-a.modificador_porcentaje;
       }else{
         return new Date(a.fecha).getTime() - new Date(b.fecha).getTime();
@@ -218,44 +218,63 @@ async createAssingment(d,prodPlanificada,codUsuario){
   return rta;
 }
 
-async updateStartDateOnResourcesMap(codColab,fechaIniNueva){
+async updateStartDateOnResourcesMap(codColab,codCliente,fechaIniNueva,linNeg){
  var data=await periodService.getLastPeriod();
  const periodo=data.periodo;
  [[data]]=await sequelize.query(`SELECT fecha_inicio FROM mapa_recursos
                                   WHERE periodo='${periodo}' AND cod_colaborador=${codColab};`);
   const fechaIniAnt=data.fecha_inicio;
-  if(fechaIniAnt===null || new Date(fechaIniNueva).getTime()<new Date(fechaIniAnt).getTime()){
+  if(fechaIniAnt===null || fechaIniNueva<fechaIniAnt){
     await sequelize.query(`UPDATE mapa_recursos
                           SET fecha_inicio='${fechaIniNueva}'
-                          WHERE periodo='${periodo}' AND cod_colaborador=${codColab};`);
+                          WHERE periodo='${periodo}' AND cod_colaborador=${codColab}
+                          AND cod_cliente=${codCliente} AND linea_negocio='${linNeg}'
+                          AND cod_cliente=${codCliente} AND linea_negocio='${linNeg}';`);
   }
 }
 
-async updateEndDateOnResourcesMap(codColab,fechaFinNueva){
+async updateEndDateOnResourcesMap(codColab,codCliente,fechaFinNueva,linNeg){
   var data=await periodService.getLastPeriod();
   const periodo=data.periodo;
   [[data]]=await sequelize.query(`SELECT fecha_fin FROM mapa_recursos
-                                   WHERE periodo='${periodo}' AND cod_colaborador=${codColab};`);
+                                   WHERE periodo='${periodo}' AND cod_colaborador=${codColab}
+                                   AND cod_cliente=${codCliente} AND linea_negocio='${linNeg}';`);
    const fechaFinAnt=data.fecha_fin;
-   if(fechaFinNueva===null || new Date(fechaFinNueva).getTime()>new Date(fechaFinAnt).getTime()){
+   if(fechaFinNueva===null || fechaFinNueva>fechaFinAnt){
      await sequelize.query(`UPDATE mapa_recursos
                            SET fecha_inicio='${fechaFinNueva}'
-                           WHERE periodo='${periodo}' AND cod_colaborador=${codColab};`);
+                           WHERE periodo='${periodo}' AND cod_colaborador=${codColab}
+                           AND cod_cliente=${codCliente} AND linea_negocio='${linNeg}';`);
    }
  }
 
- async updateAssignedPercentOnResourcesMap(codColab,fechaFinNueva){
+ async updateAssignedPercentOnResourcesMap(codColab,codCliente,fechaFinNueva,linNeg){
   var data=await periodService.getLastPeriod();
   const periodo=data.periodo;
   [[data]]=await sequelize.query(`SELECT fecha_fin FROM mapa_recursos
-                                   WHERE periodo='${periodo}' AND cod_colaborador=${codColab};`);
+                                   WHERE periodo='${periodo}' AND cod_colaborador=${codColab}
+                                   AND cod_cliente=${codCliente} AND linea_negocio='${linNeg}';`);
    const fechaFinAnt=data.fecha_fin;
-   if(fechaFinNueva===null || new Date(fechaFinNueva).getTime()>new Date(fechaFinAnt).getTime()){
+   if(fechaFinNueva===null || fechaFinNueva>fechaFinAnt){
      await sequelize.query(`UPDATE mapa_recursos
                            SET fecha_inicio='${fechaFinNueva}'
-                           WHERE periodo='${periodo}' AND cod_colaborador=${codColab};`);
+                           WHERE periodo='${periodo}' AND cod_colaborador=${codColab}
+                           AND cod_cliente=${codCliente} AND linea_negocio='${linNeg}';`);
    }
  }
+
+ async showAssignments(codServ){
+  const query=`SELECT puesto,nivel,nro_documento,CONCAT(nombres,' ',apellido_pat,' ',apellido_mat) AS nombres_apellidos,
+                fecha_inicio,fecha_fin,por_asignacion,horas_asignacion
+                FROM asignacion_recursos
+                INNER JOIN colaborador ON asignacion_recursos.cod_colaborador=colaborador.cod_colaborador
+                INNER JOIN puesto ON puesto.cod_puesto=colaborador.cod_puesto
+                WHERE cod_servicio=${codServ}
+                ORDER BY nombres_apellidos ASC,fecha_inicio DESC;`;
+  const [data]=await sequelize.query(query);
+  return data;
+ }
+
 }
 
 module.exports = AssignmentsService;
