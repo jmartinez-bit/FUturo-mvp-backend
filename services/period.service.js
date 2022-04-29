@@ -30,27 +30,58 @@ class PeriodService{
       'periodo', 'tasa_cambio', 'usuario_reg', 'estado'
     ];
     // Sentencia
-    const insert = getInsert(fields);
-    const query = `${ insert } VALUES(${ fields.map(field => "(:".concat(field).concat(")")).toString() }) RETURNING *;`;
+    const query = `${ getInsert(fields) }
+              VALUES(${ fields.map(field => "(:".concat(field).concat(")")).toString() })
+              RETURNING *;`;
 
     try {
-
       data.usuario_reg = 'prueba';
       data.estado = 'A';
       const [[ newPeriod ]] = await sequelize.query(query, {
         type: QueryTypes.INSERT,
         replacements: data
       });
+      this.setEstadoInactive();
       return newPeriod;
-
     } catch (error) {
-
       if (error.name === 'SequelizeUniqueConstraintError') {
-        console.error(error);
         throw boom.conflict('there was a conflict');
       }
-
     }
+  }
+
+  async setEstadoInactive() {
+    const query = `UPDATE periodo
+            SET estado = 'I'
+            WHERE periodo = (SELECT periodo FROM periodo
+              ORDER BY fecha_reg DESC OFFSET 1 ROW FETCH FIRST 1 ROW ONLY)
+              RETURNING *;`;
+
+    const [[updatePeriod]] = await sequelize.query(query);
+
+    if (!updatePeriod) {
+      throw boom.notFound('period not found');
+    }
+
+    return updatePeriod;
+  }
+
+  async update(data) {
+
+    const query = `UPDATE periodo
+            SET tasa_cambio = (:tasa_cambio)
+            WHERE estado = 'A' RETURNING *;`;
+
+    const [[updatePeriod]] = await sequelize.query(query, {
+      replacements: data,
+      type: sequelize.QueryTypes.UPDATE
+    });
+
+    if (!updatePeriod) {
+      throw boom.notFound('period not found');
+    }
+
+    return updatePeriod;
   }
 
 }

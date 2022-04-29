@@ -8,4 +8,12 @@ const createPeriodSchema = Joi.object({
   tasa_cambio: tasa_cambio.required(),
 });
 
-module.exports = { createPeriodSchema }
+const updatePeriodSchema = Joi.object({
+  tasa_cambio: tasa_cambio.required(),
+});
+
+const getPeriodSchema = Joi.object({
+  periodo: periodo.required(),
+});
+
+module.exports = { createPeriodSchema, updatePeriodSchema, getPeriodSchema }

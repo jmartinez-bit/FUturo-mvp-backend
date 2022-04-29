@@ -1,6 +1,6 @@
 const express = require('express');
 const validatorHandler = require('../middlewares/validator.handler');
-const { createPeriodSchema } = require('../schemas/period.schema');
+const { createPeriodSchema, updatePeriodSchema } = require('../schemas/period.schema');
 const PeriodService = require('./../services/period.service');
 
 const router = express.Router();
@@ -22,6 +22,17 @@ router.post('/create',
   try {
     const body = req.body;
     res.status(201).json(await periodService.create(body));
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put('/update',
+  validatorHandler(updatePeriodSchema, 'body'),
+  async (req, res, next) => {
+  try {
+    const body = req.body;
+    res.json(await periodService.update(body));
   } catch (error) {
     next(error);
   }
