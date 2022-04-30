@@ -1,9 +1,13 @@
 const express = require('express');
 const AssignmentsService = require('../services/assignments.service');
+const PeriodService = require('../services/period.service');
+const ServicesService = require('../services/services.service');
 
 
 const router = express.Router();
 const assignmentsService = new AssignmentsService();
+const periodService = new PeriodService();
+const servicesService = new ServicesService();
 
 
 router.get("/maxAccumPercent/:fechaIni/:fechaFin/:codColab",async (req, res,next) =>{
@@ -22,9 +26,9 @@ router.post("/createOrEditAssignment",async (req, res,next) =>{
   try{
     const {fecha_ini,fecha_fin,cod_colaborador,cod_servicio,percent,horas_asignadas,tarifa}=req.body;
     const cod_asignacion=req.body.cod_asignacion||-1;
-    var rta=await assignmentsService.validateDates(fecha_ini, fecha_fin, cod_colaborador,cod_servicio);
+    var rta=await assignmentsService.validateDates(fecha_ini, fecha_fin, cod_colaborador,cod_servicio,cod_asignacion);
     var e=rta.error;
-    if(!(await assignmentsService.validatePercentage(fecha_ini, fecha_fin, cod_colaborador,percent)) && !e){
+    if(!(await assignmentsService.validatePercentage(fecha_ini, fecha_fin, cod_colaborador,percent,cod_asignacion)) && !e){
     rta={"error":true,"message":"El porcentaje de asignación excede el 100% en algun punto del periodo seleccionado"};
     e=true;
     }
@@ -40,9 +44,15 @@ router.post("/createOrEditAssignment",async (req, res,next) =>{
       if(cod_asignacion===-1){
         rta=await assignmentsService.createAssingment(req.body,prodPlanificada,codUsuario);
       }else{
-       ;
+        rta=await assignmentsService.editAssingment(req.body,prodPlanificada,codUsuario);
       }
-
+    const codCliente=await servicesService.findClientCod(cod_servicio);
+    const codLineaServicio=await servicesService.findServiceLineCod(cod_servicio);
+    const data2=await periodService.getLastPeriod();
+    const periodo=data2.periodo;
+    await this.updateStartDateOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
+    await this.updateEndDateOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
+    await this.updatePercentOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
     }
     res.json(rta);
   }catch (e){
