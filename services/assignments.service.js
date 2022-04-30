@@ -71,7 +71,7 @@ class AssignmentsService{
     fechas.push({"fecha":fechaIni,"modificador_porcentaje":0,"ind":"INI"});
     fechas.push({"fecha":fechaFin,"modificador_porcentaje":0,"ind":"FIN"});
     var sortedFechas=fechas.sort((a, b) =>{
-      if (new Date(a.fecha).getTime() === new Date(b.fecha).getTime()) {
+      if (a.fecha=== b.fecha) {
         return b.modificador_porcentaje-a.modificador_porcentaje;
       }else{
         return new Date(a.fecha).getTime() - new Date(b.fecha).getTime();
@@ -117,13 +117,13 @@ class AssignmentsService{
   async validateDates(fechaIni, fechaFin, codColab,codServ) {
 
   var [[data]] = await sequelize.query(`SELECT fecha_inicio,fecha_fin FROM contrato WHERE cod_colaborador=${codColab} AND estado='AC' ;`);
-  const fechaInicioContrato=new Date(data.fecha_inicio).getTime();
-  const fechaFinContrato=new Date(data.fecha_fin).getTime();
+  const fechaInicioContrato=data.fecha_inicio;
+  const fechaFinContrato=data.fecha_fin;
   [[data]] = await sequelize.query(`SELECT fecha_ini_planificada,fecha_fin_planificada,fecha_ini_real,fecha_fin_real FROM servicio WHERE cod_servicio=${codServ};`);
-  const fechaIniPlanificada=new Date(data.fecha_ini_planificada).getTime();
-  const fechaFinPlanificada=new Date(data.fecha_fin_planificada).getTime();
-  const fechaIniReal=new Date(data.fecha_ini_real).getTime();
-  const fechaFinReal=new Date(data.fecha_fin_real).getTime();
+  const fechaFinPlanificada=data.fecha_fin_planificada;
+  const fechaIniPlanificada=data.fecha_ini_planificada;
+  const fechaIniReal=data.fecha_ini_real;
+  const fechaFinReal=data.fecha_fin_real;
 
   var rta;
   var error=false;
@@ -214,48 +214,72 @@ async createAssingment(d,prodPlanificada,codUsuario){
                VALUES (${cod_servicio},${cod_colaborador},'${percent}','${fecha_ini}','${fecha_fin}','${horas_asignadas}',
                ${cod_puesto},'${nivel}','${tarifa}','${prodPlanificada}',CURRENT_DATE,'${usuarioReg}');`;
   await sequelize.query(query);
-  const rta={"error":false,"message":"Se creo asignación satisfactoriamente"};;
+  const [[data1]]=await sequelize.query(`SELECT cod_cliente,cod_linea_servicio FROM servicio
+                                        WHERE cod_servicio=${cod_servicio}`);
+  const data2=await periodService.getLastPeriod();
+  const periodo=data2.periodo;
+  await this.updateStartDateOnResourcesMap(cod_colaborador,data1.cod_cliente,fecha_ini,data1.cod_linea_servicio,periodo);
+  await this.updateEndDateOnResourcesMap(cod_colaborador,data1.cod_cliente,fecha_fin,data1.cod_linea_servicio,periodo);
+  await this.updatePercentOnResourcesMap(cod_colaborador,data1.cod_cliente,data1.cod_linea_servicio,percent,fecha_ini,fecha_fin,periodo)
+  const rta={"error":false,"message":"Se creo asignación satisfactoriamente"};
   return rta;
 }
 
-async updateStartDateOnResourcesMap(codColab,fechaIniNueva){
- var data=await periodService.getLastPeriod();
- const periodo=data.periodo;
- [[data]]=await sequelize.query(`SELECT fecha_inicio FROM mapa_recursos
-                                  WHERE periodo='${periodo}' AND cod_colaborador=${codColab};`);
+async updateStartDateOnResourcesMap(codColab,codCliente,fechaIniNueva,codLinServ,periodo){
+ const [[data]]=await sequelize.query(`SELECT fecha_inicio FROM mapa_recursos
+                                  WHERE periodo='${periodo}' AND cod_colaborador=${codColab}
+                                  AND cod_cliente=${codCliente} AND linea_negocio='${codLinServ}';`);
+
   const fechaIniAnt=data.fecha_inicio;
-  if(fechaIniAnt===null || new Date(fechaIniNueva).getTime()<new Date(fechaIniAnt).getTime()){
+  if(fechaIniAnt===null || fechaIniNueva<fechaIniAnt){
     await sequelize.query(`UPDATE mapa_recursos
                           SET fecha_inicio='${fechaIniNueva}'
-                          WHERE periodo='${periodo}' AND cod_colaborador=${codColab};`);
+                          WHERE periodo='${periodo}' AND cod_colaborador=${codColab}
+                          AND cod_cliente=${codCliente} AND linea_negocio='${codLinServ}';`);
   }
 }
 
-async updateEndDateOnResourcesMap(codColab,fechaFinNueva){
-  var data=await periodService.getLastPeriod();
-  const periodo=data.periodo;
-  [[data]]=await sequelize.query(`SELECT fecha_fin FROM mapa_recursos
-                                   WHERE periodo='${periodo}' AND cod_colaborador=${codColab};`);
+async updateEndDateOnResourcesMap(codColab,codCliente,fechaFinNueva,codLinServ,periodo){
+  const [[data]]=await sequelize.query(`SELECT fecha_fin FROM mapa_recursos
+                                   WHERE periodo='${periodo}' AND cod_colaborador=${codColab}
+                                   AND cod_cliente=${codCliente} AND linea_negocio='${codLinServ}';`);
    const fechaFinAnt=data.fecha_fin;
-   if(fechaFinNueva===null || new Date(fechaFinNueva).getTime()>new Date(fechaFinAnt).getTime()){
+   if(fechaFinAnt===null || fechaFinNueva>fechaFinAnt){
      await sequelize.query(`UPDATE mapa_recursos
-                           SET fecha_inicio='${fechaFinNueva}'
-                           WHERE periodo='${periodo}' AND cod_colaborador=${codColab};`);
+                           SET fecha_fin='${fechaFinNueva}'
+                           WHERE periodo='${periodo}' AND cod_colaborador=${codColab}
+                           AND cod_cliente=${codCliente} AND linea_negocio='${codLinServ}';`);
    }
  }
 
- async updateAssignedPercentOnResourcesMap(codColab,fechaFinNueva){
-  var data=await periodService.getLastPeriod();
-  const periodo=data.periodo;
-  [[data]]=await sequelize.query(`SELECT fecha_fin FROM mapa_recursos
-                                   WHERE periodo='${periodo}' AND cod_colaborador=${codColab};`);
-   const fechaFinAnt=data.fecha_fin;
-   if(fechaFinNueva===null || new Date(fechaFinNueva).getTime()>new Date(fechaFinAnt).getTime()){
+ async updatePercentOnResourcesMap(codColab,codCliente,codLinServ,porc,fechaIniNueva,fechaFinNueva,periodo){
+  var [[data]]=await sequelize.query(`SELECT CURRENT_DATE;`);
+   const fechaActual=data.current_date;
+   if(fechaIniNueva<=fechaActual && fechaActual<=fechaFinNueva){
+     [[data]]=await sequelize.query(`SELECT asignacion FROM mapa_recursos
+                                  WHERE periodo='${periodo}' AND cod_colaborador=${codColab}
+                                  AND cod_cliente=${codCliente} AND linea_negocio='${codLinServ}';`);
+     var asig=data.asignacion||0;
+     asig+=porc;
      await sequelize.query(`UPDATE mapa_recursos
-                           SET fecha_inicio='${fechaFinNueva}'
-                           WHERE periodo='${periodo}' AND cod_colaborador=${codColab};`);
+                           SET asignacion='${asig}'
+                           WHERE periodo='${periodo}' AND cod_colaborador=${codColab}
+                           AND cod_cliente=${codCliente} AND linea_negocio='${codLinServ}';`);
    }
  }
+
+ async showAssignments(codServ){
+  const query=`SELECT puesto.puesto,colaborador.nivel,nro_documento,CONCAT(nombres,' ',apellido_pat,' ',apellido_mat) AS nombres_apellidos,
+                fecha_inicio,fecha_fin,por_asignacion,horas_asignacion
+                FROM asignacion_recursos
+                INNER JOIN colaborador ON asignacion_recursos.cod_colaborador=colaborador.cod_colaborador
+                INNER JOIN puesto ON puesto.cod_puesto=colaborador.cod_puesto
+                WHERE cod_servicio=${codServ}
+                ORDER BY nombres_apellidos ASC,fecha_inicio DESC;`;
+  const [data]=await sequelize.query(query);
+  return data;
+ }
+
 }
 
 module.exports = AssignmentsService;
