@@ -14,8 +14,8 @@ class PaymentServicesService{
 
   async get(cod_servicio){
 
-    let query = "SELECT cod_hito, cod_servicio, numero_hito, descripcion_hito, horas, monto, fecha_inicio, fecha_fin "+
-    "FROM pagos_servicios WHERE cod_servicio = " + cod_servicio + " ORDER BY fecha_inicio;"
+    let query = "SELECT cod_hito, cod_servicio, ROW_NUMBER() OVER(ORDER BY fecha_inicio) AS numero_hito, descripcion_hito, horas, monto, fecha_inicio, fecha_fin "+
+    "FROM pagos_servicios WHERE cod_servicio = " + cod_servicio + " ;"
     const [rta] = await sequelize.query(query);
     return rta;
   }
