@@ -50,9 +50,9 @@ router.post("/createOrEditAssignment",async (req, res,next) =>{
     const codLineaServicio=await servicesService.findServiceLineCod(cod_servicio);
     const data2=await periodService.getLastPeriod();
     const periodo=data2.periodo;
-    await this.updateStartDateOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
-    await this.updateEndDateOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
-    await this.updatePercentOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
+    await assignmentsService.updateStartDateOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
+    await assignmentsService.updateEndDateOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
+    await assignmentsService.updatePercentOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
     }
     res.json(rta);
   }catch (e){
@@ -77,6 +77,26 @@ router.get("/showgrid/:codServ",async (req, res,next) =>{
   try{
     const {codServ}=req.params;
     const rta=await assignmentsService.showAssignments(codServ);
+    res.json(rta);
+
+  }catch (e){
+    next(e);
+  }
+
+});
+
+router.get("/deleteAssignment/:codAsig",async (req, res,next) =>{
+  try{
+    const {codAsig}=req.params;
+    const [cod_colaborador,cod_servicio]=await assignmentsService.findCollaboratorCodAndClientCod(codAsig);
+    const rta=await assignmentsService.deleteAssignment(codAsig);
+    const codCliente=await servicesService.findClientCod(cod_servicio);
+    const codLineaServicio=await servicesService.findServiceLineCod(cod_servicio);
+    const data2=await periodService.getLastPeriod();
+    const periodo=data2.periodo;
+    await assignmentsService.updateStartDateOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
+    await assignmentsService.updateEndDateOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
+    await assignmentsService.updatePercentOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
     res.json(rta);
 
   }catch (e){

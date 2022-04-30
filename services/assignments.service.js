@@ -220,9 +220,12 @@ async updateStartDateOnResourcesMap(codColab,codServ,codCliente,codLinServ,perio
  var [data]=await sequelize.query(`SELECT fecha_inicio FROM asignacion_recursos
                                   WHERE cod_colaborador=${codColab} AND cod_servicio='${codServ}'
                                   ORDER BY fecha_inicio ASC;`);
- const fechaIniMin=data[0].fecha_inicio;
+ var fechaIniMin=data[0].fecha_inicio||null;
+ if(fechaIniMin){
+  fechaIniMin="'"+fechaIniMin+"'";
+ }
     await sequelize.query(`UPDATE mapa_recursos
-                          SET fecha_inicio='${fechaIniMin}'
+                          SET fecha_inicio=${fechaIniMin}
                           WHERE periodo='${periodo}' AND cod_colaborador=${codColab}
                           AND cod_cliente=${codCliente} AND linea_negocio='${codLinServ}';`);
 
@@ -232,10 +235,12 @@ async updateEndDateOnResourcesMap(codColab,codServ,codCliente,codLinServ,periodo
   var [data]=await sequelize.query(`SELECT fecha_fin FROM asignacion_recursos
                                   WHERE cod_colaborador=${codColab} AND cod_servicio='${codServ}'
                                   ORDER BY fecha_fin DESC;`);
-  const fechaFinMax=data[0].fecha_fin;
-
+  var fechaFinMax=data[0].fecha_fin||null;
+  if(fechaFinMax){
+    fechaFinMax="'"+fechaFinMax+"'";
+   }
   await sequelize.query(`UPDATE mapa_recursos
-                        SET fecha_fin='${fechaFinMax}'
+                        SET fecha_fin=${fechaFinMax}
                         WHERE periodo='${periodo}' AND cod_colaborador=${codColab}
                         AND cod_cliente=${codCliente} AND linea_negocio='${codLinServ}';`);
 
@@ -245,9 +250,12 @@ async updateEndDateOnResourcesMap(codColab,codServ,codCliente,codLinServ,periodo
     const  [[data]]=await sequelize.query(`SELECT sum(por_asignacion) FROM asignacion_recursos
                                     WHERE cod_colaborador=${codColab} AND cod_servicio='${codServ}'
                                     AND fecha_inicio<=CURRENT_DATE AND CURRENT_DATE<=fecha_fin;`);
-     const asig=data.sum;
+     var asig=data.sum||null;
+     if(asig){
+      asig="'"+asig+"'";
+     }
      await sequelize.query(`UPDATE mapa_recursos
-                           SET asignacion='${asig}'
+                           SET asignacion=${asig}
                            WHERE periodo='${periodo}' AND cod_colaborador=${codColab}
                            AND cod_cliente=${codCliente} AND linea_negocio='${codLinServ}';`);
 
@@ -283,6 +291,19 @@ async updateEndDateOnResourcesMap(codColab,codServ,codCliente,codLinServ,periodo
   return rta;
  }
 
+ async findCollaboratorCodAndClientCod(cod_asignacion){
+  const [[rta]] = await sequelize.query(`SELECT cod_colaborador,cod_servicio FROM asignacion_recursos
+                                        WHERE cod_asignacion=${cod_asignacion};`);
+  return [rta.cod_colaborador,rta.cod_servicio];
+ }
+
+ async deleteAssignment(codAsig){
+  await sequelize.query(`DELETE  FROM asignacion_recursos
+                                        WHERE cod_asignacion=${codAsig};`);
+  const rta={"error":false,"message":"Se eliminó la asignación satisfactoriamente"};
+  ;
+  return rta;
+ }
 }
 
 module.exports = AssignmentsService;
