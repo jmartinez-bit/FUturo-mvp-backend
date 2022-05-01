@@ -88,10 +88,11 @@ router.get("/showgrid/:codServ",async (req, res,next) =>{
 
 });
 
-router.get("/deleteAssignment/:codAsig",async (req, res,next) =>{
+router.delete("/deleteAssignment/:codAsig",async (req, res,next) =>{
   try{
     const {codAsig}=req.params;
     const [cod_colaborador,cod_servicio]=await assignmentsService.findCollaboratorCodAndClientCod(codAsig);
+    await sequelize.query(`BEGIN;`);//INICIO DE LA TRANSACCIÓN
     const rta=await assignmentsService.deleteAssignment(codAsig);
     const codCliente=await servicesService.findClientCod(cod_servicio);
     const codLineaServicio=await servicesService.findServiceLineCod(cod_servicio);
@@ -100,6 +101,7 @@ router.get("/deleteAssignment/:codAsig",async (req, res,next) =>{
     await assignmentsService.updateStartDateOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
     await assignmentsService.updateEndDateOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
     await assignmentsService.updatePercentOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
+    await sequelize.query(`COMMIT;`);//FIN DE LA TRANSACCIÓN
     res.json(rta);
 
   }catch (e){
