@@ -248,7 +248,7 @@ async updateEndDateOnResourcesMap(codColab,codServ,codCliente,codLinServ,periodo
 
  async updatePercentOnResourcesMap(codColab,codServ,codCliente,codLinServ,periodo){
     const  [[data]]=await sequelize.query(`SELECT sum(por_asignacion) FROM asignacion_recursos
-                                    WHERE cod_colaborador=${codColab} AND cod_servicio='${codServ}'
+                                    WHERE cod_colaborador=${codColab} AND cod_servicio=${codServ}
                                     AND fecha_inicio<=CURRENT_DATE AND CURRENT_DATE<=fecha_fin;`);
      var asig=data.sum||null;
      if(asig){
@@ -263,7 +263,7 @@ async updateEndDateOnResourcesMap(codColab,codServ,codCliente,codLinServ,periodo
 
  async showAssignments(codServ){
   const query=`SELECT asignacion_recursos.cod_servicio,asignacion_recursos.cod_colaborador,puesto.puesto,colaborador.nivel,CONCAT(nombres,' ',apellido_pat,' ',apellido_mat) AS nombres_apellidos,
-                fecha_inicio,fecha_fin,por_asignacion,horas_asignacion,prod_planificada)
+                fecha_inicio,fecha_fin,por_asignacion,horas_asignacion,prod_planificada
                 FROM asignacion_recursos
                 INNER JOIN colaborador ON asignacion_recursos.cod_colaborador=colaborador.cod_colaborador
                 INNER JOIN puesto ON puesto.cod_puesto=colaborador.cod_puesto
@@ -277,7 +277,7 @@ async updateEndDateOnResourcesMap(codColab,codServ,codCliente,codLinServ,periodo
   const usuarioReg=await userService.findNames(codUsuario);
   const {cod_asignacion,percent,fecha_ini,fecha_fin,horas_asignadas,tarifa}=d;
   const query=`UPDATE asignacion_recursos
-              SET asignacion='${percent}',
+              SET por_asignacion='${percent}',
               fecha_inicio='${fecha_ini}',
               fecha_fin='${fecha_fin}',
               horas_asignacion='${horas_asignadas}',
@@ -285,7 +285,7 @@ async updateEndDateOnResourcesMap(codColab,codServ,codCliente,codLinServ,periodo
               prod_planificada='${prodPlanificada}',
               fecha_act=CURRENT_DATE,
               usuario_act='${usuarioReg}'
-              WHERE cod_asignacion='${cod_asignacion}';`
+              WHERE cod_asignacion=${cod_asignacion};`
   await sequelize.query(query);
   const rta={"error":false,"message":"Se edito asignación satisfactoriamente"};
   return rta;

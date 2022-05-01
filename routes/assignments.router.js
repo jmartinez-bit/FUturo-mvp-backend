@@ -1,4 +1,5 @@
 const express = require('express');
+const sequelize = require('../libs/sequelize');
 const AssignmentsService = require('../services/assignments.service');
 const PeriodService = require('../services/period.service');
 const ServicesService = require('../services/services.service');
@@ -13,7 +14,7 @@ const servicesService = new ServicesService();
 router.get("/maxAccumPercent/:fechaIni/:fechaFin/:codColab",async (req, res,next) =>{
   try{
     const {fechaIni,fechaFin,codColab}=req.params;
-    const max=await assignmentsService.maxAccumulatedAssignedPercentageInAnInterval(fechaIni,fechaFin,codColab);
+    const max=await assignmentsService.maxAccumulatedAssignedPercentageInAnInterval(fechaIni,fechaFin,codColab,-1);
     res.json({"maximo_porcentaje_acumulado":max});
 
   }catch (e){
@@ -42,6 +43,7 @@ router.post("/createOrEditAssignment",async (req, res,next) =>{
         const auth=JSON.parse(authorization);
         const codUsuario=auth.id_sesion;
       if(cod_asignacion===-1){
+        await sequelize.query(`BEGIN;`);//INICIO DE LA TRANSACCIÓN
         rta=await assignmentsService.createAssingment(req.body,prodPlanificada,codUsuario);
       }else{
         rta=await assignmentsService.editAssingment(req.body,prodPlanificada,codUsuario);
@@ -54,6 +56,7 @@ router.post("/createOrEditAssignment",async (req, res,next) =>{
     await assignmentsService.updateEndDateOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
     await assignmentsService.updatePercentOnResourcesMap(cod_colaborador,cod_servicio,codCliente,codLineaServicio,periodo);
     }
+    await sequelize.query(`COMMIT;`);//FIN DE LA TRANSACCIÓN
     res.json(rta);
   }catch (e){
     next(e);
@@ -64,7 +67,7 @@ router.post("/createOrEditAssignment",async (req, res,next) =>{
 router.get("/validateDates/:fechaIni/:fechaFin/:codColab/:codServ",async (req, res,next) =>{
   try{
     const {fechaIni,fechaFin,codColab,codServ}=req.params;
-    const rta=await assignmentsService.validateDates(fechaIni,fechaFin,codColab,codServ);
+    const rta=await assignmentsService.validateDates(fechaIni,fechaFin,codColab,codServ,-1);
     res.json(rta);
 
   }catch (e){
