@@ -220,7 +220,7 @@ async updateStartDateOnResourcesMap(codColab,codServ,codCliente,codLinServ,perio
  var [data]=await sequelize.query(`SELECT fecha_inicio FROM asignacion_recursos
                                   WHERE cod_colaborador=${codColab} AND cod_servicio='${codServ}'
                                   ORDER BY fecha_inicio ASC;`);
- var fechaIniMin=data[0].fecha_inicio||null;
+ var fechaIniMin=data.fecha_inicio||null;
  if(fechaIniMin){
   fechaIniMin="'"+fechaIniMin+"'";
  }
@@ -235,7 +235,7 @@ async updateEndDateOnResourcesMap(codColab,codServ,codCliente,codLinServ,periodo
   var [data]=await sequelize.query(`SELECT fecha_fin FROM asignacion_recursos
                                   WHERE cod_colaborador=${codColab} AND cod_servicio='${codServ}'
                                   ORDER BY fecha_fin DESC;`);
-  var fechaFinMax=data[0].fecha_fin||null;
+  var fechaFinMax=data.fecha_fin||null;
   if(fechaFinMax){
     fechaFinMax="'"+fechaFinMax+"'";
    }
