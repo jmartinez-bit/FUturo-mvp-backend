@@ -1,6 +1,7 @@
 const boom = require('@hapi/boom');
 const sequelize = require('../libs/sequelize');
 const { QueryTypes } = require('sequelize');
+const ResourcesService = require('./resources.service');
 
 // Sentencias
 const getSelect = (attributes = '*') => {
@@ -10,6 +11,8 @@ const getSelect = (attributes = '*') => {
 const getInsert = (attributes = '*') => {
   return `INSERT INTO periodo(${ attributes.toString() })`;
 };
+
+const resourcesService = new ResourcesService();
 
 class PeriodService{
 
@@ -42,6 +45,7 @@ class PeriodService{
         replacements: data
       });
       this.setEstadoInactive();
+      await resourcesService.createCopyResources(newPeriod.periodo);
       return newPeriod;
     } catch (error) {
       if (error.name === 'SequelizeUniqueConstraintError') {
