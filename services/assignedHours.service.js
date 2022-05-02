@@ -46,7 +46,7 @@ function countWorkDay(fechaIniString,fechFinString){
   if (weeks <= 0 && diffDay>=7) {
       return (f?f:6)-i+(i?1:0)+(f==6?-1:0)+5;
   }else if(weeks <= 0 && diffDay<7){
-      return (f?f:6)-i+(i?1:0)+(f==6?-1:0)+5;
+      return (f?f:6)-i+(i?1:0)+(f==6?-1:0);
   }else{
       return weeks*5 + (f==6?5:f) + ( i >= 1 && i <= 5 ? (6-i):0);
   }
