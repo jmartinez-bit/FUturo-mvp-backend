@@ -38,4 +38,13 @@ router.put('/update',
   }
 });
 
+router.get('/',
+  async (req, res, next) => {
+  try {
+    res.json(await periodService.getAll());
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

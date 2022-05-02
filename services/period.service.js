@@ -88,5 +88,16 @@ class PeriodService{
     return updatePeriod;
   }
 
+  async getAll() {
+    // Columnas
+    const select = getSelect(['periodo', 'tasa_cambio', "to_char(fecha_reg, 'dd-mm-yyyy') as fecha_apertura", 'estado']);
+
+    // Sentencia
+    const [data] = await sequelize.query(`${ select }
+                    ORDER BY fecha_reg DESC LIMIT 6;`);
+
+    return data;
+  }
+
 }
 module.exports = PeriodService;
