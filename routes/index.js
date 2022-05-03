@@ -13,6 +13,8 @@ const contractSolicitudeRouter = require('./contractSolicitude.router');
 const epsRouter = require('./eps.router');
 const assignedHoursRouter = require('./assignedHours.router');
 const assignmentsRouter = require('./assignments.router');
+const parameterRouter = require('./parameter.router');
+
 
 const express = require('express');
 
@@ -35,6 +37,7 @@ function routerApi(app) {
   router.use('/eps', epsRouter);
   router.use('/assignedHours', assignedHoursRouter);
   router.use('/assignments', assignmentsRouter);
+  router.use('/parameter', parameterRouter);
 
 }
 

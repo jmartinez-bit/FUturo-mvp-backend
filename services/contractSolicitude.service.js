@@ -4,6 +4,7 @@ const CollaboratorService = require('../services/collaborator.service');
 const ContractService = require('../services/contract.service');
 const ResourcesService = require('../services/resources.service');
 const UserService = require('../services/user.service');
+const ParameterService = require('../services/parameter.service');
 
 
 
@@ -13,6 +14,7 @@ const collaboratorService = new CollaboratorService();
 const contractService = new ContractService();
 const resourcesService = new ResourcesService();
 const userService = new UserService();
+const parameterService = new ParameterService();
 
 
 
@@ -20,14 +22,16 @@ class ContractSolicitudeService{
 
   async createSolicitude(body,codBanda){
 
-
+      //traigo los valores de los parametros para el calculo del clm de la BD
+      const factorPlanilla=parseFloat((await parameterService.findParameterValue("factor_planilla"))[0].valor_num_1);
+      const factorRxhPracticas=parseFloat((await parameterService.findParameterValue("factor_rxh_practicas"))[0].valor_num_1);
       //calculo del clm
       var mod=body.modalidad.toLowerCase();
       var clm;
       if(mod==="planilla"){
-        clm=(body.remuneracion)*process.env.FACTOR_PLANILLA;
+        clm=(body.remuneracion)*factorPlanilla;
       } else if(mod==="rxh"||mod==="practicante"){
-        clm=body.remuneracion*process.env.FACTOR_RXH_PRACTICAS;
+        clm=body.remuneracion*factorRxhPracticas;
       }
       if(body.bono_men){
         clm+=parseFloat(body.bono_men);
