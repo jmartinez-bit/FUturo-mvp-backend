@@ -44,8 +44,8 @@ class PeriodService{
         type: QueryTypes.INSERT,
         replacements: data
       });
-      this.setEstadoInactive();
-      await resourcesService.createCopyResources(newPeriod.periodo);
+      const periodInactive = await this.setEstadoInactive();
+      resourcesService.createCopyResources(newPeriod.periodo, periodInactive.periodo);
       return newPeriod;
     } catch (error) {
       if (error.name === 'SequelizeUniqueConstraintError') {

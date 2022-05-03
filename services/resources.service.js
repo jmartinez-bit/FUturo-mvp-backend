@@ -174,14 +174,14 @@ class ResourcesService{
     await sequelize.query(query);
   }
 
-  async createCopyResources(periodo) {
+  async createCopyResources(periodo, periodoInactivo) {
     const fields = [
       'periodo', 'cod_cliente', 'linea_negocio', 'asignacion', 'cod_colaborador', 'box', 'perfil', 'nivel', 'fecha_inicio', 'fecha_fin', 'fecha_cese', 'fecha_fin_contrato', 'horas_servicio', 'licencias', 'faltas', 'inicio_vacaciones', 'fin_vacaciones', 'vacaciones', 'horas_extras', 'produccion_horas_extras', 'total_horas_asignaciones', 'total_horas_facturables', 'eficiencia', 'rendimiento', 'capacity', 'clm', 'costo_asignacion', 'clm_efectivo', 'produccion', 'productividad', 'estado'
     ];
 
     const query = `${ getInsert(fields) }
-              ${ getSelect([ "'" + periodo.toString() + "'", ...fields.slice(1)]) }
-              WHERE estado = 'A' RETURNING *;`;
+              ${ getSelect([ "'" + periodo + "'", ...fields.slice(1)]) }
+              WHERE estado = 'A' AND periodo = '${ periodoInactivo }' RETURNING *;`;
 
     const [ copyResources ] = await sequelize.query(query, {
       type: QueryTypes.INSERT
