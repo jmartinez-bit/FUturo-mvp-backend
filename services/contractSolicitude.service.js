@@ -1,6 +1,5 @@
 const sequelize = require('../libs/sequelize');
 const SalaryBandService = require('../services/salaryBand.service');
-const EpsService = require('../services/eps.service');
 const CollaboratorService = require('../services/collaborator.service');
 const ContractService = require('../services/contract.service');
 const ResourcesService = require('../services/resources.service');
@@ -10,7 +9,6 @@ const UserService = require('../services/user.service');
 
 
 const salaryBandService = new SalaryBandService();
-const epsService = new EpsService();
 const collaboratorService = new CollaboratorService();
 const contractService = new ContractService();
 const resourcesService = new ResourcesService();
@@ -138,8 +136,8 @@ class ContractSolicitudeService{
 
   async approve(cod,indAsignFamiliar,codUsuario){
     if(indAsignFamiliar==="true"){
-      const [data]=await sequelize.query(`SELECT clm from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
-      var clm=parseFloat(data[0].clm)+parseFloat(process.env.ASIGN_FAMILIAR);
+      const [dat]=await sequelize.query(`SELECT clm from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
+      var clm=parseFloat(dat[0].clm)+parseFloat(process.env.ASIGN_FAMILIAR);
       clm=clm.toFixed(2);
       this.addFamiliarAssignment(cod,clm);
     }else{
