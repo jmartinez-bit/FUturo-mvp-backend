@@ -15,26 +15,17 @@ const salaryBandService = new SalaryBandService();
 router.post("/newSolicitude",async (req, res,next) =>{
   try{
     //obligatorios
-    const {tipo_documento, nro_documento, nombre, ape_paterno, ape_materno, fecha_nacimiento,
-       nro_celular, correo, direccion, distrito,provincia, cod_cliente, cod_linea_negocio, cod_puesto, nivel,
-        modalidad, remuneracion,fecha_inicio, fecha_fin}=req.body;
-    //no obligatorios
-      const bono_men=req.body.bono_men||null;
-      const cod_eps=req.body.cod_eps||null;
-      const eps_parcial_total=req.body.eps_parcial_total||null;
-      const ind_sctr=req.body.ind_sctr||null;
-      const condicional_adicional=req.body.condicional_adicional||null;
+    const { nro_documento, cod_puesto, nivel}=req.body;
 
     //se verifica si existe un contrato vigente
-    const codBanda=await salaryBandService.findSalaryBand(nivel,cod_puesto);
+    const [data]=await salaryBandService.findSalaryBand(nivel,cod_puesto);
+    const codBanda=data.cod_banda_salarial;
     const existAContract=  await contractService.isThereAContractActive(nro_documento);
     const existASolicitude= await contractSolicitudeService.isThereAPreviousSolicitude(nro_documento);
     if (existAContract.length===0){
       if(existASolicitude.length===0){
         if(codBanda.length!=0){
-          await contractSolicitudeService.createSolicitude(tipo_documento, nro_documento, nombre, ape_paterno,
-            ape_materno, fecha_nacimiento, nro_celular, correo, direccion, distrito, provincia, cod_cliente, cod_linea_negocio, cod_puesto,
-             nivel, modalidad, remuneracion, bono_men,cod_eps,eps_parcial_total, ind_sctr, fecha_inicio, fecha_fin, condicional_adicional);
+          await contractSolicitudeService.createSolicitude(req.body,codBanda);
 
            res.status(201).json({"error":false,
                                "message":"Nueva solicitud de contratación creada"});

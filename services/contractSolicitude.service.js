@@ -20,57 +20,45 @@ const userService = new UserService();
 
 class ContractSolicitudeService{
 
-  async createSolicitude(tipo_documento, nro_documento, nombre, ape_paterno,
-    ape_materno, fecha_nacimiento, nro_celular, correo, direccion, distrito,provincia, cod_cliente, cod_linea_negocio, cod_puesto,
-     nivel, modalidad, remuneracion, bono_men,cod_eps,eps_parcial_total, ind_sctr, fecha_inicio, fecha_fin, condicional_adicional){
+  async createSolicitude(body,codBanda){
 
-      //hallar el monto del eps
-      if(cod_eps!=null){
-        var monto_eps=await epsService.findAmount(cod_eps,eps_parcial_total);
-        }else{
-            monto_eps=0;
-        }
+
       //calculo del clm
-      var mod=modalidad.toLowerCase();
+      var mod=body.modalidad.toLowerCase();
       var clm;
       if(mod==="planilla"){
-        clm=(remuneracion)*process.env.FACTOR_PLANILLA+monto_eps;
+        clm=(body.remuneracion)*process.env.FACTOR_PLANILLA;
       } else if(mod==="rxh"||mod==="practicante"){
-        clm=remuneracion*process.env.FACTOR_RXH_PRACTICAS;
+        clm=body.remuneracion*process.env.FACTOR_RXH_PRACTICAS;
       }
-      if(bono_men){
-        clm+=parseFloat(bono_men);
+      if(body.bono_men){
+        clm+=parseFloat(body.bono_men);
       }
-      if(ind_sctr==='S'){
-        clm+=remuneracion*process.env.PORCENTAJE_SCTR;
-        }
-      //Se encuentra el cod_banda_salarial
-      const [codBanda]=await salaryBandService.findSalaryBand(nivel,cod_puesto);
-      const cod_banda_salarial=codBanda.cod_banda_salarial;
+      //se calcula la productividad
+      var productividad=body.tarifa_mensual/clm;
+      productividad=productividad.toFixed(2);
       //verificar si el clm está dentro de la banda salarial
-      const maximo=await salaryBandService.findMax(cod_banda_salarial);
-      if(clm<=maximo){
-        var estado="Pendiente Aprobacion";
+      const maximo=await salaryBandService.findMax(codBanda);
+      var estado;
+      if(clm<=maximo && body.cod_linea_negocio===1){//el cod_linea_negocio de ATIS es 1
+        estado="Pendiente Aprobacion";
       }else{
         estado="Pendiente Aprobacion GG";
       }
       //Se acondiciona el numero de decimales de "clm"
       clm=clm.toFixed(2);
 
-      if(bono_men){bono_men="'"+bono_men+"'";}
-      if(cod_eps){cod_eps="'"+cod_eps+"'";}
-      if(eps_parcial_total){eps_parcial_total="'"+eps_parcial_total+"'";}
-      if(ind_sctr){ind_sctr="'"+ind_sctr+"'";}
-      if(condicional_adicional){condicional_adicional="'"+condicional_adicional+"'";}
+      if(body.bono_men){body.bono_men="'"+body.bono_men+"'";}
+      if(body.condicional_adicional){body.condicional_adicional="'"+body.condicional_adicional+"'";}
 
 
-    const query=`INSERT INTO solicitud_contratacion (tipo_documento, nro_documento, nombre, ape_paterno, ape_materno,
-     fecha_nacimiento, nro_celular, correo, direccion, distrito,provincia, cod_cliente, cod_linea_negocio, cod_puesto, nivel,
-    cod_banda_salarial, modalidad, remuneracion, bono_men, cod_eps,eps_parcial_total, ind_sctr, fecha_inicio, fecha_fin, condicional_adicional,clm,estado,fecha_reg)
-    VALUES ('${tipo_documento}','${nro_documento}','${nombre}','${ape_paterno}','${ape_materno}','${fecha_nacimiento}',
-    '${nro_celular}','${correo}','${direccion}','${distrito}','${provincia}','${cod_cliente}','${cod_linea_negocio}','${cod_puesto}',
-    '${nivel}',${cod_banda_salarial},'${modalidad}','${remuneracion}',${bono_men},${cod_eps},${eps_parcial_total},${ind_sctr},'${fecha_inicio}',
-    '${fecha_fin}',${condicional_adicional},${clm},'${estado}',CURRENT_DATE);`;
+    const query=`INSERT INTO solicitud_contratacion (empresa,tipo_documento, nro_documento, nombre, ape_paterno, ape_materno,
+     fecha_nacimiento,sexo, nro_celular, correo, direccion, distrito,provincia, cod_cliente, cod_linea_negocio,condicion_proyecto_area, cod_puesto, nivel,
+    cod_banda_salarial, modalidad, remuneracion, bono_men, fecha_inicio, fecha_fin, condicional_adicional,jefe_responsable_directo,horario_laboral,asignacion_equipo,clm,tarifa_mensual,productividad,estado,fecha_reg)
+    VALUES ('${body.empresa}','${body.tipo_documento}','${body.nro_documento}','${body.nombre}','${body.ape_paterno}','${body.ape_materno}','${body.fecha_nacimiento}',
+    '${body.sexo}','${body.nro_celular}','${body.correo}','${body.direccion}','${body.distrito}','${body.provincia}','${body.cod_cliente}','${body.cod_linea_negocio}','${body.condicion_proyecto_area}','${body.cod_puesto}',
+    '${body.nivel}',${codBanda},'${body.modalidad}','${body.remuneracion}',${body.bono_men},'${body.fecha_inicio}',
+    '${body.fecha_fin}',${body.condicional_adicional},'${body.jefe_responsable_directo}','${body.horario_laboral}','${body.asignacion_equipo}',${clm},'${body.tarifa_mensual}',${productividad},'${estado}',CURRENT_DATE);`;
 
     await sequelize.query(query);
   }
