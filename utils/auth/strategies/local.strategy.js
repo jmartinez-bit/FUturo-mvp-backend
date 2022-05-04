@@ -11,23 +11,18 @@ const LocalStrategy = new Strategy({
   },
   async (email, password, done) => {
     try {
-      console.log("findByEmail");
       const user = await service.findByEmail(email);
-      console.log(!user);
-      console.log("pasamos por if");
       if (!user) {
         done(boom.unauthorized(), false);
       }
-      console.log("si existe usuario");
-      console.log(password);
-      console.log(user.password);
       const isMatch = await bcrypt.compare(password, user.password);
-      console.log(isMatch);
       if (!isMatch) {
         done(boom.unauthorized(), false);
       }
-      console.log("si hizo match");
       delete user.password;
+      delete user.cod_usuario;
+      delete user.usuario;
+      delete user.cod_perfil;
       done(null, user);
     } catch (error) {
       done(error, false);

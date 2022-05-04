@@ -12,10 +12,12 @@ router.post('/login',
     try {
       const user = req.user;
       const payload = {
-        sub: user.id,
-        role: user.role
+        sub: user.cod_usuario,
+        //id_sesion
+        //user
+        role: user.nombre_perfil
       }
-      const token = jwt.sign(payload, config.jwtSecret);
+      const token = jwt.sign(payload, config.jwtSecret, { expiresIn : '1800000' });
       res.json({
         user,
         token
