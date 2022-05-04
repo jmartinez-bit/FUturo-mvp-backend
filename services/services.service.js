@@ -240,6 +240,16 @@ class ServicesService{
     return data;
   }
 
-}
+  async findClientCod(cod_servicio){
+    const [[rta]] = await sequelize.query(`SELECT cod_cliente FROM servicio
+                                          WHERE cod_servicio=${cod_servicio};`);
+    return rta.cod_cliente;
+  }
 
+  async findServiceLineCod(cod_servicio){
+    const [[rta]] = await sequelize.query(`SELECT cod_linea_servicio FROM servicio
+                                          WHERE cod_servicio=${cod_servicio};`);
+    return rta.cod_linea_servicio;
+  }
+}
 module.exports = ServicesService;
