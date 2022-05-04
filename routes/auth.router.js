@@ -17,7 +17,6 @@ router.post('/login',
       }
       const token = jwt.sign(payload, config.jwtSecret, { expiresIn : '1800000' });
       res.json({
-        user,
         token
       });
     } catch (error) {

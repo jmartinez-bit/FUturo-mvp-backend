@@ -148,7 +148,7 @@ class ContractSolicitudeService{
     return data[0].estado;
   }
 
-  async approve(cod,indAsignFamiliar,codUsuario){
+  async approve(cod,indAsignFamiliar,usuarioReg){
     if(indAsignFamiliar==="true"){
       const [data]=await sequelize.query(`SELECT clm from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
       var clm=parseFloat(data[0].clm)+parseFloat(process.env.ASIGN_FAMILIAR);
@@ -159,7 +159,6 @@ class ContractSolicitudeService{
       SET ind_asign_familiar='N'
       WHERE cod_solicitud_contratacion=${cod}`);
     }
-    const usuarioReg=await userService.findNames(codUsuario);
     const [data]=await sequelize.query(`SELECT * from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
     await collaboratorService.createCollaboratorfromSolicitude(data[0],usuarioReg);
     const codCollaborator= await collaboratorService.findIdCollaborator(data[0].nro_documento);
