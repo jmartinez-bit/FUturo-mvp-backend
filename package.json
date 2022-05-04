@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
+    "test": "jest --verbose --silent --detectOpenHandles",
+    "test:watch": "npm run test -- --watch",
     "start": "node index.js",
     "lint": "eslint",
     "migrations:generate": "sequelize-cli migration:generate --name",
@@ -19,9 +21,11 @@
     "eslint": "^8.9.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^28.0.3",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
-    "sonarqube-scanner": "^2.8.1"
+    "sonarqube-scanner": "^2.8.1",
+    "supertest": "^6.2.3"
   },
   "dependencies": {
     "@hapi/boom": "^9.1.4",
