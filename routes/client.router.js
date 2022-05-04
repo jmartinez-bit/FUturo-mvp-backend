@@ -37,6 +37,17 @@ const clientService = new ClientService();
  *        cod_cliente: 6
  */
 
+ router.get("/",async (req, res,next) =>{
+  try{
+    const data=await clientService.findAll();
+    res.json(data);
+
+  }catch (e){
+    next(e);
+  }
+
+});
+
 // Obtener todos los clientes asignados a un dm
 /**
  * @swagger
@@ -50,7 +61,7 @@ const clientService = new ClientService();
  *        schema:
  *          type: integer
  *        required: true
- *        description: codigo de usuario con inicio de sesión (3)
+ *        description: codigo de usuario
  *    responses:
  *      200:
  *        description: lista de clientes asignados
@@ -68,27 +79,12 @@ const clientService = new ClientService();
  *              type: object
  *              $ref: '#/components/schemas/Unauthorized'
  */
- router.get("/",async (req, res,next) =>{
-  try{
-    const data=await clientService.findAll();
-    res.json(data);
-
-  }catch (e){
-    next(e);
-  }
-
-});
-
-
 router.get('/user',
 
   async (req, res, next) => {
   try {
-    const {authorization}=req.headers;
-    const auth=JSON.parse(authorization);
-    const codUsuario=auth.id_sesion;
-
-    const serviceLines = await clientService.findClientsJoinCarteraClienteByCodUsuario(codUsuario);
+    const user = req.user;
+    const serviceLines = await clientService.findClientsJoinCarteraClienteByCodUsuario(user.id_sesion);
     res.json(serviceLines);
   } catch (error) {
     next(error);

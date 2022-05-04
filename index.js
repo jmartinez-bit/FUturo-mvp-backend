@@ -28,8 +28,8 @@ const port = process.env.PORT ||3000;
 app.use(express.json());
 app.use(cors());
 
+require('./utils/auth');
 
-app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('Hola mundo');
@@ -43,6 +43,8 @@ app.use(logErrors);
 app.use(boomErrorHandler);
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDoc(swaggerSpec)));
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log('Mi port ' + port);
 });
+
+module.exports = { app, server }

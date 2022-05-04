@@ -36,7 +36,7 @@ class ServicesService{
       replacements: [data.cod_cliente,
         data.cod_linea_servicio,
         data.tipo_servicio,
-        data.descripcion_servicio.toLowerCase(),
+        data.descripcion_servicio,
         data.horas_venta,
         data.moneda,
         data.tasa_cambio,
@@ -213,6 +213,33 @@ class ServicesService{
     return rta;
   }
 
+  async getproduccion(codServicio) {
+    // Columnas
+    const select = getSelect(['servicio.cod_servicio',
+                              'servicio.fecha_ini_planificada',
+                              'servicio.fecha_fin_planificada',
+                              'servicio.fecha_ini_real',
+                              'servicio.fecha_fin_real',
+
+                              'servicio.horas_planificadas',
+                              'servicio.costo_planificada',
+                              'servicio.produccion_ejecutadas',
+                              'servicio.costo_venta',
+                              'servicio.costo_planificada - servicio.costo_venta as margen',
+                              'servicio.produccion_ejecutadas / servicio.costo_venta as productividad',
+                              'servicio.costo_venta / servicio.costo_planificada as rentabilidad',
+
+                            ]);
+
+    const query=`${ select }
+                WHERE servicio.cod_servicio = ${ codServicio };`;
+    
+    query = query + ""
+    const [[data]] = await sequelize.query(query);
+
+    return data;
+  }
+
   async findClientCod(cod_servicio){
     const [[rta]] = await sequelize.query(`SELECT cod_cliente FROM servicio
                                           WHERE cod_servicio=${cod_servicio};`);
@@ -224,7 +251,5 @@ class ServicesService{
                                           WHERE cod_servicio=${cod_servicio};`);
     return rta.cod_linea_servicio;
   }
-
 }
-
 module.exports = ServicesService;

@@ -1,6 +1,8 @@
 const express = require('express');
+const passport = require('passport');
 const ServicesService = require('./../services/services.service');
 const validatorHandler = require('./../middlewares/validator.handler');
+const { checkRoles  }  = require('./../middlewares/auth.handler');
 const { createServiceSchema, updateServiceSchema, getServiceSchema } = require('./../schemas/service.schema');
 
 
@@ -310,8 +312,11 @@ router.post("/cartera",async (req, res,next) =>{
 });
 
 //Obtener los servicios de un DM.
-router.post("/get",async (req, res,next) =>{
+router.post("/get",
+  checkRoles('DELIVERY_MANAGER', 'GERENTE_DE_OPERACIONES'),
+  async (req, res,next) =>{
   try{
+    console.log("autorizado")
     const cod_cliente=req.body.cod_cliente;
     const cod_linea_negocio=req.body.cod_linea_negocio||null;
     const estado=req.body.estado||null;
@@ -321,5 +326,18 @@ router.post("/get",async (req, res,next) =>{
     next(e);
   }
 });
+
+//Obtener los atributos de un Servicio.
+router.get('/getproduccion:cod_Servicio',
+  validatorHandler(getServiceSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { codServicio } = req.params;
+      res.json(await service.getproduccion(codServicio));
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;
