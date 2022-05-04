@@ -50,9 +50,9 @@ class ContractSolicitudeService{
       //Se acondiciona el numero de decimales de "clm"
       clm=clm.toFixed(2);
 
-      if(body.bono_men){body.bono_men="'"+body.bono_men+"'";}
-      if(body.condicional_adicional){body.condicional_adicional="'"+body.condicional_adicional+"'";}
-      if(body.cv){body.cv="'"+body.cv+"'";}
+      if(body.bono_men){body.bono_men="'"+body.bono_men+"'";}else{body.bono_men=null;}
+      if(body.condicional_adicional){body.condicional_adicional="'"+body.condicional_adicional+"'";}else{body.condicional_adicional=null;}
+      if(body.cv){body.cv="'"+body.cv+"'";}else{body.cv=null;}
 
 
     const query=`INSERT INTO solicitud_contratacion (empresa,tipo_documento, nro_documento, nombre, ape_paterno, ape_materno,

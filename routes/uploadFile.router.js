@@ -7,6 +7,7 @@ const router = express.Router();
 
 
 router.post("/",function (req, res) {
+  console.log(req.headers);
   upload.single("myFile")(req, res, function (err) {
     if (err instanceof multer.MulterError) {
       res.send({ error: true,message:err.message });
