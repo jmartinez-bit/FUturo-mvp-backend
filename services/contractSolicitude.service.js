@@ -76,9 +76,9 @@ class ContractSolicitudeService{
   }
 
   async findBy(body){
-    var query=`SELECT cod_solicitud_contratacion,solicitud_contratacion.fecha_reg,cliente.nombre_corto,cod_linea_negocio,puesto.puesto,nivel,nro_documento,
-    CONCAT(nombre,' ',ape_paterno,' ',ape_materno) AS nombre_apellidos,modalidad,remuneracion,bono_men,cod_eps,
-    ind_sctr,solicitud_contratacion.estado,fecha_aprob,ind_aprobacion_gg,fecha_aprob_gg
+    var query=`SELECT cod_solicitud_contratacion,solicitud_contratacion.fecha_reg,cliente.nombre_corto,
+    cod_linea_negocio,puesto.puesto,nivel,nro_documento,CONCAT(nombre,' ',ape_paterno,' ',ape_materno) AS nombre_apellidos,
+    modalidad,remuneracion,bono_men,solicitud_contratacion.estado,fecha_aprob,ind_aprobacion_gg,fecha_aprob_gg
     FROM solicitud_contratacion
     INNER JOIN cliente ON solicitud_contratacion.cod_cliente=cliente.cod_cliente
     INNER JOIN puesto ON solicitud_contratacion.cod_puesto=puesto.cod_puesto `;
@@ -109,27 +109,13 @@ class ContractSolicitudeService{
   async findOne(cod){
     const query1=`SELECT cod_solicitud_contratacion,tipo_documento,nro_documento,nombre,ape_paterno,ape_materno,fecha_nacimiento,
               nro_celular,correo,direccion,distrito,provincia,nombre_corto,cod_linea_negocio,solicitud_contratacion.cod_puesto,
-              puesto,nivel,cod_banda_salarial,modalidad,remuneracion,bono_men,cod_eps,
-              eps_parcial_total, ind_sctr,ind_asign_familiar,fecha_inicio,fecha_fin,condicional_adicional,solicitud_contratacion.estado
+              puesto,nivel,cod_banda_salarial,modalidad,remuneracion,bono_men,ind_asign_familiar,fecha_inicio,fecha_fin,condicional_adicional,solicitud_contratacion.estado
                  FROM solicitud_contratacion
                  INNER JOIN cliente ON solicitud_contratacion.cod_cliente=cliente.cod_cliente
                  INNER JOIN puesto ON solicitud_contratacion.cod_puesto=puesto.cod_puesto
                  WHERE cod_solicitud_contratacion=${cod} ;`;
-    var [data1] = await sequelize.query(query1);
-    const codEps=data1[0].cod_eps;
-  //Se verifica si el campo cod_eps está lleno
-    if(codEps){
-    const query2=`SELECT plan_eps FROM eps
-                  WHERE cod_eps=${codEps} ;`;
-    const [data2] = await sequelize.query(query2);
-  //Se añade el campo plan_eps
-    data1=[{
-      ...data1[0],
-      ...data2[0]
-    }]
-  }
-
-    return data1;
+    const [data] = await sequelize.query(query1);
+    return data;
   }
 
   async findState(cod){
