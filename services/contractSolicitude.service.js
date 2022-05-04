@@ -52,15 +52,16 @@ class ContractSolicitudeService{
 
       if(body.bono_men){body.bono_men="'"+body.bono_men+"'";}
       if(body.condicional_adicional){body.condicional_adicional="'"+body.condicional_adicional+"'";}
+      if(body.cv){body.cv="'"+body.cv+"'";}
 
 
     const query=`INSERT INTO solicitud_contratacion (empresa,tipo_documento, nro_documento, nombre, ape_paterno, ape_materno,
      fecha_nacimiento,sexo, nro_celular, correo, direccion, distrito,provincia, cod_cliente, cod_linea_negocio,condicion_proyecto_area, cod_puesto, nivel,
-    cod_banda_salarial, modalidad, remuneracion, bono_men, fecha_inicio, fecha_fin, condicional_adicional,jefe_responsable_directo,horario_laboral,asignacion_equipo,clm,tarifa_mensual,productividad,estado,fecha_reg)
+    cod_banda_salarial, modalidad, remuneracion, bono_men, fecha_inicio, fecha_fin, condicional_adicional,jefe_responsable_directo,horario_laboral,asignacion_equipo,clm,tarifa_mensual,productividad,cv,estado,fecha_reg)
     VALUES ('${body.empresa}','${body.tipo_documento}','${body.nro_documento}','${body.nombre}','${body.ape_paterno}','${body.ape_materno}','${body.fecha_nacimiento}',
     '${body.sexo}','${body.nro_celular}','${body.correo}','${body.direccion}','${body.distrito}','${body.provincia}','${body.cod_cliente}','${body.cod_linea_negocio}','${body.condicion_proyecto_area}','${body.cod_puesto}',
     '${body.nivel}',${codBanda},'${body.modalidad}','${body.remuneracion}',${body.bono_men},'${body.fecha_inicio}',
-    '${body.fecha_fin}',${body.condicional_adicional},'${body.jefe_responsable_directo}','${body.horario_laboral}','${body.asignacion_equipo}',${clm},'${body.tarifa_mensual}',${productividad},'${estado}',CURRENT_DATE);`;
+    '${body.fecha_fin}',${body.condicional_adicional},'${body.jefe_responsable_directo}','${body.horario_laboral}','${body.asignacion_equipo}',${clm},'${body.tarifa_mensual}',${productividad},${body.cv},'${estado}',CURRENT_DATE);`;
 
     await sequelize.query(query);
   }

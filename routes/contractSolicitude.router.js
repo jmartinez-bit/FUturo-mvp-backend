@@ -2,7 +2,6 @@ const express = require('express');
 const ContractSolicitudeService = require('../services/contractSolicitude.service');
 const ContractService = require('../services/contract.service');
 const SalaryBandService = require('../services/salaryBand.service');
-const { upload } = require("./middlewares/error.handler");
 
 
 
@@ -14,7 +13,7 @@ const salaryBandService = new SalaryBandService();
 
 
 
-router.post("/newSolicitude",upload.single("myFile"),async (req, res,next) =>{
+router.post("/newSolicitude",async (req, res,next) =>{
   try{
     //obligatorios
     const { nro_documento, cod_puesto, nivel}=req.body;

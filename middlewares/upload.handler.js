@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
     cb(null, `${fileName}.${ext}`); //TODO 123123213232.pdf
   },
   destination: function (res, file, cb) {
-    cb(null, `../public`);
+    cb(null, `./public`);
   },
 });
 

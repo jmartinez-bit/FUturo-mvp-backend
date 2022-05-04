@@ -14,6 +14,7 @@ const epsRouter = require('./eps.router');
 const assignedHoursRouter = require('./assignedHours.router');
 const assignmentsRouter = require('./assignments.router');
 const parameterRouter = require('./parameter.router');
+const uploadFileRouter = require('./uploadFile.router');
 
 
 const express = require('express');
@@ -38,6 +39,7 @@ function routerApi(app) {
   router.use('/assignedHours', assignedHoursRouter);
   router.use('/assignments', assignmentsRouter);
   router.use('/parameter', parameterRouter);
+  router.use('/uploadFile', uploadFileRouter);
 
 }
 
