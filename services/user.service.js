@@ -1,28 +1,11 @@
 const sequelize = require('../libs/sequelize');
-const bcrypt = require('bcrypt');
 
 class UserService{
 
-  async findNames(cod_usuario){
-    const query=`SELECT nombres_apellidos FROM usuario WHERE cod_usuario=${cod_usuario}; `;
+  async findUsername(cod_usuario){
+    const query=`SELECT usuario FROM usuario WHERE cod_usuario=${cod_usuario}; `;
     const [[data]] = await sequelize.query(query);
-     return data.nombres_apellidos;
-  }
-
-  async created(){
-    const query=`SELECT nombres_apellidos FROM usuario WHERE cod_usuario=${cod_usuario}; `;
-    const [[data]] = await sequelize.query(query);
-     return data.nombres_apellidos;
-  }
-
-  async create(data) {
-    const hash = await bcrypt.hash(data.password, 10);
-    const newUser = await models.User.create({
-      ...data,
-      password: hash
-    });
-    delete newUser.dataValues.password;
-    return newUser;
+     return data.usuario;
   }
 
   async findByEmail(email) {

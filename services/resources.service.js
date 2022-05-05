@@ -1,8 +1,12 @@
 const sequelize = require('../libs/sequelize');
+const { QueryTypes } = require('sequelize');
 
-
-function getSelect(attributes = '*') {
+const getSelect = (attributes = '*') => {
   return `SELECT ${ attributes.toString() } FROM mapa_recursos`;
+};
+
+const getInsert = (attributes = '*') => {
+  return `INSERT INTO mapa_recursos(${ attributes.toString() })`;
 };
 
 class ResourcesService{
@@ -168,6 +172,22 @@ class ResourcesService{
     const query=`INSERT INTO mapa_recursos (periodo, cod_cliente, linea_negocio, cod_colaborador, perfil, nivel, clm, estado)
       VALUES ('${data[0].periodo}',${d.cod_cliente},'${d.cod_linea_negocio}',${codColaborador},${d.cod_puesto},'${d.nivel}','${d.clm}','A');`;
     await sequelize.query(query);
+  }
+
+  async createCopyResources(periodo, periodoInactivo) {
+    const fields = [
+      'periodo', 'cod_cliente', 'linea_negocio', 'asignacion', 'cod_colaborador', 'box', 'perfil', 'nivel', 'fecha_inicio', 'fecha_fin', 'fecha_cese', 'fecha_fin_contrato', 'horas_servicio', 'licencias', 'faltas', 'inicio_vacaciones', 'fin_vacaciones', 'vacaciones', 'horas_extras', 'produccion_horas_extras', 'total_horas_asignaciones', 'total_horas_facturables', 'eficiencia', 'rendimiento', 'capacity', 'clm', 'costo_asignacion', 'clm_efectivo', 'produccion', 'productividad', 'estado'
+    ];
+
+    const query = `${ getInsert(fields) }
+              ${ getSelect([ "'" + periodo + "'", ...fields.slice(1)]) }
+              WHERE estado = 'A' AND periodo = '${ periodoInactivo }' RETURNING *;`;
+
+    const [ copyResources ] = await sequelize.query(query, {
+      type: QueryTypes.INSERT
+    });
+
+    return copyResources;
   }
 }
 

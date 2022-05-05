@@ -47,7 +47,7 @@ const serviceTypesService = new ServiceTypeService();
  *            schema:
  *              type: array
  *              items:
- *                $ref: '#/components/schemas/Client'
+ *                $ref: '#/components/schemas/ServiceType'
  */
 router.get('/service-line/:codLineaServicio', async (req, res, next) => {
   try {

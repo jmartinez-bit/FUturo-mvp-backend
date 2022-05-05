@@ -36,7 +36,7 @@ class ServicesService{
       replacements: [data.cod_cliente,
         data.cod_linea_servicio,
         data.tipo_servicio,
-        data.descripcion_servicio.toLowerCase(),
+        data.descripcion_servicio,
         data.horas_venta,
         data.moneda,
         data.tasa_cambio,
@@ -231,9 +231,9 @@ class ServicesService{
 
                             ]);
 
-    const query=`${ select }
+    let query=`${ select }
                 WHERE servicio.cod_servicio = ${ codServicio };`;
-    
+
     query = query + ""
     const [[data]] = await sequelize.query(query);
 

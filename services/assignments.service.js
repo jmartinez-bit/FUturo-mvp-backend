@@ -82,19 +82,13 @@ class AssignmentsService{
        porc+=element.modificador_porcentaje;
        porcentajes.push(porc);//el array porcentaje tendrá los acumulados
     })
-    //console.log(sortedFechas);
-    //console.log(porcentajes);
 
     var indexIni = sortedFechas.findIndex(a=> a.ind == "INI");
     var indexFin = sortedFechas.findIndex(a=> a.ind == "FIN");
-    //console.log(indexIni);
-    //console.log(indexFin);
-    porcentajes=porcentajes.slice(indexIni+1, indexFin+1)
-    //console.log(porcentajes);
 
-    var max = Math.max(...porcentajes);
+    porcentajes=porcentajes.slice(indexIni+1, indexFin+1);
 
-    return max;
+    return Math.max(...porcentajes);
   }
 
   async validateCrosses(fechaIni, fechaFin, codColab,codServ,cod_asignacion) {
@@ -103,8 +97,9 @@ class AssignmentsService{
                                       AND (    (fecha_inicio<=to_date('${ fechaIni }', 'YYYY-MM-DD') AND fecha_fin>=to_date('${ fechaIni }', 'YYYY-MM-DD'))
                                             OR (fecha_inicio<=to_date('${ fechaFin }', 'YYYY-MM-DD') AND fecha_fin>=to_date('${ fechaFin }', 'YYYY-MM-DD'))
                                           ); `);
+    var rta;
     if(parseFloat(data.count)===0){
-    var  rta={"error":false,"message":"Las fechas de asignacion son validas"};
+         rta={"error":false,"message":"Las fechas de asignacion son validas"};
     }else{
          rta={"error":true,"message":"Las fechas de asignacion se cruzan con asignaciones del mismo colaborador en el mismo servicio"};
     }
@@ -178,11 +173,7 @@ class AssignmentsService{
 
 async validatePercentage(fechaIni, fechaFin, codColab,percent,cod_asignacion) {
   const max=await this.maxAccumulatedAssignedPercentageInAnInterval(fechaIni, fechaFin, codColab,cod_asignacion);
-  if(percent>100-max){
-    return false;
-  }else{
-    return true;
-  }
+  return (percent<=100-max);
 }
 
 async sumPlannedProductions(codServ, codAsignacion) {
@@ -200,8 +191,7 @@ async saleValue(codServ) {
 async validatesumPlannedProductions(codServ, codAsignacion,prodPlanificada) {
   const sum= await this.sumPlannedProductions(codServ, codAsignacion);
   const saleValue=await this.saleValue(codServ);
-  const rta=(((sum+prodPlanificada)>saleValue)?true:false);
-  return rta;
+  return (sum+prodPlanificada)>saleValue;
 }
 
 async createAssingment(d,prodPlanificada,codUsuario){
@@ -212,8 +202,7 @@ async createAssingment(d,prodPlanificada,codUsuario){
                VALUES (${cod_servicio},${cod_colaborador},'${percent}','${fecha_ini}','${fecha_fin}','${horas_asignadas}',
                ${cod_puesto},'${nivel}','${tarifa}','${prodPlanificada}',CURRENT_DATE,'${usuarioReg}');`;
   await sequelize.query(query);
-  const rta={"error":false,"message":"Se creo asignación satisfactoriamente"};
-  return rta;
+  return {"error":false,"message":"Se creo asignación satisfactoriamente"};
 }
 
 async updateStartDateOnResourcesMap(codColab,codServ,codCliente,codLinServ,periodo){
@@ -288,8 +277,7 @@ async updateEndDateOnResourcesMap(codColab,codServ,codCliente,codLinServ,periodo
               usuario_act='${usuarioReg}'
               WHERE cod_asignacion=${cod_asignacion};`
   await sequelize.query(query);
-  const rta={"error":false,"message":"Se edito asignación satisfactoriamente"};
-  return rta;
+  return {"error":false,"message":"Se edito asignación satisfactoriamente"};
  }
 
  async findCollaboratorCodAndClientCod(cod_asignacion){
