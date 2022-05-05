@@ -151,10 +151,14 @@ class ContractSolicitudeService{
 
   }
 
-  async reject(cod){
-    const query=`UPDATE solicitud_contratacion
-                 SET estado='Rechazado',fecha_rechaz=CURRENT_DATE
-                 WHERE cod_solicitud_contratacion=${cod}`;
+  async reject(cod,body){
+    var query=`UPDATE solicitud_contratacion
+                 SET estado='Rechazado',`
+    if(body.motivo_rechazo){
+      query+=`motivo_rechazo='${body.motivo_rechazo}',`;
+    }
+      query+= `fecha_rechaz=CURRENT_DATE
+              WHERE cod_solicitud_contratacion=${cod}`;
     await sequelize.query(query);
   }
 
