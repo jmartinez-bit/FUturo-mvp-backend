@@ -28,12 +28,14 @@ describe('GET /api/v1/clients/user', () => {
 
     expect(response.body).toEqual(expect.arrayContaining([]));
     if (response.body.length > 0) {
-      expect(response.body[0]).toEqual(
-        expect.objectContaining({
-          nombre_corto: expect.any(String),
-          cod_cliente: expect.any(Number),
-        })
-      );
+      response.body.map(res => {
+        expect(res).toEqual(
+          expect.objectContaining({
+            nombre_corto: expect.any(String),
+            cod_cliente: expect.any(Number),
+          })
+        );
+      });
     }
   });
 });
