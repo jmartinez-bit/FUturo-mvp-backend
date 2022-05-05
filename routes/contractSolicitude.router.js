@@ -5,6 +5,7 @@ const SalaryBandService = require('../services/salaryBand.service');
 
 
 
+
 const router = express.Router();
 const contractService = new ContractService();
 const contractSolicitudeService = new ContractSolicitudeService();
@@ -124,6 +125,18 @@ router.get("/approvegg/:cod",async (req, res,next) =>{
       res.status(200).json({"error":false,
                           "message":"Se cambió el estado a Pendiente Aprobacion"});
     }
+
+  }catch (e){
+    next(e);
+  }
+
+});
+
+router.post("/edit/:cod",async (req, res,next) =>{
+  try{
+    const {cod}=req.params;
+    const data=await contractSolicitudeService.editSolicitude(cod,req.body);
+    res.json(data);
 
   }catch (e){
     next(e);

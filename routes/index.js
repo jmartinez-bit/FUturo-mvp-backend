@@ -16,6 +16,9 @@ const epsRouter = require('./eps.router');
 const assignedHoursRouter = require('./assignedHours.router');
 const assignmentsRouter = require('./assignments.router');
 const authRouter  = require('./auth.router');
+const parameterRouter = require('./parameter.router');
+const uploadFileRouter = require('./uploadFile.router');
+
 
 const express = require('express');
 
@@ -39,6 +42,8 @@ function routerApi(app) {
   router.use('/assignedHours', passport.authenticate('jwt', {session: false}), assignedHoursRouter);
   router.use('/assignments', passport.authenticate('jwt', {session: false}), assignmentsRouter);
   router.use('/auth', authRouter);
+  router.use('/parameter', parameterRouter);
+  router.use('/uploadFile', uploadFileRouter);
 }
 
 module.exports = routerApi;
