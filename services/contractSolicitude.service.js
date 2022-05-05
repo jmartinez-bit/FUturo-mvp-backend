@@ -107,9 +107,10 @@ class ContractSolicitudeService{
   }
 
   async findOne(cod){
-    const query1=`SELECT cod_solicitud_contratacion,tipo_documento,nro_documento,nombre,ape_paterno,ape_materno,fecha_nacimiento,
+    const query1=`SELECT cod_solicitud_contratacion,empresa,tipo_documento,nro_documento,nombre,ape_paterno,ape_materno,fecha_nacimiento,sexo,
               nro_celular,correo,direccion,distrito,provincia,nombre_corto,cod_linea_negocio,solicitud_contratacion.cod_puesto,
-              puesto,nivel,cod_banda_salarial,modalidad,remuneracion,bono_men,ind_asign_familiar,fecha_inicio,fecha_fin,condicional_adicional,solicitud_contratacion.estado
+              puesto,nivel,cod_banda_salarial,modalidad,remuneracion,bono_men,ind_asign_familiar,fecha_inicio,fecha_fin,condicional_adicional,solicitud_contratacion.estado,
+              condicion_proyecto_area,tarifa_mensual,productividad,jefe_responsable_directo,horario_laboral,asignacion_equipo,cv,motivo_rechazo
                  FROM solicitud_contratacion
                  INNER JOIN cliente ON solicitud_contratacion.cod_cliente=cliente.cod_cliente
                  INNER JOIN puesto ON solicitud_contratacion.cod_puesto=puesto.cod_puesto
@@ -150,10 +151,14 @@ class ContractSolicitudeService{
 
   }
 
-  async reject(cod){
-    const query=`UPDATE solicitud_contratacion
-                 SET estado='Rechazado',fecha_rechaz=CURRENT_DATE
-                 WHERE cod_solicitud_contratacion=${cod}`;
+  async reject(cod,body){
+    var query=`UPDATE solicitud_contratacion
+                 SET estado='Rechazado',`
+    if(body.motivo_rechazo){
+      query+=`motivo_rechazo='${body.motivo_rechazo}',`;
+    }
+      query+= `fecha_rechaz=CURRENT_DATE
+              WHERE cod_solicitud_contratacion=${cod}`;
     await sequelize.query(query);
   }
 

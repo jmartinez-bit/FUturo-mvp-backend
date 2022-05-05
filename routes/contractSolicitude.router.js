@@ -94,7 +94,7 @@ router.get("/approve/:cod/:indAsignFamiliar",async (req, res,next) =>{
 
 });
 
-router.get("/reject/:cod",async (req, res,next) =>{
+router.post("/reject/:cod",async (req, res,next) =>{
   try{
     const {cod}=req.params;
     const estado=await contractSolicitudeService.findState(cod);
@@ -102,7 +102,7 @@ router.get("/reject/:cod",async (req, res,next) =>{
       res.status(409).json({"error":false,
       "message":"A esta solicitud ya se le asigno el estado "+estado});
     }else{
-      await contractSolicitudeService.reject(cod);
+      await contractSolicitudeService.reject(cod,req.body);
       res.status(200).json({"error":false,
                           "message":"Se cambió el estado a Rechazado"});
     }
