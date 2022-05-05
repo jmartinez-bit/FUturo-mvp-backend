@@ -171,6 +171,55 @@ class ContractSolicitudeService{
     await sequelize.query(query);
   }
 
+  async editSolicitude(cod,body){
+    var query=`UPDATE solicitud_contratacion
+                 SET `;
+    if(body.empresa){
+      query+=`empresa='${body.empresa}',`;
+    }
+    if(body.tipo_documento){
+      query+=`tipo_documento='${body.tipo_documento}',`;
+    }
+    if(body.nro_documento){
+      query+=`nro_documento='${body.nro_documento}',`;
+    }
+    if(body.nombre){
+      query+=`nombre='${body.nombre}',`;
+    }
+    if(body.ape_paterno){
+      query+=`ape_paterno='${body.ape_paterno}',`;
+    }
+    if(body.ape_materno){
+      query+=`ape_materno='${body.ape_materno}',`;
+    }
+    if(body.fecha_nacimiento){
+      query+=`fecha_nacimiento='${body.fecha_nacimiento}',`;
+    }
+    if(body.sexo){
+      query+=`sexo='${body.sexo}',`;
+    }
+    if(body.nro_celular){
+      query+=`nro_celular='${body.nro_celular}',`;
+    }
+    if(body.correo){
+      query+=`correo='${body.correo}',`;
+    }
+    if(body.direccion){
+      query+=`direccion='${body.direccion}',`;
+    }
+    if(body.distrito){
+      query+=`distrito='${body.distrito}',`;
+    }
+    if(body.direccion){
+      query+=`provincia='${body.provincia}',`;
+    }
+      query = query.substring(0, query.length - 1);
+      query+=` WHERE cod_solicitud_contratacion=${cod};`;
+
+    await sequelize.query(query);
+    return {"error":false,"message":"Se edito con éxito la solicitud de contratación"};
+  }
+
 }
 
 module.exports = ContractSolicitudeService;

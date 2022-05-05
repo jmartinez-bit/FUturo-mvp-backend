@@ -134,4 +134,16 @@ router.get("/approvegg/:cod",async (req, res,next) =>{
 
 });
 
+router.post("/edit/:cod",async (req, res,next) =>{
+  try{
+    const {cod}=req.params;
+    const data=await contractSolicitudeService.editSolicitude(cod,req.body);
+    res.json(data);
+
+  }catch (e){
+    next(e);
+  }
+
+});
+
 module.exports = router;
