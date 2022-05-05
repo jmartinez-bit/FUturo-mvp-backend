@@ -1,5 +1,4 @@
 const express = require('express');
-const passport = require('passport');
 const ServicesService = require('./../services/services.service');
 const validatorHandler = require('./../middlewares/validator.handler');
 const { checkRoles  }  = require('./../middlewares/auth.handler');
@@ -316,7 +315,6 @@ router.post("/get",
   checkRoles('DELIVERY_MANAGER', 'GERENTE_DE_OPERACIONES'),
   async (req, res,next) =>{
   try{
-    console.log("autorizado")
     const cod_cliente=req.body.cod_cliente;
     const cod_linea_negocio=req.body.cod_linea_negocio||null;
     const estado=req.body.estado||null;
