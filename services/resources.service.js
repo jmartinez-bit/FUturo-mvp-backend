@@ -30,7 +30,7 @@ class ResourcesService{
       nombres=nombres.toLowerCase();
       query+=" AND lower(CONCAT(nombres,' ',apellido_pat,' ',apellido_mat)) like '%"+nombres+"%'";
     }
-    query+=" ;";
+    query+=" ORDER BY cod_mapa_recurso DESC;";
     const [data] = await sequelize.query(query);
     return data;
   }
