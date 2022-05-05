@@ -231,9 +231,9 @@ class ServicesService{
 
                             ]);
 
-    const query=`${ select }
+    let query=`${ select }
                 WHERE servicio.cod_servicio = ${ codServicio };`;
-    
+
     query = query + ""
     const [[data]] = await sequelize.query(query);
 

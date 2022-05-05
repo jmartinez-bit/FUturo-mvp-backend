@@ -1,6 +1,5 @@
 const sequelize = require('../libs/sequelize');
 const SalaryBandService = require('../services/salaryBand.service');
-const EpsService = require('../services/eps.service');
 const CollaboratorService = require('../services/collaborator.service');
 const ContractService = require('../services/contract.service');
 const ResourcesService = require('../services/resources.service');
@@ -10,7 +9,6 @@ const UserService = require('../services/user.service');
 
 
 const salaryBandService = new SalaryBandService();
-const epsService = new EpsService();
 const collaboratorService = new CollaboratorService();
 const contractService = new ContractService();
 const resourcesService = new ResourcesService();
@@ -136,7 +134,7 @@ class ContractSolicitudeService{
     return data[0].estado;
   }
 
-  async approve(cod,indAsignFamiliar,usuarioReg){
+  async approve(cod,indAsignFamiliar,codUsuario){
     if(indAsignFamiliar==="true"){
       const [data]=await sequelize.query(`SELECT clm from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
       var clm=parseFloat(data[0].clm)+parseFloat(process.env.ASIGN_FAMILIAR);
@@ -147,6 +145,7 @@ class ContractSolicitudeService{
       SET ind_asign_familiar='N'
       WHERE cod_solicitud_contratacion=${cod}`);
     }
+    const usuarioReg=await userService.findUsername(codUsuario);
     const [data]=await sequelize.query(`SELECT * from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
     await collaboratorService.createCollaboratorfromSolicitude(data[0],usuarioReg);
     const codCollaborator= await collaboratorService.findIdCollaborator(data[0].nro_documento);
