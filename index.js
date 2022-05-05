@@ -2,7 +2,6 @@ const express = require('express');
 const routerApi = require("./routes");
 const { logErrors, boomErrorHandler } = require("./middlewares/error.handler");
 const cors = require('cors');
-const { checkApikey } = require('./middlewares/auth.handler')
 
 // swagger
 const swaggerUI = require("swagger-ui-express");
@@ -30,6 +29,8 @@ app.use(express.json());
 app.use(cors());
 
 require('./utils/auth');
+app.use(express.static("./public"));
+
 
 app.get('/', (req, res) => {
   res.send('Hola mundo');
@@ -43,6 +44,8 @@ app.use(logErrors);
 app.use(boomErrorHandler);
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDoc(swaggerSpec)));
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log('Mi port ' + port);
 });
+
+module.exports = { app, server }

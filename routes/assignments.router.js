@@ -58,8 +58,8 @@ router.post("/createOrEditAssignment",async (req, res,next) =>{
     }
     await sequelize.query(`COMMIT;`);//FIN DE LA TRANSACCIÓN
     res.json(rta);
-  }catch (e){
-    next(e);
+  }catch (er){
+    next(er);
   }
 
 });
