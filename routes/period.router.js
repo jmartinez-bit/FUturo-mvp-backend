@@ -1,5 +1,6 @@
 const express = require('express');
 const validatorHandler = require('../middlewares/validator.handler');
+const { checkRoles  }  = require('./../middlewares/auth.handler');
 const { createPeriodSchema, updatePeriodSchema } = require('../schemas/period.schema');
 const PeriodService = require('./../services/period.service');
 
@@ -169,6 +170,7 @@ router.put('/update',
  *              $ref: '#/components/schemas/GetPeriods'
  */
 router.get('/',
+  checkRoles('JEFE_DE_RECURSOS_HUMANOS', 'ANALISTA_DE_RECURSOS_HUMANOS'),
   async (req, res, next) => {
   try {
     res.json(await periodService.getAll());
