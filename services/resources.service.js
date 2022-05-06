@@ -1,3 +1,4 @@
+const boom = require('@hapi/boom');
 const sequelize = require('../libs/sequelize');
 const { QueryTypes } = require('sequelize');
 
@@ -85,6 +86,10 @@ class ResourcesService{
     const query = `${ select } WHERE mapa_recursos.cod_mapa_recurso=${ id };`;
 
     const [[data]] = await sequelize.query(query);
+
+    if (!data) {
+      throw boom.notFound('resource not found');
+    }
 
     return data;
   }

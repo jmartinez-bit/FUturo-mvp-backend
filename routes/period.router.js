@@ -114,6 +114,7 @@ router.get('/last-period', async (req, res, next) => {
  *              $ref: '#/components/schemas/Unauthorized'
  */
 router.post('/create',
+  checkRoles('JEFE_DE_RECURSOS_HUMANOS', 'ANALISTA_RECURSOS_HUMANOS'),
   validatorHandler(createPeriodSchema, 'body'),
   async (req, res, next) => {
   try {
@@ -143,6 +144,7 @@ router.post('/create',
  *        description: periodo actualizado
  */
 router.put('/update',
+  checkRoles('JEFE_DE_RECURSOS_HUMANOS', 'ANALISTA_RECURSOS_HUMANOS'),
   validatorHandler(updatePeriodSchema, 'body'),
   async (req, res, next) => {
   try {
@@ -170,7 +172,7 @@ router.put('/update',
  *              $ref: '#/components/schemas/GetPeriods'
  */
 router.get('/',
-  checkRoles('JEFE_DE_RECURSOS_HUMANOS', 'ANALISTA_DE_RECURSOS_HUMANOS'),
+  checkRoles('JEFE_DE_RECURSOS_HUMANOS', 'ANALISTA_RECURSOS_HUMANOS'),
   async (req, res, next) => {
   try {
     res.json(await periodService.getAll());
