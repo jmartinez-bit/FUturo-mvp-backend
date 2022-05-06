@@ -15,7 +15,7 @@ class ClientService{
 
     // Sentencia
     const [data] = await sequelize.query(`${ select } ${ joinCarteraCliente }
-                                          WHERE cartera_cliente.cod_usuario = ${ codUsuario };`);
+                                          WHERE cartera_cliente.cod_usuario = ${ codUsuario } AND estado='A';`);
 
     return data;
   }

@@ -32,7 +32,7 @@ beforeAll(async () => {
 });
 
 describe('GET /api/v1/period', () => {
-  test('deberia obtener el listado de periodos (los ultimos 6 periodos)', async () => {
+  test('deberia obtener el listado de periodos', async () => {
     const response = await request(app)
       .get('/api/v1/period')
       .set('authorization', auth.token)
@@ -40,7 +40,6 @@ describe('GET /api/v1/period', () => {
       .expect(200);
 
     expect(response.body).toEqual(expect.arrayContaining([]));
-    expect(response.body.length).toBeLessThanOrEqual(6);
     if (response.body.length > 0) {
       response.body.map((res) => {
         expect(res).toEqual(

@@ -94,7 +94,7 @@ class PeriodService{
 
     // Sentencia
     const [data] = await sequelize.query(`${ select }
-                    ORDER BY fecha_reg DESC LIMIT 6;`);
+                    ORDER BY fecha_reg DESC;`);
 
     return data;
   }
