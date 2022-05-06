@@ -68,10 +68,18 @@ class ResourcesService{
   }
 
   async findClients(idDM){
-    const query="SELECT cartera_cliente.cod_cliente,nombre_corto FROM cliente "+
-                "INNER JOIN cartera_cliente ON cliente.cod_cliente=cartera_cliente.cod_cliente "+
-                "WHERE cod_usuario="+idDM+" AND cartera_cliente.estado='A' ;";
-    const [data] = await sequelize.query(query);
+    var query=`SELECT nombre_perfil FROM usuario
+              INNER JOIN perfil ON usuario.cod_perfil=perfil.cod_perfil
+              WHERE cod_usuario=${idDM} ;`;
+    var [data]=await sequelize.query(query);
+    if(data.nombre_perfil==='Delivery Manager'){
+      query="SELECT cartera_cliente.cod_cliente,nombre_corto FROM cliente "+
+      "INNER JOIN cartera_cliente ON cliente.cod_cliente=cartera_cliente.cod_cliente "+
+      "WHERE cod_usuario="+idDM+" AND cartera_cliente.estado='A' ;";
+    }else{
+      query="SELECT cod_cliente,nombre_corto FROM cliente WHERE estado='A' ORDER BY nombre_corto ASC;";
+    }
+     [data] = await sequelize.query(query);
      return data;
   }
 
