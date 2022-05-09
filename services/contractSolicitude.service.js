@@ -42,7 +42,7 @@ class ContractSolicitudeService{
       //verificar si el clm está dentro de la banda salarial
       const maximo=await salaryBandService.findMax(codBanda);
       var estado;
-      if(clm<=maximo && body.cod_linea_negocio==1){//el cod_linea_negocio de ATIS es 1
+      if(clm<=maximo && body.cod_linea_negocio=="ATIS"){//el cod_linea_negocio de ATIS es 1
         estado="Pendiente Aprobacion";
       }else{
         estado="Pendiente Aprobacion GG";
