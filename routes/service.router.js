@@ -312,7 +312,7 @@ router.post("/cartera",async (req, res,next) =>{
 
 //Obtener los servicios de un DM.
 router.post("/get",
-  checkRoles('DELIVERY_MANAGER', 'GERENTE_DE_OPERACIONES'),
+  checkRoles('DELIVERY_MANAGER', 'JEFE_DE_PROYECTOS'),
   async (req, res,next) =>{
   try{
     const cod_cliente=req.body.cod_cliente;

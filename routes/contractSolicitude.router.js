@@ -121,7 +121,7 @@ router.get("/reject/:cod",async (req, res,next) =>{
       res.status(409).json({"error":false,
       "message":"A esta solicitud ya se le asigno el estado "+estado});
     }else{
-      await contractSolicitudeService.reject(cod);
+      await contractSolicitudeService.reject(cod,req.body);
       res.status(200).json({"error":false,
                           "message":"Se cambió el estado a Rechazado"});
     }

@@ -15,13 +15,13 @@ class ClientService{
 
     // Sentencia
     const [data] = await sequelize.query(`${ select } ${ joinCarteraCliente }
-                                          WHERE cartera_cliente.cod_usuario = ${ codUsuario };`);
+                                          WHERE cartera_cliente.cod_usuario = ${ codUsuario } AND cartera_cliente.estado='A';`);
 
     return data;
   }
 
   async findAll(){
-    const query=`SELECT cod_cliente,nombre_corto FROM cliente WHERE estado='activo' ORDER BY nombre_corto ASC;`;
+    const query=`SELECT cod_cliente,nombre_corto FROM cliente WHERE estado='A' ORDER BY nombre_corto ASC;`;
     const [data] = await sequelize.query(query);
      return data;
   }

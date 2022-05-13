@@ -1,3 +1,4 @@
+const boom = require('@hapi/boom');
 const sequelize = require('../libs/sequelize');
 const UserService = require('../services/user.service');
 
@@ -24,6 +25,11 @@ class AssignmentsService{
                 AND servicio.cod_cliente = ${ cod_cliente }
                 AND to_date('${ periodo }', 'MM-YYYY') <= fecha_fin;`;
     const [data] = await sequelize.query(query);
+
+    if (data.length === 0) {
+      throw boom.notFound('assignments not found');
+    }
+
     return data;
 
   }

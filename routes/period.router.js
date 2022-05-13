@@ -1,5 +1,6 @@
 const express = require('express');
 const validatorHandler = require('../middlewares/validator.handler');
+const { checkRoles  }  = require('./../middlewares/auth.handler');
 const { createPeriodSchema, updatePeriodSchema } = require('../schemas/period.schema');
 const PeriodService = require('./../services/period.service');
 
@@ -113,6 +114,7 @@ router.get('/last-period', async (req, res, next) => {
  *              $ref: '#/components/schemas/Unauthorized'
  */
 router.post('/create',
+  checkRoles('JEFE_DE_RECURSOS_HUMANOS', 'ANALISTA_RECURSOS_HUMANOS'),
   validatorHandler(createPeriodSchema, 'body'),
   async (req, res, next) => {
   try {
@@ -142,6 +144,7 @@ router.post('/create',
  *        description: periodo actualizado
  */
 router.put('/update',
+  checkRoles('JEFE_DE_RECURSOS_HUMANOS', 'ANALISTA_RECURSOS_HUMANOS'),
   validatorHandler(updatePeriodSchema, 'body'),
   async (req, res, next) => {
   try {
@@ -169,6 +172,7 @@ router.put('/update',
  *              $ref: '#/components/schemas/GetPeriods'
  */
 router.get('/',
+  checkRoles('JEFE_DE_RECURSOS_HUMANOS', 'ANALISTA_RECURSOS_HUMANOS'),
   async (req, res, next) => {
   try {
     res.json(await periodService.getAll());
