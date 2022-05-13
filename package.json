@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "test": "jest --verbose --silent --detectOpenHandles",
+    "test": "jest --coverage --verbose --silent --detectOpenHandles",
     "test:watch": "npm run test -- --watch",
     "start": "node index.js",
     "lint": "eslint",
@@ -13,6 +13,18 @@
     "migrations:run": "sequelize-cli db:migrate",
     "migrations:revert": "sequelize-cli db:migrate:undo",
     "migrations:delete": "sequelize-cli db:migrate:undo:all"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "testResultsProcessor": "jest-sonar-reporter"
+  },
+  "jestSonar": {
+    "reportPath": "coverage",
+    "reportFile": "test-reporter.xml",
+    "indent": 4
   },
   "keywords": [],
   "author": "",
@@ -22,6 +34,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^28.0.3",
+    "jest-sonar-reporter": "^2.0.0",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
     "sonarqube-scanner": "^2.8.1",
