@@ -1,5 +1,7 @@
 const boom = require('@hapi/boom');
 const sequelize = require('../libs/sequelize');
+const { QueryTypes } = require('sequelize');
+
 
 // Sentencias
 const getSelect = (attributes = '*') => {
@@ -39,17 +41,23 @@ class CollaboratorService{
   async createCollaboratorfromSolicitude(d,usuarioReg){
     const query=`INSERT INTO colaborador(tipo_doc, nro_documento, cod_puesto, nivel,cod_area, nombres, apellido_mat,
                  apellido_pat, fecha_nacimiento,sexo, correo_personal, celular_personal,direccion,distrito,provincia,fecha_reg,usuario_reg)
-                 VALUES ('${d.tipo_documento}','${d.nro_documento}',${d.cod_puesto},'${d.nivel}',1,'${d.nombre}',
-                 '${d.ape_materno}','${d.ape_paterno}','${d.fecha_nacimiento}','${d.sexo}', '${d.correo}','${d.nro_celular}',
-                 '${d.direccion}','${d.distrito}','${d.provincia}',CURRENT_DATE,'${usuarioReg}');`;
-    await sequelize.query(query);
+                 VALUES (?,?,?,?,1,?,?,?,?,?,?,?,?,?,?,CURRENT_DATE,?);`;
+    await sequelize.query(query,
+      {
+        type: QueryTypes.INSERT,
+        replacements: [d.tipo_documento,d.nro_documento,d.cod_puesto,d.nivel,d.nombre,d.ape_materno,
+          d.ape_paterno,d.fecha_nacimiento,d.sexo,d.correo,d.nro_celular,d.direccion,d.distrito,d.provincia,usuarioReg]
+      });
   }
 
   async findIdCollaborator(nro_documento){
     nro_documento="'"+nro_documento+"'";
     const query=`SELECT cod_colaborador from colaborador
-                  WHERE nro_documento=${nro_documento} ;`;
-    const [data]= await sequelize.query(query);
+                  WHERE nro_documento=? ;`;
+    const [data]= await sequelize.query(query,{
+      type: QueryTypes.SELECT,
+      replacements: [nro_documento]
+    });
     return data[0].cod_colaborador;
   }
 

@@ -1,4 +1,5 @@
 const sequelize = require('../libs/sequelize');
+const { QueryTypes } = require('sequelize');
 const SalaryBandService = require('../services/salaryBand.service');
 const CollaboratorService = require('../services/collaborator.service');
 const ContractService = require('../services/contract.service');
@@ -50,28 +51,33 @@ class ContractSolicitudeService{
       //Se acondiciona el numero de decimales de "clm"
       clm=clm.toFixed(2);
 
-      if(body.bono_men){body.bono_men="'"+body.bono_men+"'";}else{body.bono_men=null;}
-      if(body.condicional_adicional){body.condicional_adicional="'"+body.condicional_adicional+"'";}else{body.condicional_adicional=null;}
-      if(body.cv){body.cv="'"+body.cv+"'";}else{body.cv=null;}
-
-
     const query=`INSERT INTO solicitud_contratacion (empresa,tipo_documento, nro_documento, nombre, ape_paterno, ape_materno,
      fecha_nacimiento,sexo, nro_celular, correo, direccion, distrito,provincia, cod_cliente, cod_linea_negocio,condicion_proyecto_area, cod_puesto, nivel,
     cod_banda_salarial, modalidad, remuneracion, bono_men, fecha_inicio, fecha_fin, condicional_adicional,jefe_responsable_directo,horario_laboral,asignacion_equipo,clm,tarifa_mensual,productividad,cv,estado,fecha_reg)
-    VALUES ('${body.empresa}','${body.tipo_documento}','${body.nro_documento}','${body.nombre}','${body.ape_paterno}','${body.ape_materno}','${body.fecha_nacimiento}',
-    '${body.sexo}','${body.nro_celular}','${body.correo}','${body.direccion}','${body.distrito}','${body.provincia}','${body.cod_cliente}','${body.cod_linea_negocio}','${body.condicion_proyecto_area}','${body.cod_puesto}',
-    '${body.nivel}',${codBanda},'${body.modalidad}','${body.remuneracion}',${body.bono_men},'${body.fecha_inicio}',
-    '${body.fecha_fin}',${body.condicional_adicional},'${body.jefe_responsable_directo}','${body.horario_laboral}','${body.asignacion_equipo}',${clm},'${body.tarifa_mensual}',${productividad},${body.cv},'${estado}',CURRENT_DATE);`;
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,
+      ?,?,?,?,?,?,?,?,?,?,CURRENT_DATE);`;
 
-    await sequelize.query(query);
+    await sequelize.query(query,
+      {
+        type: QueryTypes.INSERT,
+        replacements: [body.empresa,body.tipo_documento,body.nro_documento,body.nombre,body.ape_paterno,
+          body.ape_materno,body.fecha_nacimiento,body.sexo,body.nro_celular,body.correo,body.direccion,body.distrito,
+          body.provincia,body.cod_cliente,body.cod_linea_negocio,body.condicion_proyecto_area,body.cod_puesto,
+          body.nivel,codBanda,body.modalidad,body.remuneracion,body.bono_men,body.fecha_inicio,body.fecha_fin,body.condicional_adicional,
+          body.jefe_responsable_directo,body.horario_laboral,body.asignacion_equipo,clm,body.tarifa_mensual,productividad,body.cv,estado]
+      });
   }
 
   async isThereAPreviousSolicitude(nroDocumento){
     const query=`SELECT TRUE
                 WHERE EXISTS (SELECT 1
                               FROM solicitud_contratacion
-                              WHERE nro_documento = '${nroDocumento}' AND estado<>'Rechazado'); `;
-    const [data] = await sequelize.query(query);
+                              WHERE nro_documento = ? AND estado<>'Rechazado'); `;
+    const data = await sequelize.query(query,
+      {
+        type: QueryTypes.SELECT,
+        replacements: [nroDocumento]
+      });
      return data;
   }
 
@@ -107,22 +113,29 @@ class ContractSolicitudeService{
   }
 
   async findOne(cod){
-    const query1=`SELECT cod_solicitud_contratacion,empresa,tipo_documento,nro_documento,nombre,ape_paterno,ape_materno,fecha_nacimiento,sexo,
+    const query=`SELECT cod_solicitud_contratacion,empresa,tipo_documento,nro_documento,nombre,ape_paterno,ape_materno,fecha_nacimiento,sexo,
               nro_celular,correo,direccion,distrito,provincia,nombre_corto,cod_linea_negocio,solicitud_contratacion.cod_puesto,
               puesto,nivel,cod_banda_salarial,modalidad,remuneracion,bono_men,ind_asign_familiar,fecha_inicio,fecha_fin,condicional_adicional,solicitud_contratacion.estado,
               condicion_proyecto_area,tarifa_mensual,productividad,jefe_responsable_directo,horario_laboral,asignacion_equipo,cv,motivo_rechazo
                  FROM solicitud_contratacion
                  INNER JOIN cliente ON solicitud_contratacion.cod_cliente=cliente.cod_cliente
                  INNER JOIN puesto ON solicitud_contratacion.cod_puesto=puesto.cod_puesto
-                 WHERE cod_solicitud_contratacion=${cod} ;`;
-    const [data] = await sequelize.query(query1);
+                 WHERE cod_solicitud_contratacion=? ;`;
+    const [data] = await sequelize.query(query,{
+      type: QueryTypes.SELECT,
+      replacements: [cod]
+    });
     return data;
   }
 
   async findState(cod){
     const query=`SELECT estado FROM solicitud_contratacion
-                 WHERE cod_solicitud_contratacion=${cod}`;
-    const [data]=await sequelize.query(query);
+                 WHERE cod_solicitud_contratacion=? ;`;
+    const [data]=await sequelize.query(query,
+      {
+        type: QueryTypes.SELECT,
+        replacements: [cod]
+      });
     return data[0].estado;
   }
 
