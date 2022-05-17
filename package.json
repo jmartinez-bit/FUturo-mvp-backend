@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "sonar": "node sonar-project.js",
     "dev": "nodemon index.js",
     "test": "jest --coverage --verbose --silent --detectOpenHandles",
     "test:watch": "npm run test -- --watch",
@@ -33,7 +34,6 @@
     "eslint": "^8.9.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^28.0.3",
     "jest-sonar-reporter": "^2.0.0",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
@@ -59,7 +59,8 @@
     "sequelize": "^6.17.0",
     "sequelize-cli": "^6.4.1",
     "swagger-jsdoc": "^6.2.1",
-    "swagger-ui-express": "^4.3.0"
+    "swagger-ui-express": "^4.3.0",
+    "jest": "^28.0.3"
   },
   "engines": {
     "node": "16.x"
