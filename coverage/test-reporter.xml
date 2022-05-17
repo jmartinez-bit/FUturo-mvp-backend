@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testExecutions version="1">
-    <file path="D:\cursos\practicas\MDP\practica-fu\FUturo-mvp-backend\tests\resources.test.js">
-        <testCase name="GET /api/v1/resources/productividad/{codMapaRecurso} deberia obtener el contrato del colaborador" duration="128"/>
-    </file>
-</testExecutions>
