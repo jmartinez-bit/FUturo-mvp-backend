@@ -51,16 +51,6 @@ router.post("/newSolicitude",async (req, res,next) =>{
 
 });
 
-router.post("/",async (req, res,next) =>{
-  try{
-    const body=req.body;
-    const data=await contractSolicitudeService.findBy(body);
-    res.json(data);
-  }catch (e){
-    next(e);
-  }
-
-});
 
 router.get("/:cod",async (req, res,next) =>{
   try{

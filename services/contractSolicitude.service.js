@@ -107,9 +107,8 @@ class ContractSolicitudeService{
     if(body.estado){
       query+=`AND solicitud_contratacion.estado = '${body.estado}'`;
     }
-    query+=`ORDER BY cod_solicitud_contratacion DESC;`;
-    const [data] = await sequelize.query(query);
-     return data;
+
+     return query;
   }
 
   async findOne(cod){
