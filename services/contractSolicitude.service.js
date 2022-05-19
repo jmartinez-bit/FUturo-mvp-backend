@@ -111,8 +111,8 @@ class ContractSolicitudeService{
      return query;
   }
 
-  async findOne(cod){
-    const query=`SELECT tipo_solicitud,cod_solicitud_contratacion,empresa,tipo_documento,nro_documento,nombre,ape_paterno,ape_materno,fecha_nacimiento,sexo,
+   findOne(){
+    return `SELECT tipo_solicitud,cod_solicitud_contratacion,empresa,tipo_documento,nro_documento,nombre,ape_paterno,ape_materno,fecha_nacimiento,sexo,
               nro_celular,correo,direccion,distrito,provincia,nombre_corto,cod_linea_negocio,solicitud_contratacion.cod_puesto,
               puesto,nivel,cod_banda_salarial,modalidad,remuneracion,bono_men,ind_asign_familiar,fecha_inicio,fecha_fin,condicional_adicional,solicitud_contratacion.estado,
               condicion_proyecto_area,tarifa_mensual,productividad,jefe_responsable_directo,horario_laboral,asignacion_equipo,cv,motivo_rechazo
@@ -120,11 +120,7 @@ class ContractSolicitudeService{
                  INNER JOIN cliente ON solicitud_contratacion.cod_cliente=cliente.cod_cliente
                  INNER JOIN puesto ON solicitud_contratacion.cod_puesto=puesto.cod_puesto
                  WHERE cod_solicitud_contratacion=? ;`;
-    const data = await sequelize.query(query,{
-      type: QueryTypes.SELECT,
-      replacements: [cod]
-    });
-    return data;
+
   }
 
   async findState(cod){
