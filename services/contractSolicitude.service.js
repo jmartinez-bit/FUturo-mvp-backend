@@ -120,7 +120,7 @@ class ContractSolicitudeService{
                  INNER JOIN cliente ON solicitud_contratacion.cod_cliente=cliente.cod_cliente
                  INNER JOIN puesto ON solicitud_contratacion.cod_puesto=puesto.cod_puesto
                  WHERE cod_solicitud_contratacion=? ;`;
-    const [data] = await sequelize.query(query,{
+    const data = await sequelize.query(query,{
       type: QueryTypes.SELECT,
       replacements: [cod]
     });
