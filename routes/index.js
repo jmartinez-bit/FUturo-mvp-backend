@@ -19,6 +19,7 @@ const authRouter  = require('./auth.router');
 const parameterRouter = require('./parameter.router');
 const uploadFileRouter = require('./uploadFile.router');
 const solicitudeRouter = require('./solicitude.router');
+const renovationRequestRouter = require('./renovation-request.router');
 
 
 const express = require('express');
@@ -43,6 +44,7 @@ function routerApi(app) {
   router.use('/assignedHours', passport.authenticate('jwt', {session: false}), assignedHoursRouter);
   router.use('/assignments', passport.authenticate('jwt', {session: false}), assignmentsRouter);
   router.use('/solicitude', passport.authenticate('jwt', {session: false}), solicitudeRouter);
+  router.use('/renovation-request', passport.authenticate('jwt', {session: false}), renovationRequestRouter);
   router.use('/auth', authRouter);
   router.use('/parameter', parameterRouter);
   router.use('/uploadFile', uploadFileRouter);
