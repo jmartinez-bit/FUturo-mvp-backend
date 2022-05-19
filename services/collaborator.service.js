@@ -1,3 +1,4 @@
+const boom = require('@hapi/boom');
 const sequelize = require('../libs/sequelize');
 
 // Sentencias
@@ -23,10 +24,14 @@ class CollaboratorService{
     // Sentencia
     const query=`${ select } ${ joinContrato }
                 WHERE colaborador.cod_colaborador=${ codColaborador }
-                AND to_date('${ month + 1 }-${ year }', 'MM-YYYY') >= contrato.fecha_inicio
+                AND to_date('${ month === 12 ? 1 : month + 1 }-${ year }', 'MM-YYYY') >= contrato.fecha_inicio
                 AND to_date('${ month }-${ year }', 'MM-YYYY') <= contrato.fecha_fin
                 ORDER BY contrato.cod_contrato DESC LIMIT 1;`;
     const [[data]] = await sequelize.query(query);
+
+    if (!data) {
+      throw boom.notFound('contract not found');
+    }
 
     return data;
   }

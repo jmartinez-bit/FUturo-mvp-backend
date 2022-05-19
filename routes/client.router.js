@@ -55,13 +55,6 @@ const clientService = new ClientService();
  *  get:
  *    summary: Obtener clientes de un dm
  *    tags: [Cliente]
- *    parameters:
- *      - in: header
- *        name: api
- *        schema:
- *          type: integer
- *        required: true
- *        description: codigo de usuario
  *    responses:
  *      200:
  *        description: lista de clientes asignados
