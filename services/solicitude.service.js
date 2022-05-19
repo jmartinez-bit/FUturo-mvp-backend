@@ -33,7 +33,7 @@ class SolicitudeService{
     switch (tipo) {
       case "contratacion":
         query=contractSolicitudeService.findOne();
-        data = await sequelize.query(query,{
+        [data] = await sequelize.query(query,{
           type: QueryTypes.SELECT,
           replacements: [cod]
         });
