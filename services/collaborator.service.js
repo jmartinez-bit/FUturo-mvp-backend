@@ -51,14 +51,13 @@ class CollaboratorService{
   }
 
   async findIdCollaborator(nro_documento){
-    nro_documento="'"+nro_documento+"'";
     const query=`SELECT cod_colaborador from colaborador
                   WHERE nro_documento=? ;`;
     const [data]= await sequelize.query(query,{
       type: QueryTypes.SELECT,
       replacements: [nro_documento]
     });
-    return data[0].cod_colaborador;
+    return data.cod_colaborador;
   }
 
 }

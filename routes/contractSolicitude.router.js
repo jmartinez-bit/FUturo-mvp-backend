@@ -72,6 +72,9 @@ router.get("/approve/:cod/:indAsignFamiliar",async (req, res,next) =>{
     if(estado==="Aprobado"||estado==="Rechazado"){
       res.status(409).json({"error":false,
       "message":"A esta solicitud ya se le asigno el estado "+estado});
+    }else if(estado==="Pendiente Aprobacion GG"){
+      res.status(409).json({"error":false,
+      "message":"Necesita aprobación del Gerente General "});
     }else{
       await contractSolicitudeService.approve(cod,indAsignFamiliar,cod_usuario);
       res.status(200).json({"error":false,
@@ -84,24 +87,6 @@ router.get("/approve/:cod/:indAsignFamiliar",async (req, res,next) =>{
 
 });
 
-router.get("/approvegg/:cod",async (req, res,next) =>{
-  try{
-    const {cod}=req.params;
-    const estado=await contractSolicitudeService.findState(cod);
-    if(estado==="Aprobado"||estado==="Rechazado"){
-      res.status(409).json({"error":false,
-      "message":"A esta solicitud ya se le asigno el estado "+estado});
-    }else{
-      await contractSolicitudeService.approvegg(cod);
-      res.status(200).json({"error":false,
-                          "message":"Se cambió el estado a Rechazado"});
-    }
-
-  }catch (e){
-    next(e);
-  }
-
-});
 
 router.get("/reject/:cod",async (req, res,next) =>{
   try{

@@ -81,8 +81,8 @@ class ContractSolicitudeService{
      return data;
   }
 
-  async findBy(body){
-    var query=`SELECT cod_solicitud_contratacion,solicitud_contratacion.fecha_reg,cliente.nombre_corto,
+   findBy(body){
+    var query=`SELECT tipo_solicitud,cod_solicitud_contratacion,solicitud_contratacion.fecha_reg,cliente.nombre_corto,
     cod_linea_negocio,puesto.puesto,nivel,nro_documento,CONCAT(nombre,' ',ape_paterno,' ',ape_materno) AS nombre_apellidos,
     modalidad,remuneracion,bono_men,solicitud_contratacion.estado,fecha_aprob,ind_aprobacion_gg,fecha_aprob_gg
     FROM solicitud_contratacion
@@ -112,7 +112,7 @@ class ContractSolicitudeService{
   }
 
   async findOne(cod){
-    const query=`SELECT cod_solicitud_contratacion,empresa,tipo_documento,nro_documento,nombre,ape_paterno,ape_materno,fecha_nacimiento,sexo,
+    const query=`SELECT tipo_solicitud,cod_solicitud_contratacion,empresa,tipo_documento,nro_documento,nombre,ape_paterno,ape_materno,fecha_nacimiento,sexo,
               nro_celular,correo,direccion,distrito,provincia,nombre_corto,cod_linea_negocio,solicitud_contratacion.cod_puesto,
               puesto,nivel,cod_banda_salarial,modalidad,remuneracion,bono_men,ind_asign_familiar,fecha_inicio,fecha_fin,condicional_adicional,solicitud_contratacion.estado,
               condicion_proyecto_area,tarifa_mensual,productividad,jefe_responsable_directo,horario_laboral,asignacion_equipo,cv,motivo_rechazo
@@ -135,10 +135,11 @@ class ContractSolicitudeService{
         type: QueryTypes.SELECT,
         replacements: [cod]
       });
-    return data[0].estado;
+    return data.estado;
   }
 
   async approve(cod,indAsignFamiliar,codUsuario){
+    await sequelize.query(`BEGIN;`);//INICIO DE LA TRANSACCIÓN
     if(indAsignFamiliar==="true"){
       const [dat]=await sequelize.query(`SELECT clm from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
       var clm=parseFloat(dat[0].clm)+parseFloat(process.env.ASIGN_FAMILIAR);
@@ -160,6 +161,7 @@ class ContractSolicitudeService{
                  SET estado='Aprobado',fecha_aprob=CURRENT_DATE
                  WHERE cod_solicitud_contratacion=${cod}`;
     await sequelize.query(query);
+    await sequelize.query(`COMMIT;`);//FIN DE LA TRANSACCIÓN
 
   }
 
