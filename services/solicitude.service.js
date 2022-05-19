@@ -9,12 +9,16 @@ class SolicitudeService{
 
   async findBy(body){
     var query;
+    var data;
     switch (body.tipo_solicitud) {
       case "contratacion":
         query=contractSolicitudeService.findBy(body);
+        query+=`ORDER BY fecha_reg DESC ;`;
+        [data] = await sequelize.query(query);
         break;
       case "renovacion":
         //query=renovationSolicitudeService.findBy(body);
+        data={"error":false,"message":"Aun no existe servicio para renovacion"};
           break;
       default:
         query=contractSolicitudeService.findBy(body)+" "//esto lo puse para que no me salten los subrayados molestos;
@@ -22,8 +26,6 @@ class SolicitudeService{
         break;
     }
 
-    query+=`ORDER BY fecha_reg DESC ;`;
-    const [data] = await sequelize.query(query);
      return data;
   }
 
