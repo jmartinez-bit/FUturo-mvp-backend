@@ -1,4 +1,6 @@
 const sequelize = require('../libs/sequelize');
+const { QueryTypes } = require('sequelize');
+
 const ContractSolicitudeService = require('../services/contractSolicitude.service');
 
 const contractSolicitudeService = new ContractSolicitudeService();
@@ -25,6 +27,27 @@ class SolicitudeService{
      return data;
   }
 
+  async findOne(cod,tipo){
+    var query;
+    var data;
+    switch (tipo) {
+      case "contratacion":
+        query=contractSolicitudeService.findOne();
+        data = await sequelize.query(query,{
+          type: QueryTypes.SELECT,
+          replacements: [cod]
+        });
+        break;
+      case "renovacion":
+        //query=renovationSolicitudeService.findBy(body);
+          break;
+      default:
+        data={"error":true,"message":"No existe servicio para este tipo de movimiento de recurso"};
+        break;
+    }
+
+     return data;
+  }
 }
 
 module.exports = SolicitudeService;

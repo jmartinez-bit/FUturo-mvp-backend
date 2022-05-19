@@ -15,4 +15,15 @@ router.post("/",async (req, res,next) =>{
 
 });
 
+router.get("/:cod/:tipo",async (req, res,next) =>{
+  try{
+    const {cod,tipo}=req.params;
+    const data=await solicitudeService.findOne(cod,tipo);
+    res.json(data);
+  }catch (e){
+    next(e);
+  }
+
+});
+
 module.exports = router;
