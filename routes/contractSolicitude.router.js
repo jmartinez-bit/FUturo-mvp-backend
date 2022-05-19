@@ -51,16 +51,6 @@ router.post("/newSolicitude",async (req, res,next) =>{
 
 });
 
-router.post("/",async (req, res,next) =>{
-  try{
-    const body=req.body;
-    const data=await contractSolicitudeService.findBy(body);
-    res.json(data);
-  }catch (e){
-    next(e);
-  }
-
-});
 
 router.get("/:cod",async (req, res,next) =>{
   try{
@@ -82,6 +72,9 @@ router.get("/approve/:cod/:indAsignFamiliar",async (req, res,next) =>{
     if(estado==="Aprobado"||estado==="Rechazado"){
       res.status(409).json({"error":false,
       "message":"A esta solicitud ya se le asigno el estado "+estado});
+    }else if(estado==="Pendiente Aprobacion GG"){
+      res.status(409).json({"error":false,
+      "message":"Necesita aprobación del Gerente General "});
     }else{
       await contractSolicitudeService.approve(cod,indAsignFamiliar,cod_usuario);
       res.status(200).json({"error":false,
@@ -94,7 +87,8 @@ router.get("/approve/:cod/:indAsignFamiliar",async (req, res,next) =>{
 
 });
 
-router.post("/reject/:cod",async (req, res,next) =>{
+
+router.get("/reject/:cod",async (req, res,next) =>{
   try{
     const {cod}=req.params;
     const estado=await contractSolicitudeService.findState(cod);
