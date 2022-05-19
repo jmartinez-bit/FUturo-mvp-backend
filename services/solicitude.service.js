@@ -23,6 +23,8 @@ class SolicitudeService{
       default:
         query=contractSolicitudeService.findBy(body)+" "//esto lo puse para que no me salten los subrayados molestos;
         //"UNION"+renovationSolicitudeService.findBy(body);  //unir cada vez que se agregue un tipo de solicitud
+        query+=`ORDER BY fecha_reg DESC ;`;
+        [data] = await sequelize.query(query);
         break;
     }
 
