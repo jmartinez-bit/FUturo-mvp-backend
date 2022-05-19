@@ -39,9 +39,7 @@ router.post("/createOrEditAssignment",async (req, res,next) =>{
       e=true;
     }
     if(!e ){
-        const {authorization}=req.headers;
-        const auth=JSON.parse(authorization);
-        const codUsuario=auth.id_sesion;
+        const codUsuario=req.user.id_sesion;
       if(cod_asignacion===-1){
         await sequelize.query(`BEGIN;`);//INICIO DE LA TRANSACCIÓN
         rta=await assignmentsService.createAssingment(req.body,prodPlanificada,codUsuario);

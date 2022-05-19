@@ -11,7 +11,7 @@ function checkApiKey(req, res, next) {
   } else {
     next(boom.unauthorized());
   }
-};
+}
 
 function checkRoles(...roles) {
   return (req, res, next) => {
@@ -23,7 +23,7 @@ function checkRoles(...roles) {
     }
   }
 
-};
+}
 
 
 module.exports = { checkApiKey, checkRoles }
