@@ -14,8 +14,9 @@ router.post("/resourcesmap",async (req, res,next) =>{
     const {cod_cliente,periodo}=req.body;
     const cod_perfil=req.body.cod_perfil||null;
     const nombres=req.body.nombres||null;
+    const contrato_vencer=req.body.contrato_vencer||null;
 
-    const resources=await service.findByClientPeriodProfileAndNames(cod_cliente,periodo,cod_perfil,nombres);
+    const resources=await service.findByClientPeriodProfileAndNames(cod_cliente,periodo,cod_perfil,nombres,contrato_vencer);
     res.json(resources);
 
   }catch (e){
