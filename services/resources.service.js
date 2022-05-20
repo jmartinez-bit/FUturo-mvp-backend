@@ -16,7 +16,7 @@ class ResourcesService{
     this.resources=[]
   }
 
-  async findByClientPeriodProfileAndNames(cod_cliente,periodo,cod_perfil,nombres){
+  async findByClientPeriodProfileAndNames(cod_cliente,periodo,cod_perfil,nombres,contrato_vencer){
     const select="SELECT cod_mapa_recurso,mapa_recursos.cod_colaborador,linea_negocio,mapa_recursos.estado,puesto AS nombre_perfil,mapa_recursos.nivel,"+
               " fecha_inicio,fecha_fin,asignacion,fecha_fin_contrato,clm_efectivo,produccion,productividad,CONCAT(nombres,' ',apellido_pat,' ',apellido_mat) AS nombre_colaborador "+
              " FROM mapa_recursos "+
@@ -30,6 +30,9 @@ class ResourcesService{
     if(nombres!=null){
       nombres=nombres.toLowerCase();
       query+=" AND lower(CONCAT(nombres,' ',apellido_pat,' ',apellido_mat)) like '%"+nombres+"%'";
+    }
+    if(contrato_vencer!=null){
+      query+=" AND extract(days from ( fecha_fin_contrato - (now() - INTERVAL '5 hours'))) < "+ contrato_vencer*7;
     }
     query+=" ORDER BY cod_mapa_recurso DESC;";
     const [data] = await sequelize.query(query);
@@ -88,7 +91,7 @@ class ResourcesService{
     const select = getSelect(['mapa_recursos.eficiencia', 'mapa_recursos.rendimiento',
     'mapa_recursos.horas_servicio', 'mapa_recursos.licencias', 'mapa_recursos.faltas',
     'mapa_recursos.vacaciones', 'mapa_recursos.horas_extras', 'mapa_recursos.total_horas_asignaciones',
-    'mapa_recursos.total_horas_facturables', 'mapa_recursos.capacity']);
+    'mapa_recursos.total_horas_facturables', 'mapa_recursos.capacity', 'mapa_recursos.estado']);
 
     // Sentencia
     const query = `${ select } WHERE mapa_recursos.cod_mapa_recurso=${ id };`;
