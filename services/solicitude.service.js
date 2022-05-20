@@ -2,8 +2,10 @@ const sequelize = require('../libs/sequelize');
 const { QueryTypes } = require('sequelize');
 
 const ContractSolicitudeService = require('../services/contractSolicitude.service');
+const RenovationRequestService = require('../services/renovation-request.service');
 
 const contractSolicitudeService = new ContractSolicitudeService();
+const renovationRequestService = new RenovationRequestService();
 
 class SolicitudeService{
 
@@ -17,12 +19,13 @@ class SolicitudeService{
         [data] = await sequelize.query(query);
         break;
       case "renovacion":
-        //query=renovationSolicitudeService.findBy(body);
-        data={"error":false,"message":"Aun no existe servicio para renovacion"};
-          break;
+        query=renovationRequestService.findBy(body);
+        query+=`ORDER BY fecha_reg DESC ;`;
+        [data] = await sequelize.query(query);
+        break;
       default:
-        query=contractSolicitudeService.findBy(body)+" "//esto lo puse para que no me salten los subrayados molestos;
-        //"UNION"+renovationSolicitudeService.findBy(body);  //unir cada vez que se agregue un tipo de solicitud
+        query=contractSolicitudeService.findBy(body)+
+        " UNION "+renovationRequestService.findBy(body);  //unir cada vez que se agregue un tipo de solicitud
         query+=`ORDER BY fecha_reg DESC ;`;
         [data] = await sequelize.query(query);
         break;
@@ -43,7 +46,11 @@ class SolicitudeService{
         });
         break;
       case "renovacion":
-        //query=renovationSolicitudeService.findBy(body);
+        query=renovationRequestService.findOne();
+        [data] = await sequelize.query(query,{
+          type: QueryTypes.SELECT,
+          replacements: [cod]
+        });
           break;
       default:
         data={"error":true,"message":"No existe servicio para este tipo de movimiento de recurso"};

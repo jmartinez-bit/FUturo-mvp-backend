@@ -84,7 +84,7 @@ class ContractSolicitudeService{
    findBy(body){
     var query=`SELECT tipo_solicitud,cod_solicitud_contratacion,solicitud_contratacion.fecha_reg,cliente.nombre_corto,
     cod_linea_negocio,puesto.puesto,nivel,nro_documento,CONCAT(nombre,' ',ape_paterno,' ',ape_materno) AS nombre_apellidos,
-    modalidad,remuneracion,bono_men,solicitud_contratacion.estado,fecha_aprob,ind_aprobacion_gg,fecha_aprob_gg
+    modalidad,remuneracion,bono_men,solicitud_contratacion.estado,fecha_aprob,fecha_aprob_gg
     FROM solicitud_contratacion
     INNER JOIN cliente ON solicitud_contratacion.cod_cliente=cliente.cod_cliente
     INNER JOIN puesto ON solicitud_contratacion.cod_puesto=puesto.cod_puesto `;

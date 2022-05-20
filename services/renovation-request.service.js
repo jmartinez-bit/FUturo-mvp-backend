@@ -3,10 +3,6 @@ const sequelize = require('../libs/sequelize');
 const { QueryTypes } = require('sequelize');
 
 // Sentencias
-const getSelect = (attributes = '*') => {
-  return `SELECT ${ attributes.toString() } FROM solicitud_renovacion`;
-};
-
 const getInsert = (attributes = '*') => {
   return `INSERT INTO solicitud_renovacion(${ attributes.toString() })`;
 };
@@ -40,33 +36,47 @@ class RenovationRequestService {
   }
 
   findBy(body){
-    var query=`SELECT tipo_solicitud,cod_solicitud_contratacion,solicitud_contratacion.fecha_reg,cliente.nombre_corto,
-    cod_linea_negocio,puesto.puesto,nivel,nro_documento,CONCAT(nombre,' ',ape_paterno,' ',ape_materno) AS nombre_apellidos,
-    modalidad,remuneracion,bono_men,solicitud_contratacion.estado,fecha_aprob,ind_aprobacion_gg,fecha_aprob_gg
+    var query=`SELECT tipo_solicitud,cod_solicitud_renovacion,solicitud_renovacion.fecha_reg,cliente.nombre_corto,
+    cod_linea_negocio,puesto.puesto,colaborador.nivel,colaborador.nro_documento,CONCAT(colaborador.nombres,' ',colaborador.apellido_pat,' ',colaborador.apellido_mat) AS nombre_apellidos,
+    modalidad,remuneracion,bono_men,solicitud_renovacion.estado,fecha_aprob,fecha_aprob_gg
     FROM solicitud_renovacion
-    INNER JOIN cliente ON solicitud_contratacion.cod_cliente=cliente.cod_cliente
-    INNER JOIN puesto ON solicitud_contratacion.cod_puesto=puesto.cod_puesto `;
+    INNER JOIN colaborador ON solicitud_renovacion.cod_colaborador=colaborador.cod_colaborador
+    INNER JOIN cliente ON solicitud_renovacion.cod_cliente=cliente.cod_cliente
+    INNER JOIN puesto ON colaborador.cod_puesto=puesto.cod_puesto `;
     if(body.length!=0){
-      query+="WHERE cod_solicitud_contratacion>0 ";
+      query+="WHERE cod_solicitud_renovacion>0 ";
     }
     if(body.cod_cliente){
-      query+=`AND solicitud_contratacion.cod_cliente = '${body.cod_cliente}' `;
+      query+=`AND solicitud_renovacion.cod_cliente = '${body.cod_cliente}' `;
     }
     if(body.cod_linea_negocio){
       query+=`AND cod_linea_negocio = '${body.cod_linea_negocio}' `;
     }
     if(body.nro_documento){
-      query+=`AND nro_documento = '${body.nro_documento}' `;
+      query+=`AND colaborador.nro_documento = '${body.nro_documento}' `;
     }
     if(body.nombre){
       const nombre=(body.nombre).toLowerCase();
-      query+=`AND (lower(CONCAT(nombre,' ',ape_paterno,' ',ape_materno)) like '%${nombre}%') `
+      query+=`AND (lower(CONCAT(colaborador.nombres,' ',colaborador.apellido_pat,' ',colaborador.apellido_mat)) like '%${nombre}%') `
     }
     if(body.estado){
-      query+=`AND solicitud_contratacion.estado = '${body.estado}'`;
+      query+=`AND solicitud_renovacion.estado = '${body.estado}'`;
     }
 
      return query;
+  }
+
+  findOne(){
+    return `SELECT tipo_solicitud,cod_solicitud_renovacion,nombre_corto,nro_documento,nombres,apellido_pat,apellido_mat,
+            opcion_renovacion,nueva_modalidad,nuevo_sueldo,nuevo_bono,nuevo_puesto,nuevo_nivel_puesto,
+            colaborador.cod_puesto,puesto.puesto,colaborador.nivel,modalidad,remuneracion,bono_men,
+            fecha_fin_ant,fecha_inicio_nuevo,fecha_fin_nuevo,solicitud_renovacion.estado,motivo_rechazo
+            FROM solicitud_renovacion
+            INNER JOIN colaborador ON solicitud_renovacion.cod_colaborador=colaborador.cod_colaborador
+            INNER JOIN cliente ON solicitud_renovacion.cod_cliente=cliente.cod_cliente
+            INNER JOIN puesto ON colaborador.cod_puesto=puesto.cod_puesto
+            WHERE cod_solicitud_renovacion=? ;`;
+
   }
 
 }
