@@ -43,13 +43,13 @@ class ContractService{
     //Insert
     const query=`INSERT INTO contrato(
       cod_colaborador,tipo, modalidad,ind_asign_familiar,asignacion_familiar, sueldo_planilla, rxh,
-       bono, clm, fecha_inicio, fecha_fin,estado,fecha_reg,usuario_registro)
-      VALUES (?,'C',?,?,?, ?,?, ?, ?, ?,?,'AC',CURRENT_DATE,?);`;
+       bono, clm, fecha_inicio, fecha_fin,estado,fecha_reg,usuario_registro,empresa)
+      VALUES (?,'C',?,?,?, ?,?, ?, ?, ?,?,'AC',CURRENT_DATE,?,?);`;
     await sequelize.query(query,
       {
       type: QueryTypes.INSERT,
       replacements: [id,d.modalidad,indAsignFamiliar,asignFamiliar,
-      sueldoPlanilla,rxh,d.bono_men,d.clm,d.fecha_inicio,d.fecha_fin,usuarioReg]
+      sueldoPlanilla,rxh,d.bono_men,d.clm,d.fecha_inicio,d.fecha_fin,usuarioReg,d.empresa]
       });
   }
 

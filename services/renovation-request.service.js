@@ -9,10 +9,61 @@ const getInsert = (attributes = '*') => {
 
 class RenovationRequestService {
 
+  async modifyDataInput(data_in){
+    var query;
+    if(data_in.opcion_renovacion==="mismas condiciones"){
+    /////Seleccionamos cod_colaborador,cod_cliente
+      query=`SELECT cod_colaborador,cod_cliente FROM mapa_recursos
+            WHERE cod_mapa_recurso=? ;`;
+    let [data1]=await sequelize.query(query,
+      {
+      type: QueryTypes.SELECT,
+      replacements: [data_in.cod_mapa_recurso]
+      });
+      console.log(data1);
+    /////Seleccionamos empresa,modalidad,remuneracion,bono_men,fecha_fin_ant,fecha_inicio_nuevo
+    query=`SELECT empresa,modalidad,(COALESCE(sueldo_planilla,0)+COALESCE(rxh,0)) AS remuneracion,bono AS bono_men,
+    fecha_fin AS fecha_fin_ant,(fecha_fin+1) AS fecha_inicio_nuevo
+    FROM contrato
+    WHERE cod_colaborador=? ;`;
+    let [data2]=await sequelize.query(query,
+    {
+    type: QueryTypes.SELECT,
+    replacements: [data1.cod_colaborador]
+    });
+    console.log(data2);
+    /////Seleccionamos puesto,cod_puesto y nivel
+    query=`SELECT puesto,colaborador.cod_puesto,nivel
+    FROM colaborador
+    INNER JOIN puesto ON colaborador.cod_puesto=puesto.cod_puesto
+    WHERE cod_colaborador=? ;`;
+    let [data3]=await sequelize.query(query,
+    {
+    type: QueryTypes.SELECT,
+    replacements: [data1.cod_colaborador]
+    });
+    console.log(data3);
+    /////Se colocan los valores por defecto para esta opcion de renovacion
+    let data4={
+        "modalidad_bono":"mensual",/////////ALERTA//ALERTA//AGREGAR A LA TABLA Y AL FLUJO DE CONTRATACION, NO DESDE AQUÍ
+        "nueva_modalidad":"F",
+        "nuevo_sueldo":"F",
+        "nuevo_bono":"F",
+        "nuevo_puesto":"F",
+        "nuevo_nivel_puesto":"F",
+        "estado":"Pendiente Aprobacion"
+    }
+    console.log(data4);
+    ///////////////////Unimos todos los datos que ya teníamos guardados y los nuevos
+    return {...data_in,...data1,...data2,...data3,...data4};
+    }
+  }
+
   async create(data) {
     const fields = [
-      'opcion_renovacion', 'empresa', 'nueva_modalidad', 'nuevo_sueldo',
-      'nuevo_bono', 'nuevo_puesto', 'nuevo_nivel_puesto', 'cod_puesto',
+      'cod_colaborador','cod_cliente','opcion_renovacion', 'empresa',
+      'nueva_modalidad', 'nuevo_sueldo','nuevo_bono', 'nuevo_puesto',
+      'nuevo_nivel_puesto', 'cod_puesto',
       'nivel', 'modalidad', 'remuneracion', 'modalidad_bono',
       'bono_men', 'estado', 'fecha_fin_ant', 'fecha_inicio_nuevo',
       'fecha_fin_nuevo'
@@ -34,6 +85,33 @@ class RenovationRequestService {
       }
     }
   }
+
+  // async create(data) {
+  //   const fields = [
+  //     'cod_colaborador','cod_cliente','opcion_renovacion', 'empresa',
+  //     'nueva_modalidad', 'nuevo_sueldo','nuevo_bono', 'nuevo_puesto',
+  //     'nuevo_nivel_puesto', 'cod_puesto',
+  //     'nivel', 'modalidad', 'remuneracion', 'modalidad_bono',
+  //     'bono_men', 'estado', 'fecha_fin_ant', 'fecha_inicio_nuevo',
+  //     'fecha_fin_nuevo'
+  //   ];
+  //   // Sentencia
+  //   const query = `${ getInsert(fields) }
+  //             VALUES(${ fields.map(field => "(:".concat(field).concat(")")).toString() })
+  //             RETURNING *;`;
+
+  //   try {
+  //     const [[ newRequestService ]] = await sequelize.query(query, {
+  //       type: QueryTypes.INSERT,
+  //       replacements: data
+  //     });
+  //     return newRequestService;
+  //   } catch (error) {
+  //     if (error.name === 'SequelizeUniqueConstraintError') {
+  //       throw boom.conflict('there was a conflict');
+  //     }
+  //   }
+  // }
 
   findBy(body){
     var query=`SELECT tipo_solicitud,cod_solicitud_renovacion,solicitud_renovacion.fecha_reg,cliente.nombre_corto,
@@ -79,5 +157,19 @@ class RenovationRequestService {
 
   }
 
+  async findCollaboratorData(cod){
+    const query=`SELECT mapa_recursos.cod_colaborador,colaborador.nro_documento,
+                 CONCAT(colaborador.nombres,' ',colaborador.apellido_pat,' ',colaborador.apellido_mat) AS nombres,
+                 mapa_recursos.cod_cliente,nombre_corto
+                 FROM mapa_recursos
+                 INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador
+                 INNER JOIN cliente ON mapa_recursos.cod_cliente=cliente.cod_cliente
+                 WHERE cod_mapa_recurso=? ;`;
+    const [data]= await sequelize.query(query,{
+      type: QueryTypes.SELECT,
+      replacements: [cod]
+    });
+    return data;
+  }
 }
 module.exports = RenovationRequestService;
