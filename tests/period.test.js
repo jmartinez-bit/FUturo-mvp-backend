@@ -24,7 +24,7 @@ beforeAll(async () => {
    * Perfil: JEFE_DE_RECURSOS_HUMANOS
    */
   const response = await request(app).post('/api/v1/auth/login').send({
-    email: 'johana.landa@mdp.com.pe',
+    email: 'johanna.landa@mdp.com.pe',
     password: '123456',
   });
 
