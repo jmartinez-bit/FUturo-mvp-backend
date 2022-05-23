@@ -25,4 +25,14 @@ router.get('/collaborator/:cod',
   }
 });
 
+router.get('/auto/:cod_mapa_recurso',
+  async (req, res, next) => {
+  try {
+    const {cod_mapa_recurso} = req.params;
+    res.status(201).json(await renovationRequestService.fillDataAutocompleted(cod_mapa_recurso));
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
