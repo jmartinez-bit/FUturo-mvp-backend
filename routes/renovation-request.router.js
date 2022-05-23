@@ -15,16 +15,6 @@ router.post('/create',
   }
 });
 
-router.get('/collaborator/:cod',
-  async (req, res, next) => {
-  try {
-    const {cod}=req.params;
-    res.status(201).json(await renovationRequestService.findCollaboratorData(cod));
-  } catch (error) {
-    next(error);
-  }
-});
-
 router.get('/auto/:cod_mapa_recurso',
   async (req, res, next) => {
   try {

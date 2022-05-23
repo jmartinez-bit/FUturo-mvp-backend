@@ -21,7 +21,12 @@ class RenovationRequestService {
   async fillDataAutocompleted(cod_mapa_recurso){
     var query;
     /////Seleccionamos cod_colaborador,cod_cliente
-      query=`SELECT cod_colaborador,cod_cliente FROM mapa_recursos
+      query=`SELECT mapa_recursos.cod_colaborador,colaborador.nro_documento,
+            CONCAT(colaborador.nombres,' ',colaborador.apellido_pat,' ',colaborador.apellido_mat) AS nombres,
+            mapa_recursos.cod_cliente,nombre_corto
+            FROM mapa_recursos
+            INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador
+            INNER JOIN cliente ON mapa_recursos.cod_cliente=cliente.cod_cliente
             WHERE cod_mapa_recurso=? ;`;
     let [data1]=await sequelize.query(query,
       {
@@ -133,19 +138,5 @@ class RenovationRequestService {
 
   }
 
-  async findCollaboratorData(cod){
-    const query=`SELECT mapa_recursos.cod_colaborador,colaborador.nro_documento,
-                 CONCAT(colaborador.nombres,' ',colaborador.apellido_pat,' ',colaborador.apellido_mat) AS nombres,
-                 mapa_recursos.cod_cliente,nombre_corto
-                 FROM mapa_recursos
-                 INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador
-                 INNER JOIN cliente ON mapa_recursos.cod_cliente=cliente.cod_cliente
-                 WHERE cod_mapa_recurso=? ;`;
-    const [data]= await sequelize.query(query,{
-      type: QueryTypes.SELECT,
-      replacements: [cod]
-    });
-    return data;
-  }
 }
 module.exports = RenovationRequestService;
