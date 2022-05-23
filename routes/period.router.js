@@ -79,7 +79,7 @@ const periodService = new PeriodService();
  *              type: object
  *              $ref: '#/components/schemas/LastPeriod'
  */
-router.get('/last-period', async (req, res, next) => {
+router.get('/last-period', async (_req, res, next) => {
   try {
     const lastPeriod = await periodService.getLastPeriod();
     res.json(lastPeriod);
@@ -173,7 +173,7 @@ router.put('/update',
  */
 router.get('/',
   checkRoles('JEFE_DE_RECURSOS_HUMANOS', 'ANALISTA_RECURSOS_HUMANOS'),
-  async (req, res, next) => {
+  async (_req, res, next) => {
   try {
     res.json(await periodService.getAll());
   } catch (error) {

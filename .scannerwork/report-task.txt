@@ -2,5 +2,5 @@ projectKey=fu-back
 serverUrl=http://localhost:9000
 serverVersion=9.4.0.54424
 dashboardUrl=http://localhost:9000/dashboard?id=fu-back
-ceTaskId=AYDUDExd5hOsWonWi9eX
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AYDUDExd5hOsWonWi9eX
+ceTaskId=AYDfKX-bfhjhjo3xdw_C
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYDfKX-bfhjhjo3xdw_C
