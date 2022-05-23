@@ -2,19 +2,19 @@ const multer = require("multer");
 
 
 const storage = multer.diskStorage({
-  filename: function (res, file, cb) {
-    const ext = file.originalname.split(".").pop(); //TODO pdf / jpeg / mp3
-    const fileName = Date.now(); //TODO 12312321321
-    cb(null, `${fileName}.${ext}`); //TODO 123123213232.pdf
+  filename: function (_res, file, cb) {
+    const ext = file.originalname.split(".").pop(); // pdf / jpeg / mp3
+    const fileName = Date.now(); // 12312321321
+    cb(null, `${fileName}.${ext}`); // 123123213232.pdf
   },
-  destination: function (res, file, cb) {
+  destination: function (_res, _file, cb) {
     cb(null, `./public`);
   },
 });
 
 const maxSize=2*1024*1024;
 const upload = multer({ storage ,
-  fileFilter: function (req, file, cb) {
+  fileFilter: function (_req, file, cb) {
 
              var filetypes = /docx|doc|pdf/;
              var mimetype = filetypes.test(file.mimetype);

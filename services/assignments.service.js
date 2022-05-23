@@ -8,7 +8,7 @@ const userService = new UserService();
 // Sentencias
 function getSelect(attributes = '*') {
   return `SELECT ${ attributes.toString() } FROM asignacion_recursos`;
-};
+}
 const joinService = `INNER JOIN servicio ON servicio.cod_servicio = asignacion_recursos.cod_servicio`;
 const joinColaborador = `INNER JOIN colaborador ON asignacion_recursos.cod_colaborador = colaborador.cod_colaborador`;
 

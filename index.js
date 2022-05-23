@@ -44,7 +44,7 @@ require('./utils/auth');
 app.use(express.static("./public"));
 
 
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.send('Hola mundo');
 });
 

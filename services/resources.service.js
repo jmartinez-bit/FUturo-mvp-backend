@@ -115,7 +115,6 @@ class ResourcesService{
 
   //Servicio de calculo de monto total
   async findByMontoServicio(cod_cliente,periodo,perfil,nombres){
-    // const client = await getConnection();
     let query = "SELECT sum(clm_efectivo) as clm_efectivo, sum(produccion) as produccion, sum(produccion)/sum(clm_efectivo) as productividad" +
     " FROM public.mapa_recursos" +
     " INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador" +
@@ -176,11 +175,8 @@ class ResourcesService{
 
   //Servicio UH 4
   async findByAperturaMapaRecursosMensual(){
-    // const client = await getConnection();
-    // const periodo = fecha.getMonth() + 1;
-    // console.log(periodo);
     const rta = await sequelize.query("SELECT * FROM public.maparecursos");
-    return (await rta).rows;
+    return rta.rows;
   }
 
   async createResourcefromSolicitude(d,codColaborador){

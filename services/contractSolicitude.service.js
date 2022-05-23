@@ -73,12 +73,11 @@ class ContractSolicitudeService{
                 WHERE EXISTS (SELECT 1
                               FROM solicitud_contratacion
                               WHERE nro_documento = ? AND estado<>'Rechazado'); `;
-    const data = await sequelize.query(query,
+     return sequelize.query(query,
       {
         type: QueryTypes.SELECT,
         replacements: [nroDocumento]
       });
-     return data;
   }
 
    findBy(body){

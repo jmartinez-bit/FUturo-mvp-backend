@@ -10,11 +10,11 @@ class ContractService{
                               INNER JOIN colaborador ON contrato.cod_colaborador=colaborador.cod_colaborador
                               WHERE nro_documento = ? AND CURRENT_DATE<=fecha_fin
                               AND (contrato.estado='AC' OR contrato.estado='RE') ); `;
-    const data = await sequelize.query(query,{
+
+    return sequelize.query(query,{
       type: QueryTypes.SELECT,
       replacements: [nroDocumento]
     });
-     return data;
   }
 
   async createContractfromSolicitude(d,id,usuarioReg){

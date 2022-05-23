@@ -16,6 +16,5 @@ sonarqubeScanner(
       'sonar.testExecutionReportPaths': 'coverage/test-reporter.xml',
       'sonar.sourceEncoding': 'UTF-8'
     },
-  },
-  () => {}
+  }
 );
