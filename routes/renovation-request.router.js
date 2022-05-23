@@ -8,8 +8,19 @@ router.post('/create',
   async (req, res, next) => {
   try {
     const body = req.body;
-    const data=await renovationRequestService.modifyDataInput(body);
-    res.status(201).json(await renovationRequestService.create(data));
+    if(body.opcion_renovacion==="mismas condiciones"){
+      const data=await renovationRequestService.modifyDataInput(body);
+      if(data.fecha_fin_nuevo<data.fecha_inicio_nuevo){
+        res.status(409).json({"error":true,
+        "message":"La fecha de fin del nuevo contrato debe ser mayor la fecha de inicio"});
+      }else{
+        res.status(201).json(await renovationRequestService.create(data));
+      }
+    }else{
+        res.status(409).json({"error":true,
+        "message":"Opcion de renovacion equivocada. La opcion: '"+body.opcion_renovacion+ "' no está implementada"});
+    }
+
   } catch (error) {
     next(error);
   }
