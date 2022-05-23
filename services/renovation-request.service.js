@@ -23,7 +23,7 @@ class RenovationRequestService {
     /////Seleccionamos cod_colaborador,cod_cliente
       query=`SELECT mapa_recursos.cod_colaborador,colaborador.nro_documento,
             CONCAT(colaborador.nombres,' ',colaborador.apellido_pat,' ',colaborador.apellido_mat) AS nombres,
-            mapa_recursos.cod_cliente,nombre_corto
+            mapa_recursos.cod_cliente,nombre_corto,linea_negocio AS cod_linea_negocio
             FROM mapa_recursos
             INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador
             INNER JOIN cliente ON mapa_recursos.cod_cliente=cliente.cod_cliente
@@ -69,7 +69,7 @@ class RenovationRequestService {
 
   async create(data) {
     const fields = [
-      'cod_colaborador','cod_cliente','opcion_renovacion', 'empresa',
+      'cod_colaborador','cod_cliente','cod_linea_negocio','opcion_renovacion', 'empresa',
       'nueva_modalidad', 'nuevo_sueldo','nuevo_bono', 'nuevo_puesto',
       'nuevo_nivel_puesto', 'cod_puesto',
       'nivel', 'modalidad', 'remuneracion', 'modalidad_bono',
