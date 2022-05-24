@@ -99,7 +99,7 @@ router.get('/productividad/:resmapid', async (req, res, next) => {
 router.get('/contrato/:cod_colaborador/:periodo', async (req, res, next) => {
   try {
     const { cod_colaborador, periodo } = req.params;
-    const contract = await collaboratorService.findByCodColaboradorJoinContrato(cod_colaborador, periodo);
+    const contract = await collaboratorService.findByCodColaboradorJoinContrato(cod_colaborador);
     res.json(contract);
   } catch (error) {
     next(error);
