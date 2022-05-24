@@ -42,12 +42,15 @@ router.get('/auto/:cod_mapa_recurso',
   }
 });
 
-<<<<<<< HEAD
 router.get("/getRenovation/:cod_solicitud_renovacion",async (req, res,next) =>{
   try{
     const {cod_solicitud_renovacion}=req.params;
     res.status(201).json(await renovationRequestService.findOneSolicitude(cod_solicitud_renovacion));
-=======
+  }catch (e){
+    next(e);
+  }
+});
+
 router.get("/reject/:cod",async (req, res,next) =>{
   try{
     const {cod}=req.params;
@@ -60,8 +63,6 @@ router.get("/reject/:cod",async (req, res,next) =>{
       res.status(200).json({"error":false,
                           "message":"Se cambió el estado a Rechazado"});
     }
->>>>>>> f037a9cbb3ce20429f14d9ee4f2dedc02fdd8aad
-
   }catch (e){
     next(e);
   }

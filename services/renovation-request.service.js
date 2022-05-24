@@ -138,7 +138,6 @@ class RenovationRequestService {
 
   }
 
-<<<<<<< HEAD
   async findOneSolicitude(cod_solicitud_renovacion){
     let query
     query=`SELECT tipo_solicitud,cod_solicitud_renovacion,nombre_corto,nro_documento,nombres,apellido_pat,apellido_mat,
@@ -197,7 +196,6 @@ class RenovationRequestService {
   //   await sequelize.query(`COMMIT;`);//FIN DE LA TRANSACCIÓN
 
   // }
-=======
   async findState(cod){
     const query=`SELECT estado FROM solicitud_renovacion
                  WHERE cod_solicitud_renovacion=? ;`;
@@ -231,7 +229,6 @@ class RenovationRequestService {
         replacements: [codColab]
       });
   }
->>>>>>> f037a9cbb3ce20429f14d9ee4f2dedc02fdd8aad
 
 }
 module.exports = RenovationRequestService;
