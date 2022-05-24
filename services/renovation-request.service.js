@@ -160,5 +160,17 @@ class RenovationRequestService {
     await sequelize.query(query);
   }
 
+  async isThereAPreviousSolicitude(codColab){
+    const query=`SELECT TRUE
+                WHERE EXISTS (SELECT 1
+                              FROM solicitud_renovacion
+                              WHERE cod_colaborador = ? AND estado<>'Rechazado' AND estado<>'Aprobado'); `;
+     return sequelize.query(query,
+      {
+        type: QueryTypes.SELECT,
+        replacements: [codColab]
+      });
+  }
+
 }
 module.exports = RenovationRequestService;
