@@ -138,7 +138,64 @@ class RenovationRequestService {
 
   }
 
+  async findOneSolicitude(cod_solicitud_renovacion){
+    let query
+    query=`SELECT tipo_solicitud,cod_solicitud_renovacion,nombre_corto,nro_documento,nombres,apellido_pat,apellido_mat,
+    opcion_renovacion,nueva_modalidad,nuevo_sueldo,nuevo_bono,nuevo_puesto,nuevo_nivel_puesto,
+    colaborador.cod_puesto,puesto.puesto,colaborador.nivel,modalidad,remuneracion,bono_men,
+    fecha_fin_ant,fecha_inicio_nuevo,fecha_fin_nuevo,solicitud_renovacion.estado,motivo_rechazo
+    FROM solicitud_renovacion
+    INNER JOIN colaborador ON solicitud_renovacion.cod_colaborador=colaborador.cod_colaborador
+    INNER JOIN cliente ON solicitud_renovacion.cod_cliente=cliente.cod_cliente
+    INNER JOIN puesto ON colaborador.cod_puesto=puesto.cod_puesto
+    WHERE cod_solicitud_renovacion=? ;`;
 
+    let [data]=await sequelize.query(query,
+    {
+    type: QueryTypes.SELECT,
+    replacements: [cod_solicitud_renovacion]
+    });
+
+     return data;
+  }
+
+  // async findState(cod){
+  //   const query=`SELECT estado FROM solicitud_renovacion
+  //                WHERE cod_solicitud_renovacion=? ;`;
+  //   const [data]=await sequelize.query(query,
+  //     {
+  //       type: QueryTypes.SELECT,
+  //       replacements: [cod]
+  //     });
+  //   return data.estado;
+  // }
+
+  // async approve(cod,indAsignFamiliar,codUsuario){
+  //   await sequelize.query(`BEGIN;`);//INICIO DE LA TRANSACCIÓN
+  //   if(indAsignFamiliar==="true"){
+  //     const [dat]=await sequelize.query(`SELECT clm from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
+  //     var clm=parseFloat(dat[0].clm)+parseFloat(process.env.ASIGN_FAMILIAR);
+  //     clm=clm.toFixed(2);
+  //     this.addFamiliarAssignment(cod,clm);
+  //   }else{
+  //     await sequelize.query(`UPDATE solicitud_contratacion
+  //     SET ind_asign_familiar='N'
+  //     WHERE cod_solicitud_contratacion=${cod}`);
+  //   }
+  //   const usuarioReg=await userService.findUsername(codUsuario);
+  //   const [data]=await sequelize.query(`SELECT * from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
+  //   await collaboratorService.createCollaboratorfromSolicitude(data[0],usuarioReg);
+  //   const codCollaborator= await collaboratorService.findIdCollaborator(data[0].nro_documento);
+  //   await contractService.createContractfromSolicitude(data[0],codCollaborator,usuarioReg);
+  //   await resourcesService.createResourcefromSolicitude(data[0],codCollaborator)
+
+  //   const query=`UPDATE solicitud_contratacion
+  //                SET estado='Aprobado',fecha_aprob=CURRENT_DATE
+  //                WHERE cod_solicitud_contratacion=${cod}`;
+  //   await sequelize.query(query);
+  //   await sequelize.query(`COMMIT;`);//FIN DE LA TRANSACCIÓN
+
+  // }
 
 }
 module.exports = RenovationRequestService;
