@@ -69,7 +69,6 @@ router.get("/reject/:cod",async (req, res,next) =>{
 
 });
 
-<<<<<<< HEAD
 // router.get("/approve",async (req, res,next) =>{
 //   try{
 //     const cod_usuario = req.user.id_sesion;
@@ -93,6 +92,4 @@ router.get("/reject/:cod",async (req, res,next) =>{
 
 // });
 
-=======
->>>>>>> f037a9cbb3ce20429f14d9ee4f2dedc02fdd8aad
 module.exports = router;
