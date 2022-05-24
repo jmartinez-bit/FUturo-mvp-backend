@@ -138,7 +138,27 @@ class RenovationRequestService {
 
   }
 
+  async findState(cod){
+    const query=`SELECT estado FROM solicitud_renovacion
+                 WHERE cod_solicitud_renovacion=? ;`;
+    const [data]=await sequelize.query(query,
+      {
+        type: QueryTypes.SELECT,
+        replacements: [cod]
+      });
+    return data.estado;
+  }
 
+  async reject(cod,body){
+    var query=`UPDATE solicitud_renovacion
+                 SET estado='Rechazado',`
+    if(body.motivo_rechazo){
+      query+=`motivo_rechazo='${body.motivo_rechazo}',`;
+    }
+      query+= `fecha_rechaz=CURRENT_DATE
+              WHERE cod_solicitud_renovacion=${cod}`;
+    await sequelize.query(query);
+  }
 
 }
 module.exports = RenovationRequestService;
