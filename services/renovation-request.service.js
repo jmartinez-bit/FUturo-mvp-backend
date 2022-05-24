@@ -138,6 +138,7 @@ class RenovationRequestService {
 
   }
 
+<<<<<<< HEAD
   async findOneSolicitude(cod_solicitud_renovacion){
     let query
     query=`SELECT tipo_solicitud,cod_solicitud_renovacion,nombre_corto,nro_documento,nombres,apellido_pat,apellido_mat,
@@ -196,6 +197,41 @@ class RenovationRequestService {
   //   await sequelize.query(`COMMIT;`);//FIN DE LA TRANSACCIÓN
 
   // }
+=======
+  async findState(cod){
+    const query=`SELECT estado FROM solicitud_renovacion
+                 WHERE cod_solicitud_renovacion=? ;`;
+    const [data]=await sequelize.query(query,
+      {
+        type: QueryTypes.SELECT,
+        replacements: [cod]
+      });
+    return data.estado;
+  }
+
+  async reject(cod,body){
+    var query=`UPDATE solicitud_renovacion
+                 SET estado='Rechazado',`
+    if(body.motivo_rechazo){
+      query+=`motivo_rechazo='${body.motivo_rechazo}',`;
+    }
+      query+= `fecha_rechaz=CURRENT_DATE
+              WHERE cod_solicitud_renovacion=${cod}`;
+    await sequelize.query(query);
+  }
+
+  async isThereAPreviousSolicitude(codColab){
+    const query=`SELECT TRUE
+                WHERE EXISTS (SELECT 1
+                              FROM solicitud_renovacion
+                              WHERE cod_colaborador = ? AND estado<>'Rechazado' AND estado<>'Aprobado'); `;
+     return sequelize.query(query,
+      {
+        type: QueryTypes.SELECT,
+        replacements: [codColab]
+      });
+  }
+>>>>>>> f037a9cbb3ce20429f14d9ee4f2dedc02fdd8aad
 
 }
 module.exports = RenovationRequestService;
