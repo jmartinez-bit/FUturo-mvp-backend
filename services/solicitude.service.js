@@ -30,7 +30,7 @@ class SolicitudeService{
         [data] = await sequelize.query(query);
         break;
       default:
-        data={"error":true,"message":"No existe servicio para el tipo de movimiento de recurso"+body.tipo_solicitud};
+        data={"error":true,"message":"No existe servicio para el tipo de movimiento de recurso '"+body.tipo_solicitud+"'"};
         break;
 
     }
