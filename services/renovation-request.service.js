@@ -43,7 +43,8 @@ class RenovationRequestService {
     query=`SELECT empresa,modalidad,(COALESCE(sueldo_planilla,0)+COALESCE(rxh,0)) AS remuneracion,bono AS bono_men,
     fecha_fin AS fecha_fin_ant,(fecha_fin+1) AS fecha_inicio_nuevo
     FROM contrato
-    WHERE cod_colaborador=? ;`;
+    WHERE cod_colaborador=?
+    ORDER BY cod_contrato DESC LIMIT 1;`;
     let [data2]=await sequelize.query(query,
     {
     type: QueryTypes.SELECT,
