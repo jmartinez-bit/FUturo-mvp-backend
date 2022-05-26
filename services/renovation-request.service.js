@@ -137,7 +137,7 @@ class RenovationRequestService {
             opcion_renovacion,nueva_modalidad,nuevo_sueldo,nuevo_bono,nuevo_puesto,nuevo_nivel_puesto,
             colaborador.cod_puesto,puesto.puesto,colaborador.nivel,modalidad,remuneracion,bono_men,
             fecha_fin_ant,fecha_inicio_nuevo,fecha_fin_nuevo,solicitud_renovacion.estado,motivo_rechazo,
-            solicitud_renovacion.cod_linea_negocio,modalidad_bono
+            solicitud_renovacion.cod_linea_negocio,modalidad_bono,solicitud_renovacion.empresa
             FROM solicitud_renovacion
             INNER JOIN colaborador ON solicitud_renovacion.cod_colaborador=colaborador.cod_colaborador
             INNER JOIN cliente ON solicitud_renovacion.cod_cliente=cliente.cod_cliente
