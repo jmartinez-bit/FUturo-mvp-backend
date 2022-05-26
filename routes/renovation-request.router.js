@@ -42,15 +42,6 @@ router.get('/auto/:cod_mapa_recurso',
   }
 });
 
-router.get("/getRenovation/:cod_solicitud_renovacion",async (req, res,next) =>{
-  try{
-    const {cod_solicitud_renovacion}=req.params;
-    res.status(201).json(await renovationRequestService.findOneSolicitude(cod_solicitud_renovacion));
-  }catch (e){
-    next(e);
-  }
-});
-
 router.get("/reject/:cod",async (req, res,next) =>{
   try{
     const {cod}=req.params;
@@ -69,27 +60,25 @@ router.get("/reject/:cod",async (req, res,next) =>{
 
 });
 
-// router.get("/approve",async (req, res,next) =>{
-//   try{
-//     const cod_usuario = req.user.id_sesion;
-//     const {cod,indAsignFamiliar}=req.params;
-//     const estado=await renovationRequestService.findState(cod);
-//     if(estado==="Aprobado"||estado==="Rechazado"){
-//       res.status(409).json({"error":false,
-//       "message":"A esta solicitud ya se le asigno el estado "+estado});
-//     }else if(estado==="Pendiente Aprobacion GG"){
-//       res.status(409).json({"error":false,
-//       "message":"Necesita aprobación del Gerente General "});
-//     }else{
-//       await renovationRequestService.approve(cod,indAsignFamiliar,cod_usuario);
-//       res.status(200).json({"error":false,
-//                           "message":"Se cambió el estado a Aprobado y se creo un nuevo contrato"});
-//     }
+router.get("/approve/:cod",async (req, res,next) =>{
+  try{
+    console.log("ingresamos a la ruta")
+    const cod_usuario = req.user.id_sesion;
+    const {cod}=req.params;
+    const estado=await renovationRequestService.findState(cod);
+    if(estado==="Aprobado"||estado==="Rechazado"){
+      res.status(409).json({"error":false,
+      "message":"A esta solicitud ya se le asigno el estado "+estado});
+    }else{
+      await renovationRequestService.approve(cod,cod_usuario);
+      res.status(200).json({"error":false,
+                          "message":"Se cambió el estado a Aprobado y se creo un nuevo contrato"});
+    }
 
-//   }catch (e){
-//     next(e);
-//   }
+  }catch (e){
+    next(e);
+  }
 
-// });
+});
 
 module.exports = router;
