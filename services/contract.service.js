@@ -45,16 +45,21 @@ class ContractService{
       sueldoPlanilla=d.remuneracion;
       rxh=null;
     }
+    //Acondicionamiento modalidad_bono
+    var modalidad_bono=null;
+    if(d.bono){
+      modalidad_bono='mensual';
+    }
     //Insert
     const query=`INSERT INTO contrato(
       cod_colaborador,tipo, modalidad,ind_asign_familiar,asignacion_familiar, sueldo_planilla, rxh,
-       bono, clm, fecha_inicio, fecha_fin,estado,fecha_reg,usuario_registro,empresa)
-      VALUES (?,'C',?,?,?, ?,?, ?, ?, ?,?,'AC',CURRENT_DATE,?,?);`;
+       bono, clm, fecha_inicio, fecha_fin,estado,fecha_reg,usuario_registro,empresa,modalidad_bono)
+      VALUES (?,'C',?,?,?, ?,?, ?, ?, ?,?,'AC',CURRENT_DATE,?,?,?);`;
     await sequelize.query(query,
       {
       type: QueryTypes.INSERT,
       replacements: [id,d.modalidad,indAsignFamiliar,asignFamiliar,
-      sueldoPlanilla,rxh,d.bono_men,d.clm,d.fecha_inicio,d.fecha_fin,usuarioReg,d.empresa]
+      sueldoPlanilla,rxh,d.bono_men,d.clm,d.fecha_inicio,d.fecha_fin,usuarioReg,d.empresa,modalidad_bono]
       });
   }
 
@@ -114,13 +119,13 @@ class ContractService{
     //Insert
     const queryInsert=`INSERT INTO contrato(
       cod_colaborador,tipo, modalidad,ind_asign_familiar,asignacion_familiar, sueldo_planilla, rxh,
-       bono, clm, fecha_inicio, fecha_fin,estado,fecha_reg,usuario_registro,empresa,nro_contrato_ant)
+       bono, clm, fecha_inicio, fecha_fin,estado,fecha_reg,usuario_registro,empresa,nro_contrato_ant,modalidad_bono)
       VALUES (?,'R',?,?,?, ?,?, ?, ?, ?,?,'AC',CURRENT_DATE,?,?,?);`;
     await sequelize.query(queryInsert,
       {
       type: QueryTypes.INSERT,
       replacements: [d.cod_colaborador,d.modalidad,indAsignFamiliar,asignFamiliar,
-      sueldoPlanilla,rxh,d.bono_men,clm,d.fecha_inicio_nuevo,d.fecha_fin_nuevo,usuarioReg,d.empresa,lastContract.cod_contrato]
+      sueldoPlanilla,rxh,d.bono_men,clm,d.fecha_inicio_nuevo,d.fecha_fin_nuevo,usuarioReg,d.empresa,lastContract.cod_contrato,d.modalidad_bono]
       });
     //Update a inactivo el contrato anterior
     const query1=`UPDATE contrato SET
