@@ -47,7 +47,7 @@ class ContractService{
     }
     //Acondicionamiento modalidad_bono
     var modalidad_bono=null;
-    if(d.bono){
+    if(d.bono_men){
       modalidad_bono='mensual';
     }
     //Insert
