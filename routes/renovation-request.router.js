@@ -42,7 +42,7 @@ router.get('/auto/:cod_mapa_recurso',
   }
 });
 
-router.get("/reject/:cod",async (req, res,next) =>{
+router.post("/reject/:cod",async (req, res,next) =>{
   try{
     const {cod}=req.params;
     const estado=await renovationRequestService.findState(cod);
