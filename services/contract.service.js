@@ -127,7 +127,7 @@ class ContractService{
                   estado = 'RE',
                   fecha_act = CURRENT_DATE,
                   usuario_act = '${usuarioReg}'
-                  WHERE cod_colaborador=${d.cod_colaborador}`
+                  WHERE cod_contrato=${lastContract.cod_contrato}`
 
     await sequelize.query(query1);
     //Update al mapa de recursos
