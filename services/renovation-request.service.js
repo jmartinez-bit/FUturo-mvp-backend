@@ -164,7 +164,7 @@ class RenovationRequestService {
     let query=`UPDATE solicitud_renovacion
                  SET estado='Aprobado',
                  fecha_aprob=CURRENT_DATE,
-                 usuario_aprob=${usuarioReg},
+                 usuario_aprob='${usuarioReg}'
               WHERE cod_solicitud_renovacion=${cod}`;
     await sequelize.query(query);
     await sequelize.query(`COMMIT;`);//FIN DE LA TRANSACCIÓN

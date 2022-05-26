@@ -2,6 +2,9 @@ const sequelize = require('../libs/sequelize');
 const { QueryTypes } = require('sequelize');
 
 const ParameterService = require('../services/parameter.service');
+const PeriodService = require('../services/period.service');
+
+const periodService = new PeriodService();
 const parameterService = new ParameterService();
 
 class ContractService{
@@ -57,15 +60,14 @@ class ContractService{
 
 
   async renovationContractfromSolicitude(d,usuarioReg){
-    const lastContract=await sequelize.query(`SELECT * from contrato WHERE cod_colaborador= ${d.cod_colaborador} order by fecha_reg desc limit 1`);
+    const [[lastContract]]=await sequelize.query(`SELECT * from contrato WHERE cod_colaborador= ${d.cod_colaborador} order by fecha_reg desc limit 1`);
 
-      console.log("Obtenemos datos de contrato anterioos")
       if (!d.nueva_modalidad){
         d.modalidad = lastContract.modalidad;
       }
       if (!d.nuevo_sueldo){
         if(lastContract.modalidad==='planilla'){
-          d.remuneracion = lastContract.sueldoPlanilla
+          d.remuneracion = lastContract.sueldo_planilla
         } else {
           d.remuneracion = lastContract.rxh
         }
@@ -76,13 +78,13 @@ class ContractService{
       }
       if (d.nuevo_puesto){
         const querypuesto=`UPDATE colaborador
-                 SET cod_puesto = ${d.cod_puesto}
+                 SET cod_puesto = '${d.cod_puesto}'
                  WHERE cod_colaborador=${d.cod_colaborador}`;
         await sequelize.query(querypuesto);
       }
       if (d.nuevo_nivel_puesto){
         const querynivel=`UPDATE colaborador
-                 SET nivel = ${d.nivel}
+                 SET nivel = '${d.nivel}'
                  WHERE cod_colaborador=${d.cod_colaborador}`;
         await sequelize.query(querynivel);
       }
@@ -102,7 +104,6 @@ class ContractService{
     const factorRxhPracticas=parseFloat((await parameterService.findParameterValue("factor_rxh_practicas"))[0].valor_num_1);
 
     let clm;
-
     if(d.opcion_renovacion==="mismas condiciones"){
       clm=lastContract.clm;
     } else if(d.modalidad === "planilla"){
@@ -119,27 +120,28 @@ class ContractService{
       {
       type: QueryTypes.INSERT,
       replacements: [d.cod_colaborador,d.modalidad,indAsignFamiliar,asignFamiliar,
-      sueldoPlanilla,rxh,d.bono_men,clm,d.fecha_inicio,d.fecha_fin,usuarioReg,d.empresa,lastContract.cod_contrato]
+      sueldoPlanilla,rxh,d.bono_men,clm,d.fecha_inicio_nuevo,d.fecha_fin_nuevo,usuarioReg,d.empresa,lastContract.cod_contrato]
       });
     //Update a inactivo el contrato anterior
     const query1=`UPDATE contrato SET
                   estado = 'RE',
-                  fecha_actualizacion = CURRENT_DATE,
-                  usuario_actualizacion = ${usuarioReg},
+                  fecha_act = CURRENT_DATE,
+                  usuario_act = '${usuarioReg}'
                   WHERE cod_colaborador=${d.cod_colaborador}`
 
     await sequelize.query(query1);
     //Update al mapa de recursos
-    const queryUpdate=`UPDATE mapa_recursos SET `
-    if(!d.nuevo_nivel_puesto){
-      queryUpdate += `nivel = ${d.nivel}, `
+
+    const periodo =await periodService.getLastPeriod("factor_planilla");
+    let queryUpdate=`UPDATE mapa_recursos SET `
+    if(d.nuevo_nivel_puesto){
+      queryUpdate += `nivel = '${d.nivel}', `
     }
-    if(!d.cod_puesto){
-      queryUpdate += `perfil = ${d.cod_puesto}, `
+    if(d.cod_puesto){
+      queryUpdate += `perfil = '${d.cod_puesto}', `
     }
-    queryUpdate += `fecha_fin_contrato = ${d.fecha_fin_nuevo},
-                    fecha_inicio = ${d.fecha_inicio_nuevo} `
-    queryUpdate += `WHERE cod_colaborador=${d.cod_colaborador}`
+    queryUpdate += `fecha_fin_contrato = '${d.fecha_fin_nuevo}'`
+    queryUpdate += `WHERE cod_colaborador=${d.cod_colaborador} and periodo = '${periodo.periodo}'`
 
     await sequelize.query(queryUpdate);
 
