@@ -14,7 +14,7 @@ class CollaboratorService{
   async findByCodColaboradorJoinContrato(codColaborador) {
     // Columnas
     const select = getSelect(['colaborador.cod_colaborador', 'colaborador.nro_documento',
-    'colaborador."nombres"', 'colaborador.apellido_pat', 'colaborador.apellido_mat', 'contrato.sueldo_planilla',
+    'colaborador."nombres"', 'colaborador.apellido_pat', 'colaborador.apellido_mat',  'COALESCE(contrato.sueldo_planilla,0) + COALESCE(contrato.rxh,0) AS sueldo_planilla',
     'contrato.bono', 'contrato.eps', 'contrato.clm', 'contrato.cod_contrato', 'contrato.modalidad', 'contrato.fecha_fin']);
 
     // Sentencia

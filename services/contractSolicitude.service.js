@@ -55,7 +55,7 @@ class ContractSolicitudeService{
      fecha_nacimiento,sexo, nro_celular, correo, direccion, distrito,provincia, cod_cliente, cod_linea_negocio,condicion_proyecto_area, cod_puesto, nivel,
     cod_banda_salarial, modalidad, remuneracion, bono_men, fecha_inicio, fecha_fin, condicional_adicional,jefe_responsable_directo,horario_laboral,asignacion_equipo,clm,tarifa_mensual,productividad,cv,estado,fecha_reg)
     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,
-      ?,?,?,?,?,?,?,?,?,?,CURRENT_DATE);`;
+      ?,?,?,?,?,?,?,?,?,?,NOW());`;
 
     await sequelize.query(query,
       {

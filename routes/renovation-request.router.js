@@ -54,12 +54,14 @@ router.get("/reject/:cod",async (req, res,next) =>{
       res.status(200).json({"error":false,
                           "message":"Se cambió el estado a Rechazado"});
     }
+
   }catch (e){
     next(e);
   }
 
 });
 
+<<<<<<< HEAD
 router.get("/approve/:cod",async (req, res,next) =>{
   try{
     console.log("ingresamos a la ruta")
@@ -81,4 +83,6 @@ router.get("/approve/:cod",async (req, res,next) =>{
 
 });
 
+=======
+>>>>>>> 00653c584708872c736a0af7b3adb8bbfff1dd8d
 module.exports = router;
