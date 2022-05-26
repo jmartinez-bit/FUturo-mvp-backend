@@ -61,7 +61,6 @@ router.get("/reject/:cod",async (req, res,next) =>{
 
 });
 
-<<<<<<< HEAD
 router.get("/approve/:cod",async (req, res,next) =>{
   try{
     console.log("ingresamos a la ruta")
@@ -83,6 +82,4 @@ router.get("/approve/:cod",async (req, res,next) =>{
 
 });
 
-=======
->>>>>>> 00653c584708872c736a0af7b3adb8bbfff1dd8d
 module.exports = router;
