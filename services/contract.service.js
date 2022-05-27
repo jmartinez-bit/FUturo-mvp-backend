@@ -120,7 +120,7 @@ class ContractService{
     const queryInsert=`INSERT INTO contrato(
       cod_colaborador,tipo, modalidad,ind_asign_familiar,asignacion_familiar, sueldo_planilla, rxh,
        bono, clm, fecha_inicio, fecha_fin,estado,fecha_reg,usuario_registro,empresa,nro_contrato_ant,modalidad_bono)
-      VALUES (?,'R',?,?,?, ?,?, ?, ?, ?,?,'AC',CURRENT_DATE,?,?,?);`;
+      VALUES (?,'R',?,?,?, ?,?, ?, ?, ?,?,'AC',CURRENT_DATE,?,?,?,?);`;
     await sequelize.query(queryInsert,
       {
       type: QueryTypes.INSERT,
