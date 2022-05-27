@@ -20,15 +20,16 @@ const getPeriod = (periodo) => {
 
 beforeAll(async () => {
   /**
-   * Usuario: johana.landa@mdp.com.pe
+   * Usuario: johanna.landa@mdp.com.pe
    * Perfil: JEFE_DE_RECURSOS_HUMANOS
    */
   const response = await request(app).post('/api/v1/auth/login').send({
-    email: 'johana.landa@mdp.com.pe',
+    email: 'johanna.landa@mdp.com.pe',
     password: '123456',
   });
 
   auth.token = `Bearer ${response.body.token}`;
+  await sequelize.query(`BEGIN;`);//INICIO DE LA TRANSACCIÓN
 });
 
 describe('GET /api/v1/period', () => {
@@ -106,6 +107,7 @@ describe('PUT /api/v1/period/update', () => {
 });
 
 afterAll(() => {
+  sequelize.query(`ROLLBACK;`);//FIN DE LA TRANSACCIÓN
   sequelize.close();
   server.close();
 });
