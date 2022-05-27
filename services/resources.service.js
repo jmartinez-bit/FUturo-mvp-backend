@@ -75,7 +75,7 @@ class ResourcesService{
               INNER JOIN perfil ON usuario.cod_perfil=perfil.cod_perfil
               WHERE cod_usuario=${idDM} ;`;
     var [[data]]=await sequelize.query(query);
-    if(data.nombre_perfil=="Delivery Manager"){
+    if(data.nombre_perfil=="Delivery Manager"||data.nombre_perfil=="Jefe de Servicios"){
       query="SELECT cartera_cliente.cod_cliente,nombre_corto FROM cliente "+
       "INNER JOIN cartera_cliente ON cliente.cod_cliente=cartera_cliente.cod_cliente "+
       "WHERE cod_usuario="+idDM+" AND cartera_cliente.estado='A' ;";
