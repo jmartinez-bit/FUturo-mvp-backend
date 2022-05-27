@@ -41,7 +41,7 @@ class RenovationRequestService {
       });
     /////Seleccionamos empresa,modalidad,remuneracion,bono_men,fecha_fin_ant,fecha_inicio_nuevo
     query=`SELECT empresa,modalidad,(COALESCE(sueldo_planilla,0)+COALESCE(rxh,0)) AS remuneracion,bono AS bono_men,
-    fecha_fin AS fecha_fin_ant,(fecha_fin+1) AS fecha_inicio_nuevo
+    fecha_fin AS fecha_fin_ant,(fecha_fin+1) AS fecha_inicio_nuevo,modalidad_bono
     FROM contrato
     WHERE cod_colaborador=?
     ORDER BY cod_contrato DESC LIMIT 1;`;
@@ -62,7 +62,6 @@ class RenovationRequestService {
     });
     /////Se colocan los valores por defecto para esta opcion de renovacion
     let data4={
-        "modalidad_bono":"mensual",/////////ALERTA//ALERTA//AGREGAR A LA TABLA Y AL FLUJO DE CONTRATACION, NO DESDE AQUÍ
         "nueva_modalidad":"F",
         "nuevo_sueldo":"F",
         "nuevo_bono":"F",
