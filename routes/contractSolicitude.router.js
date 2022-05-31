@@ -11,7 +11,81 @@ const contractService = new ContractService();
 const contractSolicitudeService = new ContractSolicitudeService();
 const salaryBandService = new SalaryBandService();
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    Unauthorized:
+ *      type: object
+ *      properties:
+ *        statusCode:
+ *          type: integer
+ *          description: estado de la respuesta
+ *        error:
+ *          type: string
+ *          description: error
+ *        message:
+ *          type: string
+ *          description: mensaje de error
+ *    ParamsNewSolicitude:
+ *      type: object
+ *      properties:
+ *        nro_documento:
+ *          type: string
+ *          description: Número de documento
+ *        cod_puesto:
+ *          type: integer
+ *          description: codigo del puesto
+ *        nivel:
+ *          type: string
+ *          description: nivel del colaborador
+ *      required:
+ *        - nro_documento
+ *        - cod_puesto
+ *        - nivel
+ *      example:
+ *        nro_documento: "77215670"
+ *        cod_puesto: 1
+ *        nivel: "junior"
+ *    ParamsReject:
+ *      type: object
+ *      properties:
+ *        motivo_rechazo:
+ *          type: string
+ *          description: motivo del rechazo
+ *      required:
+ *        - motivo_rechazo
+ *      example:
+ *        motivo_rechazo: "Por no saber Angular"
+ */
 
+
+/**
+ * @swagger
+ * /api/v1/contractSolicitude/newSolicitude:
+ *  post:
+ *    summary: Crear una nueva solicitud
+ *    tags: [ContractSolicitude]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: '#/components/schemas/ParamsNewSolicitude'
+ *    responses:
+ *      201:
+ *        description: Nueva solicitud de contratación creada
+ *      401:
+ *        description: Acceso no autorizado
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/Unauthorized'
+ *      409:
+ *        description: No existe banda salarial para este nivel y puesto o Existe una solicitud pendiente con este número de documento o Existe un contrato vigente con este número de documento
+ */
 
 router.post("/newSolicitude",async (req, res,next) =>{
   try{
@@ -62,6 +136,25 @@ router.post("/",async (req, res,next) =>{
 
 });
 
+/**
+ * @swagger
+ * /api/v1/contractSolicitude/{cod_sol_contratacion}:
+ *  get:
+ *    summary: Buscar una solicitud de contratación
+ *    tags: [ContractSolicitude]
+ *    parameters:
+ *      - in: path
+ *        name: cod_sol_contratacion
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Código de solicitud de contratación
+ *    responses:
+ *      200:
+ *        description: Se encontró la solicitud de contratación
+ */
+
+
 router.get("/:cod",async (req, res,next) =>{
   try{
     const {cod}=req.params;
@@ -93,6 +186,33 @@ router.get("/approve/:cod/:indAsignFamiliar",async (req, res,next) =>{
   }
 
 });
+
+/**
+ * @swagger
+ * /api/v1/contractSolicitude/reject/{cod_sol_contratacion}:
+ *  post:
+ *    summary: Rechazar una solicitud de contratación
+ *    tags: [ContractSolicitude]
+ *    parameters:
+ *      - in: path
+ *        name: cod_sol_contratacion
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Código de solicitud de contratación
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            $ref: '#/components/schemas/ParamsReject'
+ *    responses:
+ *      200:
+ *        description: Se cambió el estado a Rechazado
+ *      409:
+ *        description: A esta solicitud ya se le asignó un estado 
+ */
 
 router.post("/reject/:cod",async (req, res,next) =>{
   try{
