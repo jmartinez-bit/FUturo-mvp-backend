@@ -157,7 +157,7 @@ class RenovationRequestService {
   }
 
    async approve(cod,codUsuario){
-    await sequelize.query(`BEGIN;`);//INICIO DE LA TRANSACCIÓN
+    //await sequelize.query(`BEGIN;`);//INICIO DE LA TRANSACCIÓN
 
     const usuarioReg=await userService.findUsername(codUsuario);
     const [data]=await sequelize.query(`SELECT * from solicitud_renovacion WHERE cod_solicitud_renovacion=${cod}`);
@@ -168,7 +168,7 @@ class RenovationRequestService {
                  usuario_aprob='${usuarioReg}'
               WHERE cod_solicitud_renovacion=${cod}`;
     await sequelize.query(query);
-    await sequelize.query(`COMMIT;`);//FIN DE LA TRANSACCIÓN
+    //await sequelize.query(`COMMIT;`);//FIN DE LA TRANSACCIÓN
   }
 
   async reject(cod,body){
