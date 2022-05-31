@@ -52,17 +52,17 @@ router.post("/newSolicitude",async (req, res,next) =>{
 });
 
 
-router.get("/:cod",async (req, res,next) =>{
-  try{
-    const {cod}=req.params;
-    const [data]=await contractSolicitudeService.findOne(cod);
-    res.json(data);
+// router.get("/:cod",async (req, res,next) =>{
+//   try{
+//     const {cod}=req.params;
+//     const [data]=await contractSolicitudeService.findOne(cod);
+//     res.json(data);
 
-  }catch (e){
-    next(e);
-  }
+//   }catch (e){
+//     next(e);
+//   }
 
-});
+// });
 
 router.get("/approve/:cod/:indAsignFamiliar",async (req, res,next) =>{
   try{

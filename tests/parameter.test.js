@@ -3,6 +3,7 @@ const request = require('supertest');
 const { app, server } = require('../index');
 const  nullOrAny  = require('./util.js');
 
+
 // our global object for storing auth information
 let auth = {};
 expect.extend(nullOrAny);
@@ -20,30 +21,34 @@ beforeAll(async () => {
   auth.token = `Bearer ${response.body.token}`;
 });
 
-describe('GET /api/v1/resources/contrato/{codColaborador}/{periodo}', () => {
-  test('deberia obtener el contrato del colaborador', async () => {
+describe('GET /api/v1/parameter/:nombreParametro', () => {
+  test('deberia obtener los valores del parámetro ', async () => {
     const response = await request(app)
-      .get('/api/v1/resources/contrato/6/03-2022')
+      .get('/api/v1/parameter/factor_planilla')
       .set('authorization', auth.token)
       .expect('Content-Type', /json/)
       .expect(200);
 
-    expect(response.body).toEqual({
-        cod_colaborador: expect.any(Number),
-        nro_documento: expect.any(String),
-        nombres: expect.any(String),
-        apellido_pat: expect.any(String),
-        apellido_mat: expect.any(String),
-        sueldo_planilla: expect.any(String),
-        bono: expect.nullOrAny(String),
-        clm: expect.any(String),
-        cod_contrato: expect.any(Number),
-        modalidad: expect.any(String),
-        fecha_fin: expect.any(String),
-      }
-    );
+    expect(response.body).toEqual(expect.arrayContaining([]));
+    if (response.body.length > 0) {
+      response.body.map((res) => {
+        expect(res).toEqual(
+          expect.objectContaining({
+            valor_num_1: expect.nullOrAny(String),
+            valor_num_2: expect.nullOrAny(String),
+            valor_num_3: expect.nullOrAny(String),
+            valor_char_1: expect.nullOrAny(String),
+            valor_char_2: expect.nullOrAny(String),
+            valor_char_3: expect.nullOrAny(String)
+          })
+        );
+      });
+    }
+
+
   });
 });
+
 
 afterAll(() => {
   sequelize.close();

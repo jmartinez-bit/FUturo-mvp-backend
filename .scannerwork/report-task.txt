@@ -2,5 +2,10 @@ projectKey=fu-back
 serverUrl=http://localhost:9000
 serverVersion=9.4.0.54424
 dashboardUrl=http://localhost:9000/dashboard?id=fu-back
+<<<<<<< HEAD
 ceTaskId=AYDdCGiCdFEugK-hsHjT
 ceTaskUrl=http://localhost:9000/api/ce/task?id=AYDdCGiCdFEugK-hsHjT
+=======
+ceTaskId=AYEY1R7E_xN5_GOYoIYZ
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYEY1R7E_xN5_GOYoIYZ
+>>>>>>> feature_us21

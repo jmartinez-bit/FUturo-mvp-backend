@@ -134,7 +134,7 @@ class ContractSolicitudeService{
   }
 
   async approve(cod,indAsignFamiliar,codUsuario){
-    await sequelize.query(`BEGIN;`);//INICIO DE LA TRANSACCIÓN
+    //await sequelize.query(`BEGIN;`);//INICIO DE LA TRANSACCIÓN
     if(indAsignFamiliar==="true"){
       const [dat]=await sequelize.query(`SELECT clm from solicitud_contratacion WHERE cod_solicitud_contratacion=${cod}`);
       var clm=parseFloat(dat[0].clm)+parseFloat(process.env.ASIGN_FAMILIAR);
@@ -156,7 +156,7 @@ class ContractSolicitudeService{
                  SET estado='Aprobado',fecha_aprob=CURRENT_DATE
                  WHERE cod_solicitud_contratacion=${cod}`;
     await sequelize.query(query);
-    await sequelize.query(`COMMIT;`);//FIN DE LA TRANSACCIÓN
+    //await sequelize.query(`COMMIT;`);//FIN DE LA TRANSACCIÓN
 
   }
 

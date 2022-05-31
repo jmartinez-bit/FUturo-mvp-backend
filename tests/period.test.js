@@ -29,7 +29,6 @@ beforeAll(async () => {
   });
 
   auth.token = `Bearer ${response.body.token}`;
-  await sequelize.query(`BEGIN;`);//INICIO DE LA TRANSACCIÓN
 });
 
 describe('GET /api/v1/period', () => {
@@ -76,6 +75,7 @@ describe('GET /api/v1/period/last-period', () => {
 
 describe('POST /api/v1/period/create', () => {
   test('deberia crear el periodo', async () => {
+  await sequelize.query(`BEGIN;`);//INICIO DE LA TRANSACCIÓN
     const lastPeriod = await request(app)
       .get('/api/v1/period/last-period')
       .set('authorization', auth.token);
@@ -86,11 +86,13 @@ describe('POST /api/v1/period/create', () => {
       .send(newPeriod)
       .expect('Content-Type', /json/)
       .expect(201);
+      sequelize.query(`ROLLBACK;`);//FIN DE LA TRANSACCIÓN
   });
 });
 
 describe('PUT /api/v1/period/update', () => {
   test('deberia actualizar el ultimo periodo activo', async () => {
+   await sequelize.query(`BEGIN;`);//INICIO DE LA TRANSACCIÓN
     const response = await request(app)
       .put('/api/v1/period/update')
       .set('authorization', auth.token)
@@ -103,11 +105,13 @@ describe('PUT /api/v1/period/update', () => {
       .set('authorization', auth.token);
 
     expect(response.body.tasa_cambio).toEqual(lastPeriod.body.tasa_cambio);
+
+  await sequelize.query(`ROLLBACK;`);//FIN DE LA TRANSACCIÓN
   });
+
 });
 
 afterAll(() => {
-  sequelize.query(`ROLLBACK;`);//FIN DE LA TRANSACCIÓN
   sequelize.close();
   server.close();
 });
