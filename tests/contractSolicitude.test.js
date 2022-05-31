@@ -77,13 +77,16 @@ describe('GET /api/v1/contractSolicitude/approve/:cod/true', () => {
   });
 });
 
-describe('GET /api/v1/contractSolicitude/reject/:cod', () => {
+describe('POST /api/v1/contractSolicitude/reject/:cod', () => {
   test(`deberia rechazar una nueva solicitud de contratacion `, async () => {
     await sequelize.query(`BEGIN;`);//INICIO DE LA TRANSACCIÓN
-
+    const body={
+      motivo_rechazo:"Motivo"
+    }
     await request(app)
-      .get('/api/v1/contractSolicitude/reject/17')
+      .post('/api/v1/contractSolicitude/reject/17')
       .set('authorization', auth.token)
+      .send(body)
       .expect('Content-Type', /json/)
       .expect(200);
 

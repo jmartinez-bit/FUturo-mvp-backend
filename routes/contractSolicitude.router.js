@@ -228,7 +228,7 @@ router.get("/approve/:cod/:indAsignFamiliar",async (req, res,next) =>{
  *      200:
  *        description: Se cambió el estado a Rechazado
  *      409:
- *        description: A esta solicitud ya se le asignó un estado 
+ *        description: A esta solicitud ya se le asignó un estado
  */
 
 router.post("/reject/:cod",async (req, res,next) =>{
@@ -267,7 +267,7 @@ router.post("/reject/:cod",async (req, res,next) =>{
  *      200:
  *        description: Se aceptó la solicitud de contratación
  *      409:
- *        description: A esta solicitud ya se le asignó un estado 
+ *        description: A esta solicitud ya se le asignó un estado
  */
 
 
@@ -307,7 +307,7 @@ router.get("/approvegg/:cod",async (req, res,next) =>{
  *      200:
  *        description: Se cambió el estado a Rechazado
  *      409:
- *        description: A esta solicitud ya se le asignó un estado 
+ *        description: A esta solicitud ya se le asignó un estado
  */
 
 router.post("/edit/:cod",async (req, res,next) =>{
