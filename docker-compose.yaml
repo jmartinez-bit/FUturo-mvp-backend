@@ -19,3 +19,10 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=admin123
     ports:
       - 5050:80
+
+  sonarqube:
+    container_name: sonarqube
+    image: sonarqube:latest
+    ports:
+      - "9000:9000"
+      - "9092:9092"

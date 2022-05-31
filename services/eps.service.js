@@ -12,8 +12,7 @@ class EpsService{
     const query=`SELECT ${parcial_total} from eps
                 WHERE cod_eps=${cod_eps}; `;
     const [[data]] = await sequelize.query(query);
-    const monto=parseFloat(Object.values(data));
-    return monto;
+    return parseFloat(Object.values(data));
 
   }
 }

@@ -115,7 +115,6 @@ class ResourcesService{
 
   //Servicio de calculo de monto total
   async findByMontoServicio(cod_cliente,periodo,perfil,nombres){
-    // const client = await getConnection();
     let query = "SELECT sum(clm_efectivo) as clm_efectivo, sum(produccion) as produccion, sum(produccion)/sum(clm_efectivo) as productividad" +
     " FROM public.mapa_recursos" +
     " INNER JOIN colaborador ON mapa_recursos.cod_colaborador=colaborador.cod_colaborador" +
@@ -176,17 +175,14 @@ class ResourcesService{
 
   //Servicio UH 4
   async findByAperturaMapaRecursosMensual(){
-    // const client = await getConnection();
-    // const periodo = fecha.getMonth() + 1;
-    // console.log(periodo);
     const rta = await sequelize.query("SELECT * FROM public.maparecursos");
-    return (await rta).rows;
+    return rta.rows;
   }
 
   async createResourcefromSolicitude(d,codColaborador){
     const [data]=await sequelize.query(`SELECT periodo FROM periodo WHERE estado='A'`);
-    const query=`INSERT INTO mapa_recursos (periodo, cod_cliente, linea_negocio, cod_colaborador, perfil, nivel, clm, estado)
-      VALUES ('${data[0].periodo}',${d.cod_cliente},'${d.cod_linea_negocio}',${codColaborador},${d.cod_puesto},'${d.nivel}','${d.clm}','A');`;
+    const query=`INSERT INTO mapa_recursos (periodo, cod_cliente, linea_negocio, cod_colaborador, perfil, nivel, clm, estado,fecha_fin_contrato,fecha_inicio,asignacion)
+      VALUES ('${data[0].periodo}',${d.cod_cliente},'${d.cod_linea_negocio}',${codColaborador},${d.cod_puesto},'${d.nivel}','${d.clm}','A','${d.fecha_fin}','${d.fecha_inicio}','100');`;
     await sequelize.query(query);
   }
 

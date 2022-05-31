@@ -1,4 +1,6 @@
 const sequelize = require('../libs/sequelize');
+const { QueryTypes } = require('sequelize');
+
 
 class AssignedHoursService{
 
@@ -10,19 +12,20 @@ class AssignedHoursService{
 
   async findNumberOfFeriados(fechaIni,fechaFin){
     const query=`SELECT COUNT(*) from feriado
-                WHERE fecha_feriado BETWEEN to_date('${ fechaIni }', 'YYYY-MM-DD') AND to_date('${ fechaFin }', 'YYYY-MM-DD'); `;
-    const [[data]] = await sequelize.query(query);
-    const nroFeriados=parseFloat(Object.values(data));
-    return nroFeriados;
-
+                WHERE fecha_feriado BETWEEN to_date(?, 'YYYY-MM-DD') AND to_date(?, 'YYYY-MM-DD'); `;
+    const [[data]] = await sequelize.query(query,{
+      type: QueryTypes.SELECT,
+      replacements: [fechaIni,
+        fechaFin]
+    });
+  return parseFloat(Object.values(data));
   }
 
   async findAssignedHoursTotalAssignment(fechaIni,fechaFin){
     const nroFeriados=await this.findNumberOfFeriados(fechaIni,fechaFin);
     const workDays=countWorkDay(fechaIni,fechaFin)-nroFeriados;
     const hoursPerDay= await this.findHoursPerDay();
-    const assignedHours=workDays*hoursPerDay;
-    return assignedHours;
+    return workDays*hoursPerDay;
   }
 }
 

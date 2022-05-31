@@ -1,15 +1,20 @@
-const sonarqubeScanner =  require('sonarqube-scanner');
+const sonarqubeScanner = require('sonarqube-scanner');
+require('dotenv').config();
+
 sonarqubeScanner(
-    {
-        serverUrl:  'http://localhost:9000',
-        options : {
-            'sonar.sources':  './',
-            'sonar.tests':  './',
-            'sonar.inclusions'  :  '**', // Entry point of your code
-            'sonar.test.inclusions':  './**/*.spec.js,./**/*.spec.jsx,./**/*.test.js,./**/*.test.jsx',
-            'sonar.javascript.lcov.reportPaths':  'coverage/lcov.info',
-            'sonar.testExecutionReportPaths':  'coverage/test-reporter.xml',
-            'sonar.projectKey':'FUturo',
-            'sonar.login':'bf178918398d6392d3eb58e42fbd3875ae0e576e'
-        }
-    }, () => {});
+  {
+    serverUrl: 'http://localhost:9000',
+    options: {
+      "sonar.login": process.env.SONAR_LOGIN,
+      "sonar.password": process.env.SONAR_PASSWORD,
+      'sonar.sources': './',
+      'sonar.tests': './tests',
+      'sonar.language': 'js',
+      'sonar.inclusions': '**', // Entry point of your code
+      'sonar.exclusions': '**/tests/*.js',
+      'sonar.javascript.lcov.reportPaths': 'coverage/lcov.info',
+      'sonar.testExecutionReportPaths': 'coverage/test-reporter.xml',
+      'sonar.sourceEncoding': 'UTF-8'
+    },
+  }
+);

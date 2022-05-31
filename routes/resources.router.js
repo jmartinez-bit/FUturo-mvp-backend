@@ -246,7 +246,7 @@ router.post("/resourcesmap",async (req, res,next) =>{
 
 
 //Retorna todos los periodos
-router.get("/periods",async (req, res,next) =>{
+router.get("/periods",async (_req, res,next) =>{
   try{
     const periods=await service.findPeriods();
     res.json(periods);
@@ -325,7 +325,7 @@ router.get("/:idDM/clients",async (req, res,next) =>{
  */
 
 //Retorna todos los perfiles
-router.get("/profiles",async (req, res,next) =>{
+router.get("/profiles",async (_req, res,next) =>{
   try{
     const profiles=await service.findProfiles();
     res.json(profiles);
@@ -380,7 +380,7 @@ router.post("/montoservicio",async (req, res,next) =>{
 });
 
 //Proceso de apertura mensual de mapa de recursos.
-router.get("/aperturamaparecursos",async (req, res,next) =>{
+router.get("/aperturamaparecursos",async (_req, res,next) =>{
   try{
     const resources=await service.findByAperturaMapaRecursosMensual();
     res.json(resources);
@@ -404,7 +404,7 @@ router.get('/productividad/:resmapid', async (req, res, next) => {
 router.get('/contrato/:cod_colaborador/:periodo', async (req, res, next) => {
   try {
     const { cod_colaborador, periodo } = req.params;
-    const contract = await collaboratorService.findByCodColaboradorJoinContrato(cod_colaborador, periodo);
+    const contract = await collaboratorService.findByCodColaboradorJoinContrato(cod_colaborador);
     res.json(contract);
   } catch (error) {
     next(error);

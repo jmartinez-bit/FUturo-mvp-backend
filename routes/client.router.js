@@ -37,7 +37,7 @@ const clientService = new ClientService();
  *        cod_cliente: 6
  */
 
- router.get("/",async (req, res,next) =>{
+ router.get("/",async (_req, res,next) =>{
   try{
     const data=await clientService.findAll();
     res.json(data);

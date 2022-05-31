@@ -42,7 +42,7 @@ const serviceLine = new ServiceLineService();
  *              items:
  *                $ref: '#/components/schemas/ServiceLine'
  */
-router.get('/all', async (req, res, next) => {
+router.get('/all', async (_req, res, next) => {
   try {
     const serviceLines = await serviceLine.getAll();
     res.json(serviceLines);

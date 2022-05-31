@@ -124,23 +124,42 @@ router.post("/newSolicitude",async (req, res,next) =>{
   }
 
 });
+// !CREO QUE YA NO VA
+// /**
+//  * @swagger
+//  * /api/v1/contractSolicitude/{cod_sol_contratacion}:
+//  *  get:
+//  *    summary: Buscar una solicitud de contratación
+//  *    tags: [ContractSolicitude]
+//  *    parameters:
+//  *      - in: path
+//  *        name: cod_sol_contratacion
+//  *        schema:
+//  *          type: string
+//  *        required: true
+//  *        description: Código de solicitud de contratación
+//  *    responses:
+//  *      200:
+//  *        description: Se encontró la solicitud de contratación
+//  */
 
-router.post("/",async (req, res,next) =>{
-  try{
-    const body=req.body;
-    const data=await contractSolicitudeService.findBy(body);
-    res.json(data);
-  }catch (e){
-    next(e);
-  }
+// router.get("/:cod",async (req, res,next) =>{
+//   try{
+//     const {cod}=req.params;
+//     const [data]=await contractSolicitudeService.findOne(cod);
+//     res.json(data);
 
-});
+//   }catch (e){
+//     next(e);
+//   }
+
+// });
 
 /**
  * @swagger
- * /api/v1/contractSolicitude/{cod_sol_contratacion}:
+ * /api/v1/contractSolicitude/approve/{cod_sol_contratacion}/{asignacion_familiar}:
  *  get:
- *    summary: Buscar una solicitud de contratación
+ *    summary: Aprobar una solicitud de contratación
  *    tags: [ContractSolicitude]
  *    parameters:
  *      - in: path
@@ -149,23 +168,18 @@ router.post("/",async (req, res,next) =>{
  *          type: string
  *        required: true
  *        description: Código de solicitud de contratación
+ *      - in: path
+ *        name: asignacion_familiar
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Asignación familiar
  *    responses:
  *      200:
- *        description: Se encontró la solicitud de contratación
+ *        description: Se cambió el estado a Aprobado y se creo un nuevo contrato
+ *      409:
+ *        description: A esta solicitud ya se le asignó el estado o Necesita aprobación del Gerente General
  */
-
-
-router.get("/:cod",async (req, res,next) =>{
-  try{
-    const {cod}=req.params;
-    const [data]=await contractSolicitudeService.findOne(cod);
-    res.json(data);
-
-  }catch (e){
-    next(e);
-  }
-
-});
 
 router.get("/approve/:cod/:indAsignFamiliar",async (req, res,next) =>{
   try{
@@ -175,6 +189,9 @@ router.get("/approve/:cod/:indAsignFamiliar",async (req, res,next) =>{
     if(estado==="Aprobado"||estado==="Rechazado"){
       res.status(409).json({"error":false,
       "message":"A esta solicitud ya se le asigno el estado "+estado});
+    }else if(estado==="Pendiente Aprobacion GG"){
+      res.status(409).json({"error":false,
+      "message":"Necesita aprobación del Gerente General "});
     }else{
       await contractSolicitudeService.approve(cod,indAsignFamiliar,cod_usuario);
       res.status(200).json({"error":false,
@@ -233,6 +250,27 @@ router.post("/reject/:cod",async (req, res,next) =>{
 
 });
 
+/**
+ * @swagger
+ * /api/v1/contractSolicitude/approvegg/{cod_sol_contratacion}:
+ *  post:
+ *    summary: Aprobación de solicitud de contratación que se debe realizar por el Gerente General
+ *    tags: [ContractSolicitude]
+ *    parameters:
+ *      - in: path
+ *        name: cod_sol_contratacion
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Código de solicitud de contratación
+ *    responses:
+ *      200:
+ *        description: Se aceptó la solicitud de contratación
+ *      409:
+ *        description: A esta solicitud ya se le asignó un estado 
+ */
+
+
 router.get("/approvegg/:cod",async (req, res,next) =>{
   try{
     const {cod}=req.params;
@@ -251,6 +289,26 @@ router.get("/approvegg/:cod",async (req, res,next) =>{
   }
 
 });
+
+/**
+ * @swagger
+ * /api/v1/contractSolicitude/edit/{cod_sol_contratacion}:
+ *  post:
+ *    summary: Editar una solicitud de contratación
+ *    tags: [ContractSolicitude]
+ *    parameters:
+ *      - in: path
+ *        name: cod_sol_contratacion
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Código de solicitud de contratación
+ *    responses:
+ *      200:
+ *        description: Se cambió el estado a Rechazado
+ *      409:
+ *        description: A esta solicitud ya se le asignó un estado 
+ */
 
 router.post("/edit/:cod",async (req, res,next) =>{
   try{
